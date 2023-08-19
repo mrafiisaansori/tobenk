@@ -20,7 +20,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="<?php echo site_url('kasir/changePass') ?>" method="post">
+                        <form action="<?php echo site_url('produksi/changePass') ?>" method="post">
                             <div class="form-group row">
                                 <label for="example-url-input" class="col-md-4 col-form-label">Name</label>
                                 <div class="col-md-8" style="margin-top:10px">
