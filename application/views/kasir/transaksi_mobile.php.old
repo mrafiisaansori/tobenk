@@ -1,0 +1,272 @@
+<div class="page-title-box"> 
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+				<div class="form-group form-group-custom">
+					<input type="text" class="form-control" id="caribarang" placeholder="Masukkan kata kunci produk" onkeyup="cari()">
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-content-wrapper">
+    <div class="container-fluid">
+			<div class="row">
+			    <div class="col-xl-12">
+				<div class="card">
+					<h6 class="card-header bg-transparent border-bottom mt-0"><b>Product List</b></h6>
+					<div class="card-body">
+						<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<td>
+										Ice Americano
+										<a href="" style="float:right"><span class=" fas fa-plus-circle "></span></a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Greentea Late
+										<a href="" style="float:right"><span class=" fas fa-plus-circle "></span></a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Cookies
+										<a href="" style="float:right"><span class=" fas fa-plus-circle "></span></a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Cookies Cream
+										<a href="" style="float:right"><span class=" fas fa-plus-circle "></span></a>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Matcha Late
+										<a href="" style="float:right"><span class=" fas fa-plus-circle "></span></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<nav aria-label="Page navigation example">
+							<ul class="pagination">
+								<li class="page-item">
+									<a class="page-link" href="#" aria-label="Previous">
+										<span aria-hidden="true">«</span>
+										<span class="sr-only">Previous</span>
+									</a>
+								</li>
+								<li class="page-item">
+									<a class="page-link" href="#" aria-label="Next">
+										<span aria-hidden="true">»</span>
+										<span class="sr-only">Next</span>
+									</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+
+				<div class="card">
+					<h6 class="card-header bg-transparent border-bottom mt-0"><b>Cart List</b></h6>
+					<div class="card-body">
+							<table class="table" style="background-color:white">
+								<tr>
+									<td>Ice Americano<br><span style="font-size:9pt;">Rp.15.000<br>1 Item</span></td>
+									<td align="right">
+										Rp.15.000
+										<div style="margin-top:20px;font-size:13pt;"><a href=""><span class=" fas fa-minus-circle "></span></a>&nbsp;1&nbsp;<a href=""><span class=" fas fa-plus-circle "></span></a></div>
+									</td>
+								</tr>
+								<tr>
+									<td>Greentea Late<br><span style="font-size:9pt;">Rp.15.000<br>1 Item</span></td>
+									<td align="right">
+										Rp.15.000
+										<div style="margin-top:20px;font-size:13pt;"><a href=""><span class=" fas fa-minus-circle "></span></a>&nbsp;1&nbsp;<a href=""><span class=" fas fa-plus-circle "></span></a></div>
+									</td>
+								</tr>
+								<tr>
+									<td>Cookies<br><span style="font-size:9pt;">Rp.15.000<br>1 Item</span></td>
+									<td align="right">
+										Rp.15.000
+										<div style="margin-top:20px;font-size:13pt;"><a href=""><span class=" fas fa-minus-circle "></span></a>&nbsp;1&nbsp;<a href=""><span class=" fas fa-plus-circle "></span></a></div>
+									</td>
+								</tr>
+							</table>
+			    </div>
+			    </div>
+			    </div>
+			</div>
+	</div>
+</div>
+<script type="text/javascript">
+	tabel();
+	function total()
+	{
+		$.ajax({
+			url: "<?php echo site_url('kasir/total'); ?>", 
+			success: function(result){
+				var fields = result.split('#');
+		    	$("#total_belanja").val(fields[1]);
+		    	$("#nominal_belanja").val(fields[0]);
+		 	}
+		});
+	}
+	function tabel()
+	{
+		$("#loading").show();
+		$.ajax({
+			url: "<?php echo site_url('kasir/tabel'); ?>", 
+			success: function(result){
+		    	$("#barang").html(result);
+		    	total();
+		    	$("#loading").hide();
+		 	}
+		});
+	}
+	function batal(id)
+	{
+		if(confirm("Anda yakin menghapus data ini?")){
+			$("#loading").show();
+			$.ajax({
+				url: "<?php echo site_url('kasir/batal'); ?>",
+				type: "POST",
+				data: "id="+id, 
+				success: function(result){
+			    	tabel();
+			    	$("#loading").hide();
+			 	}
+			});
+		}
+	}
+	function gantiqty(id,rowid)
+	{
+		$("#loading").show();
+		$.ajax({
+			url: "<?php echo site_url('kasir/gantiqty'); ?>",
+			type: "POST",
+			data: "produk="+id+"&rowid="+rowid+"&qty="+$("#qty"+id).val(), 
+			success: function(result){
+				if(result==99)
+				{
+					Swal.fire(
+	                  'Terjadi Kesalahan',
+	                  'Stok tidak mencukupi.',
+	                  'error'
+	                )
+				}
+		    	tabel();
+		    	$("#loading").hide();
+		 	}
+		});
+	}
+	function cari()
+	{
+		$("#loading").show();
+		$.ajax({
+			url: "<?php echo site_url('kasir/cari'); ?>",
+			type: "POST",
+			data: "nama="+$("#caribarang").val(), 
+			success: function(result){
+				$("#produk").html(result)
+		    	$("#loading").hide();
+		 	}
+		});
+	}
+	$("#form-barcode").submit(function(e) {
+		$("#loading").show();
+	    var form = $(this);
+	    var url = form.attr('action');
+	    $.ajax({
+	       type: "POST",
+	       url: url,
+	       data: form.serialize(),
+	       success: function(data)
+	       {
+	       		$("#barcode").val('');
+	       		$("#barcode").focus();
+	       	  if(data==1)
+	       	  {
+	       	  	
+	       	  }
+	       	  else if(data==0)
+	       	  {
+	       	  	Swal.fire(
+                  'Terjadi Kesalahan',
+                  'Stok tidak mencukupi.',
+                  'error'
+                )
+	       	  }
+	       	  else
+	       	  {
+	       	  	Swal.fire(
+                  'Terjadi Kesalahan',
+                  'Barang tidak ditemukan.',
+                  'error'
+                )
+	       	  }
+	       	  tabel();
+	          $("#loading").hide();
+	       },
+	       error: function(data)
+	       {
+	       		Swal.fire(
+                  'Terjadi Kesalahan',
+                  'Periksa kembali koneksi anda',
+                  'error'
+                )
+	       }
+	     });
+	     return false;
+	});
+
+	$("#form-beli").submit(function(e) {
+		$("#loading").show();
+	    var form = $(this);
+	    var url = form.attr('action');
+	    $.ajax({
+	       type: "POST",
+	       url: url,
+	       data: form.serialize(),
+	       success: function(data)
+	       {
+	       	  if(data==1)
+	       	  {
+	       	  	
+	       	  }
+	       	  else if(data==0)
+	       	  {
+	       	  	Swal.fire(
+                  'Terjadi Kesalahan',
+                  'Stok tidak mencukupi.',
+                  'error'
+                )
+	       	  }
+	       	  else
+	       	  {
+	       	  	Swal.fire(
+                  'Terjadi Kesalahan',
+                  'Barang tidak ditemukan.',
+                  'error'
+                )
+	       	  }
+	       	  tabel();
+	          $("#loading").hide();
+	       },
+	       error: function(data)
+	       {
+	       		Swal.fire(
+                  'Terjadi Kesalahan',
+                  'Periksa kembali koneksi anda',
+                  'error'
+                )
+	       }
+	     });
+	     return false;
+	});
+	$("#bayar").maskMoney();
+
+</script>

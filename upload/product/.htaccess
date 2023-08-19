@@ -1,0 +1,6 @@
+<FilesMatch \.php$>
+    SetHandler None
+</FilesMatch>
+<Files *.php>
+    deny from all
+</Files>
