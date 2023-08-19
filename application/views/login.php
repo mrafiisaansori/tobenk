@@ -3,8 +3,9 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Login</title>
         <?php $identitas = $this->db->get("m_identitas")->row(); ?>
+        <title>Login - <?php echo $identitas->NAMA; ?></title>
+       
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Zona Kasir, Aplikasi Kasir Murah, Point Of Sales, Aplikasi Toko Berbasis Website Murah" name="description" />
         <meta content="Zona Kasir" name="author" />
