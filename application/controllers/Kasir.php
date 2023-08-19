@@ -181,17 +181,16 @@ class Kasir extends CI_Controller
 			$diskon = "0";
 		}
 
-
-		$od_sph = $this->input->post("od-sph");
-		$od_cyl = $this->input->post("od-cyl");
-		$od_axis = $this->input->post("od-axis");
-		$od_add = $this->input->post("od-add");
-		$od_pd = $this->input->post("od-pd");
-		$os_sph = $this->input->post("os-sph");
-		$os_cyl = $this->input->post("os-cyl");
-		$os_axis = $this->input->post("os-axis");
-		$os_add = $this->input->post("os-add");
-		$os_pd = $this->input->post("os-pd");
+		// $od_sph = $this->input->post("od-sph");
+		// $od_cyl = $this->input->post("od-cyl");
+		// $od_axis = $this->input->post("od-axis");
+		// $od_add = $this->input->post("od-add");
+		// $od_pd = $this->input->post("od-pd");
+		// $os_sph = $this->input->post("os-sph");
+		// $os_cyl = $this->input->post("os-cyl");
+		// $os_axis = $this->input->post("os-axis");
+		// $os_add = $this->input->post("os-add");
+		// $os_pd = $this->input->post("os-pd");
 
 		$metode = $this->input->post("metode");
 		$resep = $this->input->post("resep");
@@ -256,16 +255,16 @@ class Kasir extends CI_Controller
 				'RESEP' => $resep,
 				'ESTIMASI_SELESAI' => $estimasi,
 				'ID_CUSTOMER' => $customer,
-				'OD_SPH' => $od_sph,
-				'OD_CYL' => $od_cyl,
-				'OD_AXIS' => $od_axis,
-				'OD_ADD' => $od_add,
-				'OD_PD' => $od_pd,
-				'OS_SPH' => $os_sph,
-				'OS_CYL' => $os_cyl,
-				'OS_AXIS' => $os_axis,
-				'OS_ADD' => $os_add,
-				'OS_PD' => $os_pd,
+				// 'OD_SPH' => $od_sph,
+				// 'OD_CYL' => $od_cyl,
+				// 'OD_AXIS' => $od_axis,
+				// 'OD_ADD' => $od_add,
+				// 'OD_PD' => $od_pd,
+				// 'OS_SPH' => $os_sph,
+				// 'OS_CYL' => $os_cyl,
+				// 'OS_AXIS' => $os_axis,
+				// 'OS_ADD' => $os_add,
+				// 'OS_PD' => $os_pd,
 				'ID_METODE_BAYAR' => $metode,
 				'BAYAR' => $bayar,
 				'STATUS_PENGERJAAN' => $status,
@@ -570,9 +569,9 @@ class Kasir extends CI_Controller
 		$hal = array('menu' => 'transaksi');
 		$this->session->set_userdata($hal);
 
-		if ($this->agent->is_mobile()) {
-			redirect('transaksi-mobile.html');
-		}
+		// if ($this->agent->is_mobile()) {
+		// 	redirect('transaksi-mobile.html');
+		// }
 
 		$data['page'] = 'kasir/transaksi_full';
 		$this->load->view($this->_template, $data);

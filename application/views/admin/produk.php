@@ -36,6 +36,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
+                                <th>Ukuran</th>
                                 <th>Keterangan</th>
                                 <th>Kategori</th>
                                 <th>Stok</th>
@@ -75,7 +76,13 @@
                     <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Keterangan</label>
                         <div class="col-md-8">
-                            <textarea name="keterangan" class="form-control" id="" rows="5" placeholder="warna produk, jenis produk, seri produk dll"></textarea>
+                            <textarea name="keterangan" class="form-control" id="" rows="5" placeholder="Keterangan Produk"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="example-text-input" class="col-md-4 col-form-label">Ukuran</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" name="ukuran">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -93,19 +100,19 @@
                     <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Stok</label>
                         <div class="col-md-8">
-                            <input class="form-control" type="text" name="stok">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="example-text-input" class="col-md-4 col-form-label">Harga Jual</label>
-                        <div class="col-md-8">
-                            <input class="form-control" type="text" name="harga_jual">
+                            <input class="form-control" type="number" name="stok">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Harga Beli</label>
                         <div class="col-md-8">
-                            <input class="form-control" type="text" name="harga_beli">
+                            <input class="form-control" type="number" name="harga_beli">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="example-text-input" class="col-md-4 col-form-label">Harga Jual</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="number" name="harga_jual">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -152,7 +159,13 @@
                     <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Keterangan</label>
                         <div class="col-md-8">
-                            <textarea name="keterangan" class="form-control" id="e_keterangan" rows="5" placeholder="warna produk, jenis produk, seri produk dll"></textarea>
+                            <textarea name="keterangan" class="form-control" id="e_keterangan" rows="5" placeholder="Keterangan"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="example-text-input" class="col-md-4 col-form-label">Ukuran</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" name="ukuran" id="ukuran">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -174,15 +187,15 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-md-4 col-form-label">Harga Jual</label>
+                        <label for="example-text-input" class="col-md-4 col-form-label">Harga Beli</label>
                         <div class="col-md-8">
-                            <input class="form-control" type="text" id="e_harga_jual" name="harga_jual">
+                            <input class="form-control" type="number" id="e_harga_beli" name="harga_beli">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-md-4 col-form-label">Harga Beli</label>
+                        <label for="example-text-input" class="col-md-4 col-form-label">Harga Jual</label>
                         <div class="col-md-8">
-                            <input class="form-control" type="text" id="e_harga_beli" name="harga_beli">
+                            <input class="form-control" type="number" id="e_harga_jual" name="harga_jual">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -264,9 +277,7 @@
                 <div class="modal-body">
                     <div id="hist"></div>
                 </div>
-                <div class="modal-footer">
-                    <input type="submit" value="Simpan" class="btn btn-primary">
-                </div>
+                
         </div>
     </div>
 </div>
@@ -292,6 +303,7 @@
             success: function(data){
                 $("#e_id").val(data['ID_PRODUK']);
                 $("#e_nama").val(data['NAMA_PRODUK']);
+                $("#ukuran").val(data['UKURAN']);
                 $("#e_kategori option[value='"+data['ID_KATEGORI']+"']").attr('selected',true);
                 $("#e_stok").html(data['STOK']);
                 $("#e_harga_beli").val(data['HARGA_BELI']);

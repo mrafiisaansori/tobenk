@@ -221,7 +221,7 @@ class Admin extends CI_Controller
 	}
 	function getTabelJsonProduk()
 	{
-		$aColumns = array('ID_PRODUK', 'NAMA_PRODUK', 'KETERANGAN', 'DESKRIPSI_KATEGORI', 'STOK', 'HARGA_BELI', 'HARGA_JUAL', 'ID_KATEGORI');
+		$aColumns = array('ID_PRODUK', 'NAMA_PRODUK', 'UKURAN','KETERANGAN', 'DESKRIPSI_KATEGORI', 'STOK', 'HARGA_BELI', 'HARGA_JUAL', 'ID_KATEGORI');
 
 		//primary key
 		$sIndexColumn = "ID_PRODUK";
@@ -316,6 +316,7 @@ class Admin extends CI_Controller
 			$row[] = $seq_number;
 			//$row[] = "<a target='_blank' href='".site_url('urgent/penyusutan/'.$data->ID_PRODUK)."'>".$data->NAMA_PRODUK."</a>";
 			$row[] = "<a onclick='modalHistory(" . $data->ID_PRODUK . ")' href='javascript:void(0)'>" . $data->NAMA_PRODUK . "</a>";
+			$row[] = $data->UKURAN;
 			$row[] = $data->KETERANGAN;
 			$row[] = $data->DESKRIPSI_KATEGORI;
 			$row[] = $data->STOK;
@@ -380,8 +381,8 @@ class Admin extends CI_Controller
 		}
 		echo "
 		<tr>
-		<td colspan='3'><b>Stok Saat Ini</b></td>
-		<td>" . $produk->STOK . "</td>
+		<td colspan='3' align='center'><b>Stok Saat Ini</b></td>
+		<td><b>" . $produk->STOK . "</b></td>
 		</tr>
 		</table>";
 	}

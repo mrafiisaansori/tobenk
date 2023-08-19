@@ -164,7 +164,8 @@ class Admin_model extends CI_Model {
         $harga_jual = $this->input->post('harga_jual');
         $barcode = $this->input->post('barcode');
         $keterangan = $this->input->post('keterangan');
-        $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,STOK,HARGA_BELI,HARGA_JUAL,BARCODE,KETERANGAN) VALUES ('$nama','$kategori','$stok','$harga_beli','$harga_jual','$barcode','$keterangan')";
+        $ukuran = $this->input->post('ukuran');
+        $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,STOK,HARGA_BELI,HARGA_JUAL,BARCODE,KETERANGAN,UKURAN) VALUES ('$nama','$kategori','$stok','$harga_beli','$harga_jual','$barcode','$keterangan','$ukuran')";
         $query = $this->db->query($query);
         if($query){
             return $this->db->insert_id();
@@ -180,7 +181,8 @@ class Admin_model extends CI_Model {
         $harga_jual = $this->input->post('harga_jual');
         $barcode = $this->input->post('barcode');
         $keterangan = $this->input->post('keterangan');
-        $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,STOK,HARGA_BELI,HARGA_JUAL,BARCODE,FOTO,KETERANGAN) VALUES ('$nama','$kategori','$stok','$harga_beli','$harga_jual','$barcode','$filename','$keterangan')";
+        $ukuran = $this->input->post('ukuran');
+        $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,STOK,HARGA_BELI,HARGA_JUAL,BARCODE,FOTO,KETERANGAN,UKURAN) VALUES ('$nama','$kategori','$stok','$harga_beli','$harga_jual','$barcode','$filename','$keterangan','$ukuran')";
         $query = $this->db->query($query);
         if($query){
             return $this->db->insert_id();
@@ -215,7 +217,8 @@ class Admin_model extends CI_Model {
         $harga_jual = $this->input->post('harga_jual');
         $barcode = $this->input->post('barcode');
         $keterangan = $this->input->post('keterangan');
-        $query = "UPDATE m_produk SET NAMA='$nama',ID_KATEGORI='$kategori',HARGA_BELI='$harga_beli',HARGA_JUAL='$harga_jual',BARCODE='$barcode',KETERANGAN='$keterangan' WHERE ID='$id'";
+        $ukuran = $this->input->post('ukuran');
+        $query = "UPDATE m_produk SET NAMA='$nama',ID_KATEGORI='$kategori',HARGA_BELI='$harga_beli',HARGA_JUAL='$harga_jual',BARCODE='$barcode',KETERANGAN='$keterangan',UKURAN='$ukuran' WHERE ID='$id'";
         $query = $this->db->query($query);
         if($query){
             return true;
@@ -231,7 +234,8 @@ class Admin_model extends CI_Model {
         $harga_jual = $this->input->post('harga_jual');
         $barcode = $this->input->post('barcode');
         $keterangan = $this->input->post('keterangan');
-        $query = "UPDATE m_produk SET NAMA='$nama',ID_KATEGORI='$kategori',HARGA_BELI='$harga_beli',HARGA_JUAL='$harga_jual',BARCODE='$barcode',FOTO='$filename',KETERANGAN='$keterangan' WHERE ID='$id'";
+        $ukuran = $this->input->post('ukuran');
+        $query = "UPDATE m_produk SET NAMA='$nama',ID_KATEGORI='$kategori',HARGA_BELI='$harga_beli',HARGA_JUAL='$harga_jual',BARCODE='$barcode',FOTO='$filename',KETERANGAN='$keterangan',UKURAN='$ukuran' WHERE ID='$id'";
         $query = $this->db->query($query);
         if($query){
             return true;

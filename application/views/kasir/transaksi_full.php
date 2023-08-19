@@ -88,8 +88,8 @@
 																	</div>
 	                            </div>
 															<div class="form-group form-group-custom mb-4 contain">
-																		<a data-toggle="modal" data-target="#PowerLensa"  href="javascript:void(0)" class="btn btn-primary" style="width:100%"><i class="mdi mdi-pencil-outline mr-1"></i>Ubah</a>
-																		<table class="table table-striped table-bordered">
+																		<!--<a data-toggle="modal" data-target="#PowerLensa"  href="javascript:void(0)" class="btn btn-primary" style="width:100%"><i class="mdi mdi-pencil-outline mr-1"></i>Ubah</a>
+																		 <table class="table table-striped table-bordered">
 																			<tr>
 																				<td>Power Lensa</td>
 																				<td width="200px">SPH</td>
@@ -114,7 +114,7 @@
 																				<td><input type="hidden" class="form-control" name="os-add" id="os-add"><span id="teks-os-add"></span></td>
 																				<td><input type="hidden" class="form-control" name="os-pd" id="os-pd"><span id="teks-os-pd"></span></td>
 																			</tr>
-																		</table>
+																		</table> -->
 	                            </div>
 	                            <div class="form-group form-group-custom mb-4">
 	                                <h5 class="font-size-14">Jenis Pembayaran</h5>
