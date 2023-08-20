@@ -4,10 +4,10 @@
                             <th>No</th>
                             <th>Customer</th>
                             <th>Tanggal</th>
-                            <th>Transaksi</th>
+                            <th>Pembayaran</th>
                             <th>Diskon</th>
-                            <th>Tagihan</th>
-                            <th >Terbayar</th>
+                            <th width="300">Tagihan</th>
+                            <th width="300">Terbayar</th>
                             <th>Status</th>
                             <th>Detail</th>
                         </tr>
@@ -29,7 +29,7 @@
                                 ?>
                                 <tr>
                                     <td><?php echo sprintf("%06d",$key->ID); ?></td>
-                                    <td><?php if($key->ID_CUSTOMER) echo "<a href='javascript:void()' onclick='detail(".$key->ID.")' style='font-size:11pt'><b>".($key->NAMA_CUSTOMER)."</b></a><br><span>".$key->ALAMAT."<br>".$key->NO_TELP."</span>"; else echo "<a href='javascript:void()' onclick='detail(".$key->ID.")' style='font-size:11pt'><b>Tidak Terdaftar</b></a>"; ?></td>
+                                    <td><?php if($key->ID_CUSTOMER) echo "<b>".($key->NAMA_CUSTOMER)."</b><br><span>".$key->ALAMAT."<br>".$key->NO_TELP."</span>"; else echo "<b>Tidak Terdaftar</b>"; ?></td>
                                     <td><?php echo "<b>".tgl_indo_lengkap($key->TANGGAL)."</b><br><span>".$key->JAM."</span>"; ?></td>
                                     <td ><?php echo $key->JENIS_BAYAR; if($key->ID_METODE_BAYAR==1) echo "<br><span class='badge badge-soft-success' style='font-size:10pt'>Full</span>"; else  echo "<br><span class='badge badge-soft-danger' style='font-size:10pt'>DP</span>"; ?></td>
                                     <?php   $total+=$key->TOTAL; ?>
@@ -50,27 +50,57 @@
                         }
                         ?>
                     </tbody>
-                    <tfoot style="font-weight:bold;">
-                        <tr style="font-size:10pt!important">
-                            <td colspan=4 align=center>Total</td>
-                            <td >
-                                <?php echo formatRupiah($diskon);?>
-                            </td>
-                            <td >
-                                <?php echo formatRupiah($pendapatan); ?>
-                            </td>
-                            <td >
-                                <?php echo formatRupiah($terbayar); ?>
-                            </td>
-                            <td >
-                                <?php echo formatRupiah($belum_bayar); ?>
-                            </td>
-                            <td>
-                                
-                            </td>
-                        </tr>
-                    </tfoot>
                 </table>
+                <div class="row">
+                <div class="col-xl-3 mt-4">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <blockquote class="card-bodyquote mb-0">
+                                <p><?php echo formatRupiah($diskon);?></p>
+                                <footer class="blockquote-footer text-white">
+                                    Total Diskon
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 mt-4">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <blockquote class="card-bodyquote mb-0">
+                                <p><?php echo formatRupiah($pendapatan);?></p>
+                                <footer class="blockquote-footer text-white">
+                                    Total Tagihan
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 mt-4">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <blockquote class="card-bodyquote mb-0">
+                                <p><?php echo formatRupiah($terbayar);?></p>
+                                <footer class="blockquote-footer text-white">
+                                    Total Terbayar
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 mt-4">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <blockquote class="card-bodyquote mb-0">
+                                <p><?php echo formatRupiah($belum_bayar);?></p>
+                                <footer class="blockquote-footer text-white">
+                                    Total Belum Terbayar
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>   
 <script type="text/javascript">
     $('#datatable').DataTable({
         responsive: true

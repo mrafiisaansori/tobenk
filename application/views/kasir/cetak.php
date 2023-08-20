@@ -2,327 +2,206 @@
 date_default_timezone_set('Asia/Jakarta');
 $identitas = $this->db->query("SELECT * FROM m_identitas LIMIT 1")->row();
 ?>
-<title>Cetak Struk</title>
-<style type="text/css">
-  table{
-    font-size: 30pt;
-      font-family: sans-serif;
-  }
-    @page { size 6.35in 16.51in; margin: 0.00001mm }
-    div.page { page-break-after: always }
-    
-    hr.style-eight { padding: 0; border: none; border-top: thin dashed #333; color: #333; text-align: center; } 
-    hr.style-eight:after { /*content: "§";*/ display: inline-block; position: relative; top: -0.7em; font-size: 1.5em; padding: 0 0.25em; background: white; }
-</style>
-<script type="text/javascript" src="<?php echo site_url('qr'); ?>/jquery.min.js"></script>
-<script type="text/javascript" src="<?php echo site_url('qr'); ?>/qrcode.js"></script>
-<?php
-$browser = getBrowser();
-//echo $browser;
-
-$body="";
-if($browser=="Firefox"){
-  $body = " onload='print();window.close()' ";
-}
-elseif($browser=="Mobile browser"){
-  $body = " onload='window.print();window.onfocus=function(){ window.close(); }' ";
-}
-else{
-  $body = " onload='print()' onafterprint='window.close()' ";
-}
-?>
-<body <?php echo $body; ?>>
-
-<div class="page">
-<center>
-
-<table width="100%" >
-
-
-<tr>
-
-  <td align="center"></td>
-
-  <td ></td>
-
-  <td></td>
-
-</tr>
-  <tr>
-
-  <td align="center" style="font-size: 30pt;font-family: sans-serif;"><img width="290px" src="<?php echo site_url('upload/logo/logo-dark.png'); ?>" alt=""></td>
-
-  </tr>
-  <tr>
-
-    <td align="center" style="font-size: 30pt;font-family: sans-serif;"><b><?php echo $identitas->NAMA; ?></b></td>
-
-    </tr>
-
-    <tr>
-
-    <td align="center" style="font-size: 25pt;font-family: sans-serif;"><?php echo $identitas->ALAMAT; ?></td>
-
-    </tr>
-
-    <tr>
-    <td align="center" style="font-size: 25pt;font-family: sans-serif;"><?php echo $identitas->NO_TELP; ?></td>
-    </tr>
-   <tr>
-    <table width="500px">
-        <tr>
-            <td><hr class="" /></td>
-        </tr>
-      </table>
-  </tr>
-
-  <tr>
-
-    <table width="500px" style="font-size: 25pt;font-family: sans-serif;font-style: italic;" >
-
-        <tr>
-
-          <td width="70px" align="center">#<?php echo sprintf("%06d",$data->ID); ?></td>
-
-          <td width="80px" align="center"><?php echo date('d/m/Y'); ?></td>
-
-          <td width="70px" align="right"><?php echo date('H:m:s'); ?></td>
-
-        </tr>
-
-    </table>
-
-  </tr>
-  <tr>
-  <br>
-  <table width="500px" style="font-size: 25pt;font-family: sans-serif;">
-  <tr>
-
-    <td style="font-weight: bold;">Customer</td>
-
-    <td></td>
-
-    <td align="right"><?php echo $data->NAMA_CUSTOMER; ?></td>
-
-    </tr>
-
-    <tr>
-
-    <td style="font-weight: bold;">Petugas</td>
-
-    <td></td>
-
-    <td align="right"><?php echo $data->NAMA_KASIR; ?></td>
-
-    </tr>
-    <tr>
-
-    <td style="font-weight: bold;">Est. Selesai</td>
-
-    <td></td>
-
-    <td align="right"><?php if($data->ESTIMASI_SELESAI=="0000-00-00") echo "-"; else echo tgl_indo_lengkap($data->ESTIMASI_SELESAI); ?></td>
-
-    </tr>
-    <tr>
-
-    <td style="font-weight: bold;">Jenis Bayar</td>
-
-    <td></td>
-
-    <td align="right"><?php echo ($data->JENIS_BAYAR); ?></td>
-
-    </tr>
-    <tr>
-
-    <td style="font-weight: bold;">Metode Bayar</td>
-
-    <td></td>
-
-    <td align="right"><?php  if($data->ID_METODE_BAYAR==1) echo "Full"; else echo "DP"; ?></td>
-
-    </tr>
-  </table>
-  </tr>
-  <tr>
-    <table width="500px">
-        <tr>
-            <td><hr class="" /></td>
-        </tr>
-      </table>
-  </tr>
-  <tr>
-
-  <br>
-
-    <table width="500px" style="font-size: 25pt;font-family: sans-serif;">
-
-
-
-<?php
-
-foreach ($produk as $dat) {
-
-  ?>
-
-  <tr>
-
-  <td width="170px" align="left"><b><?php echo $dat->NAMA_PRODUK." x ".$dat->QTY; ?></b></td>
-
-  <td width="100px" align="right" style="vertical-align:top"><?php echo formatRupiah($dat->HARGA_JUAL*$dat->QTY); ?></td>
-
-  <tr>
-
-  <td colspan="" style="font-size: 20pt;font-family: sans-serif;"><?php echo $dat->KETERANGAN; ?></td>
-
-  </tr>
-
-  
-
-  </tr>
-
-  <?php
-
-}
-
-?>
-
-
-
-</table>
-
-  </tr>
-
-  <tr>
-    <tr>
-    <table width="500px" style="font-size: 14pt;font-family: sans-serif;">
-        <tr>
-            <td><hr class="" /></td>
-        </tr>
-      </table>
-  </tr>
-  <tr>
-
-    <table width="500px" style="font-size: 25pt;font-family: sans-serif;">
-
-  <tr>
-
-    <td></td>
-
-    <td></td>
-
-    <td align="right"><?php echo formatRupiah($data->TOTAL); ?></td>
-
-  </tr>
-  <tr>
-
-<td colspan="3"><br></td>
-
-</tr>
-  <tr>
-
-    <td style="font-weight: bold;">Diskon</td>
-
-    <td></td>
-
-    <td align="right"><?php echo formatRupiah($data->DISKON); ?></td>
-
-  </tr>
-
-  <tr>
-
-    <td style="font-weight: bold;">Total Tagihan</td>
-
-    <td></td>
-
-    <td align="right"><?php $hd=$data->TOTAL-$data->DISKON; echo formatRupiah($hd); ?></td>
-
-  </tr>
-
-  <tr>
-
-    <td style="font-weight: bold;">Total Bayar</td>
-
-    <td></td>
-
-    <td align="right"><?php echo formatRupiah($bayar); ?></td>
-
-  </tr>
-  <?php  if($data->ID_METODE_BAYAR==2){ ?>
-  <tr>
-
-    <td style="font-weight: bold;"><?php echo "Kurang Bayar"; ?></td>
-
-    <td></td>
-
-    <td align="right"><?php $tsemua = $bayar-$hd;  echo formatRupiah(abs($tsemua)); ?></td>
-
-  </tr>
-  <?php } ?>
-
-</table>
-
-  </tr>
-
-  <tr>
-
-  <br>
-
-  </tr>
-
-</table>
-<br>
-<br>
-<span style="font-size: 14pt;font-family: sans-serif;"></span>
-<input id="text" type="hidden" value="<?php echo site_url('cetak/'.$link); ?>" />
-<div id="qrcode" style="width:250px; height:250px; margin-top:15px;"></div>
-<div style="height:100px;margin-top:100px">
-.
-</div>
-</center>
-
-</div>
-
-
-<script>
-  function closeMe() {
-        var win = window.open("","_self"); /* url = "" or "about:blank"; target="_self" */
-        win.close();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cetak</title>
+  <style>
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #FAFAFA;
+        font: 12pt "Tahoma";
     }
-</script>
-<script type="text/javascript">
-var qrcode = new QRCode(document.getElementById("qrcode"), {
-	width : 250,
-	height : 250
-});
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+    .page {
+        width: 210mm;
+        min-height: 297mm;
+        padding: 20mm;
+        margin: 10mm auto;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .subpage {
+        padding: 1cm;
+        height: 257mm;
+        outline: 2cm #FFEAEA solid;
+    }
+    
+    @page {
+        size: A4;
+        margin: 0;
+    }
+    @media print {
+        html, body {
+            width: 210mm;
+            height: 297mm;        
+        }
+        .page {
+            margin: 0;
+            border: initial;
+            border-radius: initial;
+            width: initial;
+            min-height: initial;
+            box-shadow: initial;
+            background: initial;
+            page-break-after: always;
+        }
+    }
+    #qrcode {
+        width:100px;
+        height:100px;
+    }
+  </style>
+</head>
+<body onload="print()">
+<div class="book">
+  <div class="page">
+      <table width="100%">
+        <tr>
+          <td align="center" width="80"><img width="100px" src="<?php echo site_url('upload/logo/logo-dark.png'); ?>" alt=""></td>
+          <td align="center">
+            <b><?php echo $identitas->NAMA; ?></b><br>
+            <?php echo $identitas->ALAMAT; ?><br>
+            <?php echo $identitas->NO_TELP; ?>
+          </td>
+        </tr>
+      </table>
+      <center>
+        <hr>
+        <h3>Bukti Transaksi</h3>
+      </center>
+      
+      <table width="100%">
+        <tr>
+          <td width="150">No. Order</td>
+          <td>:</td>
+          <td><?php echo sprintf("%06d",$data->ID); ?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td width="150">Customer </td>
+          <td>:</td>
+          <td><?php echo $data->NAMA_CUSTOMER; ?> (<?php echo $data->NO_TELP; ?>)</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td width="150">Tanggal Transaksi</td>
+          <td>:</td>
+          <td><?php if($data->TANGGAL=="0000-00-00") echo "-"; else echo tgl_indo_lengkap($data->TANGGAL); ?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td width="150">Estimasi Selesai </td>
+          <td>:</td>
+          <td><?php if($data->ESTIMASI_SELESAI=="0000-00-00") echo "-"; else echo tgl_indo_lengkap($data->ESTIMASI_SELESAI); ?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td width="150">Pembayaran</td>
+          <td>:</td>
+          <td><?php echo ($data->JENIS_BAYAR); ?> (<?php  if($data->ID_METODE_BAYAR==1) echo "Full"; else echo "DP"; ?>)</td>
+        </tr>
+        <tr>
+          <td colspan="4" align="center">
+            <table width="100%" style="margin-top:25px;border: 1px solid;">
+              <tr>
+                <td align="center">
+                  <b>Mockup Design</b><br>
+                  <img height="150px" style="margin-top:10px" src="<?php echo site_url('upload/mockup/'.$data->MOCKUP); ?>" alt="">
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
 
-function makeCode () {		
-	var elText = document.getElementById("text");
-	
-	if (!elText.value) {
-		alert("Input a text");
-		elText.focus();
-		return;
-	}
-	
-	qrcode.makeCode(elText.value);
-}
+      <table width="100%" cellspacing='0' bordercolor='#000000'cellpadding='4' border='1' style='border: solid 1.5pt black; border-collapse: collapse;margin-top:20px;font-size:9pt'>
+        <tr>
+          <td style="font-weight:bold" align="center">Produk</td>
+          <td style="font-weight:bold" align="center">@Harga</td>
+          <td style="font-weight:bold" align="center">QTY</td>
+          <td style="font-weight:bold" align="center">Total</td>
+        </tr>
+          <?php 
+          $total=0;
+          foreach ($produk as $dat) { ?>
+            <tr>
+              <td style=" vertical-align: top;">
+                <b><?php echo $dat->NAMA_PRODUK." (".$dat->UKURAN.")"; ?></b>
+                <br>
+                <?php echo $dat->KETERANGAN; ?>
+              </td>
+              <td style=" vertical-align: top;">
+                <?php echo formatRupiah($dat->HARGA_JUAL); ?>
+              </td>
+              <td style=" vertical-align: top;">
+                <?php echo $dat->QTY; ?>
+              </td>
+              <td style=" vertical-align: top;" align="right">
+              <?php $tot=$dat->HARGA_JUAL*$dat->QTY; echo formatRupiah($tot); $total+=$tot; ?>
+              </td>
+            </tr>
+          <?php } ?>
+          <tr>
+            <td colspan="3" align="left">Total</td>
+            <td align="right"><?php echo formatRupiah($total); ?></td>
+          </tr>
+          <tr>
+            <td colspan="3" align="left">Diskon</td>
+            <td align="right"><?php echo formatRupiah($data->DISKON); ?></td>
+          </tr>
+          <tr>
+            <td colspan="3" align="left">Total Tagihan</td>
+            <td align="right"><?php $hd=$data->TOTAL-$data->DISKON; echo formatRupiah($hd); ?></td>
+          </tr>
+          <tr>
+            <td colspan="3" align="left">Total Bayar</td>
+            <td align="right"><?php echo formatRupiah($data->BAYAR); ?></td>
+          </tr>
+          <?php if($data->ID_METODE_BAYAR==2){ ?>
+            <tr>
+              <td colspan="3" align="left">Kurang Bayar</td>
+              <td align="right"><?php $tsemua = $data->BAYAR-$hd;  echo formatRupiah(abs($tsemua)); ?></td>
+            </tr>
+          <?php } ?>
+      </table>
 
-makeCode();
-
-$("#text").
-	on("blur", function () {
-		makeCode();
-	}).
-	on("keydown", function (e) {
-		if (e.keyCode == 13) {
-			makeCode();
-		}
-	});
-</script>
-
-
-
-
-
+      <table width="100%" style="margin-top:20px">
+        <tr>
+          <td align="center">
+            Kasir<br><br><br><br><br><br>(<?php echo $data->NAMA_KASIR; ?>)
+          </td>
+          <td align="center">
+            Customer<br><br><br><br><br><br>(<?php echo $data->NAMA_CUSTOMER; ?>)
+          </td>
+          <td align="center" width="150px">
+            <script>
+            window.addEventListener("load", () => {
+            var qrc = new QRCode(document.getElementById("qrcode"), {
+                text: "<?php echo site_url('qr/'.base64_encode_fix($data->ID)); ?>",
+                width: 100,
+                height: 100,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            });
+            </script>
+            <center>       
+                <div id="qrcode" class="mt-2"></div>
+            </center>
+          </td>
+        </tr>
+      </table>
+  </div>
+</div>
 </body>
+</html>

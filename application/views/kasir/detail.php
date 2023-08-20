@@ -67,12 +67,8 @@
 															<th><?php echo tgl_indo_lengkap($data->TANGGAL)." (".$data->JAM.")"; ?></th>
 														</tr>
 														<tr>
-															<th style="background-color:#f8f9fa"><b>Tanggal Estimasi Selesai</b></th>
+															<th style="background-color:#f8f9fa"><b>Tanggal Deadline</b></th>
 															<th><?php echo tgl_indo_lengkap($data->ESTIMASI_SELESAI); ?></th>
-														</tr>
-														<tr>
-															<th style="background-color:#f8f9fa"><b>Resep</b></th>
-															<th><?php echo $data->RESEP ?></th>
 														</tr>
 														<tr>
 															<th style="background-color:#f8f9fa"><b>Jenis Bayar</b></th>
@@ -86,42 +82,15 @@
 															<th style="background-color:#f8f9fa"><b>Status Pengerjaan</b></th>
 															<th><?php if($data->STATUS==1){ if($data->STATUS_PENGERJAAN==1) echo "<span style='font-size:10pt' class='badge badge-soft-success'>Selesai</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SELESAI)."</span>"; elseif($data->STATUS_PENGERJAAN==0)  echo "<span style='font-size:10pt' class='badge badge-soft-danger'>Proses Pengerjaan</span>"; if($data->STATUS_PENGERJAAN==2) echo "<span style='font-size:10pt' class='badge badge-soft-primary'>Diambil</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->AMBIL)."</span>"; } else { echo "<span style='font-size:10pt' class='badge badge-soft-secondary'>Dibatalkan</span>"; }  ?></th>
 														</tr>
+														<tr>
+															<th style="background-color:#f8f9fa"><b>Keterangan</b></th>
+															<th><?php echo $data->KETERANGAN ?></th>
+														</tr>
 													</tbody>
 												</table>
 												
 											</div>
 										</div>
-			            </div>
-			        </div>
-							<div class="card">
-								<h6 class="card-header bg-transparent border-bottom mt-0"><b>Lensa</b></h6>
-			            <div class="card-body">
-									<table class="table table-bordered"  style="font-size:10pt">
-												<tr style="background-color:#f8f9fa">
-													<td><b>Power Lensa</b></td>
-													<td width="200px"><b>SPH</b></td>
-													<td width="200px"><b>CYL</b></td>
-													<td width="200px"><b>AXIS</b></td>
-													<td width="200px"><b>ADD</b></td>
-													<td width="200px"><b>PD</b></td>
-												</tr>
-												<tr>
-													<td style="background-color:#f8f9fa"><b>OD</b></td>
-													<td><?php echo $data->OD_SPH; ?></td>
-													<td><?php echo $data->OD_CYL; ?></td>
-													<td><?php echo $data->OD_AXIS; ?></td>
-													<td><?php echo $data->OD_ADD; ?></td>
-													<td><?php echo $data->OD_PD; ?></td>
-												</tr>
-												<tr>
-													<td style="background-color:#f8f9fa"><b>OS</b></td>
-													<td><?php echo $data->OS_SPH; ?></td>
-													<td><?php echo $data->OS_CYL; ?></td>
-													<td><?php echo $data->OS_AXIS; ?></td>
-													<td><?php echo $data->OS_ADD; ?></td>
-													<td><?php echo $data->OS_PD; ?></td>
-												</tr>
-											</table>
 			            </div>
 			        </div>
 			    </div>
@@ -142,7 +111,7 @@
 												foreach ($produk->result() as $dat) {
 													?>
 													<tr>
-														<td><B><?php echo $dat->NAMA_PRODUK; ?></B><br><span style="font-size:9pt"><?php echo $dat->KETERANGAN; ?></span></td>
+														<td><B><?php echo $dat->NAMA_PRODUK; ?> (<?php echo $dat->UKURAN; ?>)</B><br><span style="font-size:9pt"><?php echo $dat->KETERANGAN; ?></span></td>
 														<td align="center"><?php echo $dat->QTY; ?></td>
 														<td align="right"><?php echo formatRupiah($dat->HARGA_JUAL); ?></td>
 														<td align="right"><?php echo formatRupiah($dat->QTY*$dat->HARGA_JUAL); $tot+=$dat->QTY*$dat->HARGA_JUAL; ?></td>
@@ -178,11 +147,11 @@
 			        </div>
 							<?php if($data->STATUS_PENGERJAAN==0){ ?>
 									<?php  if($data->STATUS==1){ ?>
-									<a href="<?php echo site_url('kasir/selesai/'.base64_encode_fix($id)); ?>" class="btn btn-lg btn-block btn-success "><i class="mdi mdi-file-document-box-check mr-1"></i> Selesaikan Pekerjaan</a>
-									<a href="javascript:void(0)" onclick="hapus(<?php echo $data->ID; ?>)" class="btn btn-lg btn-block btn-danger  mb-3"><i class="mdi mdi-trash-can mr-1"></i> Batalkan</a>
+									<a href="<?php echo site_url('kasir/selesai/'.base64_encode_fix($id)); ?>" class="btn btn-block btn-success "><i class="mdi mdi-file-document-box-check mr-1"></i> Selesaikan Pekerjaan</a>
+									<a href="javascript:void(0)" onclick="hapus(<?php echo $data->ID; ?>)" class="btn btn-block btn-danger  mb-3"><i class="mdi mdi-trash-can mr-1"></i> Batalkan</a>
 									<?php  } ?>
 							<?php }  else if($data->STATUS_PENGERJAAN==1){  ?>
-							<a href="<?php echo site_url('kasir/ambil/'.base64_encode_fix($id)); ?>" class="btn btn-lg btn-block btn-primary mb-3" onclick="return confirm('Dengan menekan tombol ini, maka transaksi dianggap selesai dan pesanan telah diberikan kepada customer')"><i class="mdi mdi-check-bold mr-1"></i> Selesaikan Transaksi</a>
+							<a href="<?php echo site_url('kasir/ambil/'.base64_encode_fix($id)); ?>" class="btn btn-block btn-primary mb-3" onclick="return confirm('Dengan menekan tombol ini, maka transaksi dianggap selesai dan pesanan telah diberikan kepada customer')"><i class="mdi mdi-check-bold mr-1"></i> Selesaikan Transaksi</a>
 							<?php } ?>
 			    </div>
 

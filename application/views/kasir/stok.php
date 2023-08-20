@@ -32,6 +32,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
+                                <th>Ukuran</th>
                                 <th>Kategori</th>
                                 <th>Stok</th>
                                 <th>Harga Jual</th>

@@ -197,7 +197,9 @@ class Kasir extends CI_Controller
 		$estimasi = $this->input->post("estimasi");
 		$customer = $this->input->post("customer");
 		$status = $this->input->post("status");
+		$file_mentah = $this->input->post("file_mentah");
 
+		
 		$id_kasir = $this->session->userdata("id_kasir");
 		$tanggal = date("Y-m-d");
 		$jam = date("H:i:s");
@@ -242,7 +244,22 @@ class Kasir extends CI_Controller
 			}
 
 			//End Cek Stok
-
+			$file_name="";
+			if ($_FILES['mockup']['name']) {
+				$config['upload_path'] = './upload/mockup/';
+				$config['allowed_types'] = 'jpg|png';
+				$config['max_size'] = 1046;
+				$this->load->library('upload', $config);
+				if (!$this->upload->do_upload('mockup')) {
+					$this->session->set_flashdata('judul', 'Produk');
+					$this->session->set_flashdata('status', $this->upload->display_errors());
+					$this->session->set_flashdata('type', 'error');
+					redirect('transaksi-full.html');
+				} else {
+					$upload_data = $this->upload->data();
+					$file_name = $upload_data['file_name'];
+				}
+			}
 
 			$data = array(
 				'TANGGAL' => $tanggal,
@@ -268,7 +285,9 @@ class Kasir extends CI_Controller
 				'ID_METODE_BAYAR' => $metode,
 				'BAYAR' => $bayar,
 				'STATUS_PENGERJAAN' => $status,
-				'LUNAS' => $lunas
+				'LUNAS' => $lunas,
+				'FILE_MENTAH' => $file_mentah,
+				'MOCKUP' => $file_name
 			);
 			$this->db->insert('t_penjualan', $data);
 			$id_last = $this->db->insert_id();
@@ -350,7 +369,7 @@ class Kasir extends CI_Controller
 	}
 	function getTabelJsonProduk()
 	{
-		$aColumns = array('ID_PRODUK', 'NAMA_PRODUK', 'DESKRIPSI_KATEGORI', 'STOK', 'HARGA_JUAL');
+		$aColumns = array('ID_PRODUK', 'NAMA_PRODUK', 'UKURAN', 'DESKRIPSI_KATEGORI', 'STOK', 'HARGA_JUAL');
 
 		//primary key
 		$sIndexColumn = "ID_PRODUK";
@@ -438,6 +457,7 @@ class Kasir extends CI_Controller
 			$row = array();
 			$row[] = $seq_number;
 			$row[] = $data->NAMA_PRODUK;
+			$row[] = $data->UKURAN;
 			$row[] = $data->DESKRIPSI_KATEGORI;
 			$row[] = $data->STOK;
 			$row[] = formatRupiah($data->HARGA_JUAL);
@@ -613,7 +633,7 @@ class Kasir extends CI_Controller
 							<div class="card">
 									<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
 									<div class="card-body">
-											<h4 class="card-title font-size-16 text-center">' . $key->NAMA . '</h4>
+											<h4 class="card-title font-size-16 text-center">' . $key->NAMA .' ('.$key->UKURAN .')</h4>
 											<p class="card-text text-center" style="font-size:10pt">' . $key->KETERANGAN . '</p>
 											<center><p class="card-text">
 													<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>

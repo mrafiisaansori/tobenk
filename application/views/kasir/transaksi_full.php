@@ -65,7 +65,7 @@
 						</div>
 					<div class="card">
 			            <div class="card-body"> 
-			                <form action="<?php echo site_url('kasir/bayar') ?>" method="post">
+			                <form action="<?php echo site_url('kasir/bayar') ?>" method="post" enctype="multipart/form-data">
 			                <div>
 															<div class="form-row form-group-custom mb-4">
 																<div class="col-10">
@@ -115,7 +115,20 @@
 																				<td><input type="hidden" class="form-control" name="os-pd" id="os-pd"><span id="teks-os-pd"></span></td>
 																			</tr>
 																		</table> -->
+																		
 	                            </div>
+								<div class="form-group form-group-custom mb-4">
+	                            	<h5 class="font-size-14">Keterangan</h5>
+									<textarea name="keterangan" cols="6" rows="6" class="form-control"></textarea>
+								</div>
+								<div class="form-group form-group-custom mb-4">
+	                            	<h5 class="font-size-14">Mockup <span style="font-weight:bold">(Image Max 2MB)</span></h5>
+									<input type="file" class="form-control" name="mockup" accept="image/png, image/jpeg">
+								</div>
+								<div class="form-group form-group-custom mb-4">
+	                            	<h5 class="font-size-14">File Mentah</h5>
+									<input type="text" class="form-control" name="file_mentah" placeholder="Masukkan Berupa Link">
+								</div>
 	                            <div class="form-group form-group-custom mb-4">
 	                                <h5 class="font-size-14">Jenis Pembayaran</h5>
 	                                <select class="form-control" name="jenis">
@@ -139,12 +152,9 @@
 																		<option value="2">Down Payment</option>
 	                                </select>
 	                            </div>
+															
 															<div class="form-group form-group-custom mb-4">
-	                            		<h5 class="font-size-14">Resep</h5>
-																	<input type="text" class="form-control" id="resep" name="resep">
-	                            </div>
-															<div class="form-group form-group-custom mb-4">
-	                            		<h5 class="font-size-14">Estimasi Selesai</h5>
+	                            		<h5 class="font-size-14">Deadline</h5>
 																	<input type="text" class="form-control datepicker2" data-language="en" id="estimasi" name="estimasi" readonly>
 	                            </div>
 															<div class="form-group form-group-custom mb-4">
@@ -530,83 +540,83 @@
 	});
 
 	function lama(){
-		$("#loading").show();
-		$.ajax({
-			url: "<?php echo site_url('kasir/historyTerakhir'); ?>", 
-			type: "POST",
-			data: "id_customer="+$("#customer").val(),
-			dataType:"json",
-			success: function(result){
+		// $("#loading").show();
+		// $.ajax({
+		// 	url: "<?php //echo site_url('kasir/historyTerakhir'); ?>", 
+		// 	type: "POST",
+		// 	data: "id_customer="+$("#customer").val(),
+		// 	dataType:"json",
+		// 	success: function(result){
 
-				$("#od-sph-isi").val(null);
-				$("#od-cyl-isi").val(null);
-				$("#od-axis-isi").val(null);
-				$("#od-add-isi").val(null);
-				$("#od-pd-isi").val(null);
-				$("#os-sph-isi").val(null);
-				$("#os-cyl-isi").val(null);
-				$("#os-axis-isi").val(null);
-				$("#os-add-isi").val(null);
-				$("#os-pd-isi").val(null);
+		// 		$("#od-sph-isi").val(null);
+		// 		$("#od-cyl-isi").val(null);
+		// 		$("#od-axis-isi").val(null);
+		// 		$("#od-add-isi").val(null);
+		// 		$("#od-pd-isi").val(null);
+		// 		$("#os-sph-isi").val(null);
+		// 		$("#os-cyl-isi").val(null);
+		// 		$("#os-axis-isi").val(null);
+		// 		$("#os-add-isi").val(null);
+		// 		$("#os-pd-isi").val(null);
 
-				$("#teks-od-sph").html("");
-				$("#teks-od-cyl").html("");
-				$("#teks-od-axis").html("");
-				$("#teks-od-add").html("");
-				$("#teks-od-pd").html("");
-				$("#teks-os-sph").html("");
-				$("#teks-os-cyl").html("");
-				$("#teks-os-axis").html("");
-				$("#teks-os-add").html("");
-				$("#teks-os-pd").html("");
+		// 		$("#teks-od-sph").html("");
+		// 		$("#teks-od-cyl").html("");
+		// 		$("#teks-od-axis").html("");
+		// 		$("#teks-od-add").html("");
+		// 		$("#teks-od-pd").html("");
+		// 		$("#teks-os-sph").html("");
+		// 		$("#teks-os-cyl").html("");
+		// 		$("#teks-os-axis").html("");
+		// 		$("#teks-os-add").html("");
+		// 		$("#teks-os-pd").html("");
 
-				$("#od-sph").val(null);
-				$("#od-cyl").val(null);
-				$("#od-axis").val(null);
-				$("#od-add").val(null);
-				$("#od-pd").val(null);
-				$("#os-sph").val(null);
-				$("#os-cyl").val(null);
-				$("#os-axis").val(null);
-				$("#os-add").val(null);
-				$("#os-pd").val(null);
+		// 		$("#od-sph").val(null);
+		// 		$("#od-cyl").val(null);
+		// 		$("#od-axis").val(null);
+		// 		$("#od-add").val(null);
+		// 		$("#od-pd").val(null);
+		// 		$("#os-sph").val(null);
+		// 		$("#os-cyl").val(null);
+		// 		$("#os-axis").val(null);
+		// 		$("#os-add").val(null);
+		// 		$("#os-pd").val(null);
 
-				$("#od-sph-isi").val(result['OD_SPH']);
-				$("#od-cyl-isi").val(result['OD_CYL']);
-				$("#od-axis-isi").val(result['OD_AXIS']);
-				$("#od-add-isi").val(result['OD_ADD']);
-				$("#od-pd-isi").val(result['OD_PD']);
-				$("#os-sph-isi").val(result['OS_SPH']);
-				$("#os-cyl-isi").val(result['OS_CYL']);
-				$("#os-axis-isi").val(result['OS_AXIS']);
-				$("#os-add-isi").val(result['OS_ADD']);
-				$("#os-pd-isi").val(result['OS_PD']);
+		// 		$("#od-sph-isi").val(result['OD_SPH']);
+		// 		$("#od-cyl-isi").val(result['OD_CYL']);
+		// 		$("#od-axis-isi").val(result['OD_AXIS']);
+		// 		$("#od-add-isi").val(result['OD_ADD']);
+		// 		$("#od-pd-isi").val(result['OD_PD']);
+		// 		$("#os-sph-isi").val(result['OS_SPH']);
+		// 		$("#os-cyl-isi").val(result['OS_CYL']);
+		// 		$("#os-axis-isi").val(result['OS_AXIS']);
+		// 		$("#os-add-isi").val(result['OS_ADD']);
+		// 		$("#os-pd-isi").val(result['OS_PD']);
 
-				$("#teks-od-sph").html(result['OD_SPH']);
-				$("#teks-od-cyl").html(result['OD_CYL']);
-				$("#teks-od-axis").html(result['OD_AXIS']);
-				$("#teks-od-add").html(result['OD_ADD']);
-				$("#teks-od-pd").html(result['OD_PD']);
-				$("#teks-os-sph").html(result['OS_SPH']);
-				$("#teks-os-cyl").html(result['OS_CYL']);
-				$("#teks-os-axis").html(result['OS_AXIS']);
-				$("#teks-os-add").html(result['OS_ADD']);
-				$("#teks-os-pd").html(result['OS_PD']);
+		// 		$("#teks-od-sph").html(result['OD_SPH']);
+		// 		$("#teks-od-cyl").html(result['OD_CYL']);
+		// 		$("#teks-od-axis").html(result['OD_AXIS']);
+		// 		$("#teks-od-add").html(result['OD_ADD']);
+		// 		$("#teks-od-pd").html(result['OD_PD']);
+		// 		$("#teks-os-sph").html(result['OS_SPH']);
+		// 		$("#teks-os-cyl").html(result['OS_CYL']);
+		// 		$("#teks-os-axis").html(result['OS_AXIS']);
+		// 		$("#teks-os-add").html(result['OS_ADD']);
+		// 		$("#teks-os-pd").html(result['OS_PD']);
 
-				$("#od-sph").val(result['OD_SPH']);
-				$("#od-cyl").val(result['OD_CYL']);
-				$("#od-axis").val(result['OD_AXIS']);
-				$("#od-add").val(result['OD_ADD']);
-				$("#od-pd").val(result['OD_PD']);
-				$("#os-sph").val(result['OS_SPH']);
-				$("#os-cyl").val(result['OS_CYL']);
-				$("#os-axis").val(result['OS_AXIS']);
-				$("#os-add").val(result['OS_ADD']);
-				$("#os-pd").val(result['OS_PD']);
+		// 		$("#od-sph").val(result['OD_SPH']);
+		// 		$("#od-cyl").val(result['OD_CYL']);
+		// 		$("#od-axis").val(result['OD_AXIS']);
+		// 		$("#od-add").val(result['OD_ADD']);
+		// 		$("#od-pd").val(result['OD_PD']);
+		// 		$("#os-sph").val(result['OS_SPH']);
+		// 		$("#os-cyl").val(result['OS_CYL']);
+		// 		$("#os-axis").val(result['OS_AXIS']);
+		// 		$("#os-add").val(result['OS_ADD']);
+		// 		$("#os-pd").val(result['OS_PD']);
 
-				$("#loading").hide();
-			}
-		});
+		// 		$("#loading").hide();
+		// 	}
+		// });
 	}
 
 

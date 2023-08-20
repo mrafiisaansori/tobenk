@@ -36,7 +36,7 @@
                                                     </div>
 
                                                     <div class="row mt-2">
-                                                        <div class="col-lg-4">
+                                                        <div class="col-lg-6">
                                                             <div class="card border shadow-none" style="border: 1px solid #2fa97c!important;">
                                                                 <div class="card-body">
                                                                     <div class="media">
@@ -55,7 +55,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-4">
+                                                        <!-- <div class="col-lg-6">
                                                             <div class="card border shadow-none" style="border: 1px solid #2fa97c!important;">
                                                                 <div class="card-body">
                                                                     <div class="media">
@@ -73,8 +73,8 @@
                                                                     <a style="color:white;font-size:14pt" href="javascript:void(0);" data-toggle="modal" data-target=".bs-example-modal-sm">Kirim</a>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-lg-4">
+                                                        </div> -->
+                                                        <div class="col-lg-6">
                                                             <div class="card border shadow-none" style="border: 1px solid #2fa97c!important;">
                                                                 <div class="card-body">
                                                                     <div class="media">
