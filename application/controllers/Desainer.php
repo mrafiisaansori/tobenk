@@ -70,4 +70,61 @@ class Desainer extends CI_Controller
             redirect("desainer/password");
         }
     }
+
+    function list()
+    {
+        $data['data'] = $this->db->get_where('view_penjualan', array('STATUS >=' => 1))->result();
+        $data['page'] = 'desainer/list_kerjaan';
+        $this->load->view($this->_template, $data);
+    }
+    function detailList($id)
+    {
+        $id = base64_decode_fix($id);
+        $data["id"] = $id;
+        $data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
+        $data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
+        $data['page'] = 'desainer/detail_kerjaan';
+        $this->load->view($this->_template, $data);
+    }
+    function uploadDesain($id)
+    {
+        $id = base64_decode_fix($id);
+        $detail = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
+        if ($detail->STATUS_PENGERJAAN > 2) {
+            $return = array(
+                'status' => true,
+                'judul' => 'Failed',
+                'pesan' => "You cant upload design again.",
+                'type' => 'error'
+            );
+            $this->session->set_flashdata($return);
+            redirect("desainer/detailList/" . base64_encode_fix($id));
+        }
+
+        $data_update = array(
+            'FILE_MENTAH' => $this->input->post('file_mentah'),
+        );
+
+        $config['upload_path']          = './upload/mockup/';
+        $config['allowed_types']        = 'jpg|png|jpeg';
+        $config['file_name']            = base64_encode_fix($_FILES['mockup']['name']);
+        $this->load->library('upload', $config);
+        if ($this->upload->do_upload('mockup')) {
+            $data_update['MOCKUP'] = $this->upload->data('file_name');
+            $data_update['STATUS_PENGERJAAN'] = 1;
+        }
+        $this->db->update("t_penjualan", $data_update, ["ID" => $id]);
+        //unlink last mockup
+        if (isset($data_update['MOCKUP']) && $data_update['MOCKUP'] != "") {
+            unlink("./upload/mockup/" . $detail->MOCKUP);
+        }
+        $return = array(
+            'status' => true,
+            'judul' => 'Success',
+            'pesan' => "Upload mockup successfully",
+            'type' => 'success'
+        );
+        $this->session->set_flashdata($return);
+        redirect("desainer/detailList/" . base64_encode_fix($id));
+    }
 }

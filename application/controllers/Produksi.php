@@ -70,4 +70,51 @@ class Produksi extends CI_Controller
             redirect("produksi/password");
         }
     }
+    function list()
+    {
+        //pagination setting
+        $data = $this->db->query("SELECT * FROM view_penjualan ORDER BY ID DESC")->result();
+        $per_page = 10;
+        $total_data = count($data);
+        $total_page = ceil($total_data / $per_page);
+        $page = 1;
+        if ($this->input->post('page')) {
+            $page = $this->input->post('page');
+        } else if ($this->session->userdata('page')) {
+            $page = $this->session->userdata('page');
+        }
+        $offset = ($page - 1) * $per_page;
+        //end pagination
+
+        $data = $this->db->query("SELECT * FROM view_penjualan WHERE STATUS_PENGERJAAN > 2 ORDER BY ID DESC LIMIT $per_page OFFSET $offset")->result();
+        $data['data'] = $data;
+        $data['current_page'] = $page;
+        $data['total_page'] = $total_page;
+        $data['page'] = 'produksi/list_kerjaan';
+        $this->load->view($this->_template, $data);
+    }
+
+    function detailList($id)
+    {
+        $id = base64_decode_fix($id);
+        $data["id"] = $id;
+        $data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
+        $data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
+        $data['page'] = 'produksi/detail_kerjaan';
+        $this->load->view($this->_template, $data);
+    }
+    function selesaiProduksi($id)
+    {
+        $id = base64_decode_fix($id);
+        $tgl = date("Y-m-d H:i:s");
+        $this->db->query("UPDATE t_penjualan SET STATUS_PENGERJAAN=4,SELESAI='$tgl' WHERE ID='$id'");
+        $return = array(
+            'status' => true,
+            'judul' => 'Success',
+            'pesan' => "Produksi selesai",
+            'type' => 'success'
+        );
+        $this->session->set_flashdata($return);
+        redirect("produksi/detailList/" . base64_encode_fix($id));
+    }
 }

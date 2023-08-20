@@ -110,6 +110,11 @@
                                             Beranda
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="<?php echo site_url('desainer/list'); ?>">
+                                            Daftar Kerjaan
+                                        </a>
+                                    </li>
 
                                 </ul>
                             </div>
