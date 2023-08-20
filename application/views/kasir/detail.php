@@ -147,11 +147,11 @@
 			        </div>
 							<?php if($data->STATUS_PENGERJAAN==0){ ?>
 									<?php  if($data->STATUS==1){ ?>
-									<a href="<?php echo site_url('kasir/selesai/'.base64_encode_fix($id)); ?>" class="btn btn-block btn-success "><i class="mdi mdi-file-document-box-check mr-1"></i> Selesaikan Pekerjaan</a>
+									<!-- <a href="<?php //echo site_url('kasir/selesai/'.base64_encode_fix($id)); ?>" class="btn btn-block btn-success "><i class="mdi mdi-file-document-box-check mr-1"></i> Selesaikan Pekerjaan</a> -->
 									<a href="javascript:void(0)" onclick="hapus(<?php echo $data->ID; ?>)" class="btn btn-block btn-danger  mb-3"><i class="mdi mdi-trash-can mr-1"></i> Batalkan</a>
 									<?php  } ?>
 							<?php }  else if($data->STATUS_PENGERJAAN==1){  ?>
-							<a href="<?php echo site_url('kasir/ambil/'.base64_encode_fix($id)); ?>" class="btn btn-block btn-primary mb-3" onclick="return confirm('Dengan menekan tombol ini, maka transaksi dianggap selesai dan pesanan telah diberikan kepada customer')"><i class="mdi mdi-check-bold mr-1"></i> Selesaikan Transaksi</a>
+							<!-- <a href="<?php //echo site_url('kasir/ambil/'.base64_encode_fix($id)); ?>" class="btn btn-block btn-primary mb-3" onclick="return confirm('Dengan menekan tombol ini, maka transaksi dianggap selesai dan pesanan telah diberikan kepada customer')"><i class="mdi mdi-check-bold mr-1"></i> Selesaikan Transaksi</a> -->
 							<?php } ?>
 			    </div>
 

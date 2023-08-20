@@ -17,4 +17,9 @@ class Welcome extends CI_Controller {
 		$data['page'] = 'cetak';
 		$this->load->view($data['page'],$data);
 	}
+	public function qr($id){
+		$id=base64_decode_fix($id);
+		$this->session->set_userdata("id",$id);
+		redirect("produksi")
+	}
 }

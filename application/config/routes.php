@@ -56,6 +56,7 @@ $route['logout'] = 'login/logout';
 $route['transaksi-full.html'] = 'kasir/transaksi_full';
 $route['transaksi-mobile.html'] = 'kasir/transaksi_mobile';
 $route['cetak/(:any)'] = 'welcome/cetak/$1';
+$route['qr/(:any)'] = 'welcome/qr/$1';
 
 
 //ADMIN

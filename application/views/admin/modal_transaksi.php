@@ -43,11 +43,12 @@ else{
             <b><?php echo sprintf("%06d",$data->ID); ?></b><br>
             <span style="font-size:10pt">
               Transaksi <?php echo tgl_indo_lengkap($data->TANGGAL); ?><br>
-              Estimasi <?php echo tgl_indo_lengkap($data->ESTIMASI_SELESAI); ?><br>
+              Estimasi Selesai <?php echo tgl_indo_lengkap($data->ESTIMASI_SELESAI); ?><br>
               Resep <?php echo ($data->RESEP); ?><br>
               Pembayaran <?php echo ($data->JENIS_BAYAR); ?><br>
               Metode <?php if($data->ID_METODE_BAYAR==1) echo "Full Payment"; else echo "Down Payment"; ?><br>
-              <?php if($data->STATUS==1){ if($data->STATUS_PENGERJAAN==1) echo "Pekerjaan Selesai ".tgl_jam_indo_lengkap($data->SELESAI).""; elseif($data->STATUS_PENGERJAAN==0)  echo "Proses Pengerjaan"; if($data->STATUS_PENGERJAAN==2) echo "Telah Diambil ".tgl_jam_indo_lengkap($data->AMBIL); } else { echo "Dibatalkan"; }  ?>
+              <?php if($data->STATUS==1){ if($data->STATUS_PENGERJAAN==1) echo "Pekerjaan Selesai ".tgl_jam_indo_lengkap($data->SELESAI).""; elseif($data->STATUS_PENGERJAAN==0)  echo "Proses Pengerjaan"; if($data->STATUS_PENGERJAAN==2) echo "Telah Diambil ".tgl_jam_indo_lengkap($data->AMBIL); } else { echo "Dibatalkan"; }  ?><br>
+              File Mentah <?php if($data->FILE_MENTAH) { echo "<a target='_blank' href='".$data->FILE_MENTAH."'>".($data->FILE_MENTAH)."</a>"; } else { echo "-"; } ?><br>
             </span>
             </td>
           </tr>
@@ -55,32 +56,18 @@ else{
       </table>
     </div>
     <div class="col-xl-8">
-      <table class="table table-bordered"  style="font-size:10pt">
-        <tr style="background-color:#f8f9fa">
-          <td><b>Power Lensa</b></td>
-          <td><b>SPH</b></td>
-          <td><b>CYL</b></td>
-          <td><b>AXIS</b></td>
-          <td><b>ADD</b></td>
-          <td><b>PD</b></td>
-        </tr>
-        <tr>
-          <td><b>OD</b></td>
-          <td><?php echo $data->OD_SPH; ?></td>
-          <td><?php echo $data->OD_CYL; ?></td>
-          <td><?php echo $data->OD_AXIS; ?></td>
-          <td><?php echo $data->OD_ADD; ?></td>
-          <td><?php echo $data->OD_PD; ?></td>
-        </tr>
-        <tr>
-          <td><b>OS</b></td>
-          <td><?php echo $data->OS_SPH; ?></td>
-          <td><?php echo $data->OS_CYL; ?></td>
-          <td><?php echo $data->OS_AXIS; ?></td>
-          <td><?php echo $data->OS_ADD; ?></td>
-          <td><?php echo $data->OS_PD; ?></td>
-        </tr>
-      </table>
+      <table class="table table-bordered" style="font-size:12pt">
+          <tbody>
+            <tr style="background-color:#f8f9fa;font-size:10pt;font-weight:bold;">
+              <td><i class="fas fa-file-alt mr-1"></i> Mockup</td>
+            </tr>
+            <tr>
+              <td align="center">
+              <img height="150px" src="<?php echo site_url('upload/mockup/'.$data->MOCKUP); ?>" alt="">
+              </td>
+            </tr>
+          </tbody>
+        </table>
       <table class="table table-bordered"  style="font-size:10pt">
         <tr style="background-color:#f8f9fa">
           <td style="font-weight:bold;" align="center">Produk</td>
@@ -99,7 +86,7 @@ else{
         foreach ($produk->result() as $dat) {
           ?>
           <tr>
-            <td><B><?php echo $dat->NAMA_PRODUK; ?></B><br><span style="font-size:9pt"><?php echo $dat->KETERANGAN; ?></span></td>
+            <td><B><?php echo $dat->NAMA_PRODUK; ?> (<?php echo $dat->UKURAN; ?>)</B><br><span style="font-size:9pt"><?php echo $dat->KETERANGAN; ?></span></td>
             <td align="right"><?php echo formatRupiah($dat->HARGA_BELI); ?></td>
             <td align="right"><?php echo formatRupiah($dat->HARGA_JUAL); ?></td>
             <td align="center"><?php echo $dat->QTY; ?></td>
