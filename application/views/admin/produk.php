@@ -5,7 +5,7 @@
                 <h4 class="page-title mb-1">DATA PRODUK</h4>
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);"></a></li>
-                <li class="breadcrumb-item active"></li>
+                    <li class="breadcrumb-item active"></li>
                 </ol>
             </div>
             <div class="col-md-4">
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>
 <!-- end page title end breadcrumb -->
@@ -33,17 +33,17 @@
                         <h4 class="header-title">Daftar Produk</h4>
                         <table id="tableAjax" class="table table-bordered table-striped" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Ukuran</th>
-                                <th>Keterangan</th>
-                                <th>Kategori</th>
-                                <th>Stok</th>
-                                <th width="78px">Harga Beli</th>
-                                <th width="78px">Harga Jual</th>
-                                <th width="130px">Action</th>
-                            </tr>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Ukuran</th>
+                                    <th>Keterangan</th>
+                                    <th>Kategori</th>
+                                    <th>Stok</th>
+                                    <th width="78px">Harga Beli</th>
+                                    <th width="78px">Harga Jual</th>
+                                    <th width="130px">Action</th>
+                                </tr>
                             </thead>
                         </table>
 
@@ -56,17 +56,17 @@
 <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog " role="document">
         <div class="modal-content">
-            <form  action="<?php echo base_url('admin/tambahProduk')?>" method="post" enctype="multipart/form-data">
+            <form action="<?php echo base_url('admin/tambahProduk') ?>" method="post" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Tambah Produk</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                <div class="alert alert-warning" role="alert">
-                Ukuran File Max 500 Kb
-            </div>
+                    <div class="alert alert-warning" role="alert">
+                        Ukuran File Max 500 Kb
+                    </div>
                     <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Nama</label>
                         <div class="col-md-8">
@@ -89,15 +89,24 @@
                         <label for="example-text-input" class="col-md-4 col-form-label">Kategori</label>
                         <div class="col-md-8">
                             <select name="kategori" id="" class="form-control">
-                                <?php if($kategori){?>
-                                    <?php foreach($kategori as $k){?>
-                                        <option value="<?php echo $k->ID?>"><?php echo $k->DESKRIPSI?></option>
-                                    <?php }?>
-                                <?php }?>
+                                <?php if ($kategori) { ?>
+                                    <?php foreach ($kategori as $k) { ?>
+                                        <option value="<?php echo $k->ID ?>"><?php echo $k->DESKRIPSI ?></option>
+                                    <?php } ?>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="example-text-input" class="col-md-4 col-form-label">Tanpa Stok</label>
+                        <div class="col-md-8">
+                            <select name="tanpa_stok" id="" class="form-control" onchange="ubahFlagStok(this,'')">
+                                <option value="0">Tidak</option>
+                                <option value="1">Ya</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="v_stok">
                         <label for="example-text-input" class="col-md-4 col-form-label">Stok</label>
                         <div class="col-md-8">
                             <input class="form-control" type="number" name="stok">
@@ -138,18 +147,18 @@
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog " role="document">
         <div class="modal-content">
-            <form  action="<?php echo base_url('admin/editProduk')?>" method="post" enctype="multipart/form-data">
+            <form action="<?php echo base_url('admin/editProduk') ?>" method="post" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Edit Produk</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                <div class="alert alert-warning" role="alert">
-                Ukuran File Max 500 Kb
-            </div>
-                <div class="form-group row">
+                    <div class="alert alert-warning" role="alert">
+                        Ukuran File Max 500 Kb
+                    </div>
+                    <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Nama</label>
                         <div class="col-md-8">
                             <input class="form-control" type="text" id="e_nama" name="nama">
@@ -172,15 +181,24 @@
                         <label for="example-text-input" class="col-md-4 col-form-label">Kategori</label>
                         <div class="col-md-8">
                             <select name="kategori" id="e_kategori" class="form-control">
-                                <?php if($kategori){?>
-                                    <?php foreach($kategori as $k){?>
-                                        <option value="<?php echo $k->ID?>"><?php echo $k->DESKRIPSI?></option>
-                                    <?php }?>
-                                <?php }?>
+                                <?php if ($kategori) { ?>
+                                    <?php foreach ($kategori as $k) { ?>
+                                        <option value="<?php echo $k->ID ?>"><?php echo $k->DESKRIPSI ?></option>
+                                    <?php } ?>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="example-text-input" class="col-md-4 col-form-label">Tanpa Stok</label>
+                        <div class="col-md-8">
+                            <select name="tanpa_stok" id="e_tanpa_stok" class="form-control" onchange="ubahFlagStok(this,'e_')">
+                                <option value="0">Tidak</option>
+                                <option value="1">Ya</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="e_v_stok">
                         <label for="example-text-input" class="col-md-4 col-form-label">Stok</label>
                         <div class="col-md-8">
                             <span id="e_stok"></span>
@@ -217,7 +235,7 @@
                     <input type="submit" value="Simpan" class="btn btn-primary">
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>
@@ -225,11 +243,11 @@
 <div class="modal fade" id="modalStok" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog " role="document">
         <div class="modal-content">
-            <form  action="<?php echo base_url('admin/stokInsidentil')?>" method="post" enctype="multipart/form-data">
+            <form action="<?php echo base_url('admin/stokInsidentil') ?>" method="post" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Pengaturan Stok Insidentil</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -255,7 +273,7 @@
                             <textarea name="keterangan" id="" cols="30" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="modal-footer">
                     <input type="submit" value="Simpan" class="btn btn-primary">
@@ -268,82 +286,91 @@
 <div class="modal fade" id="modalHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">History Stok Produk</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">History Stok Produk</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="hist"></div>
-                </div>
-                
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="hist"></div>
+            </div>
+
         </div>
     </div>
 </div>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         $("#tableAjax").dataTable({
-            "iDisplayLength": 10, 
-            "responsive":true,
-            "aLengthMenu": [10,25,50,100],
+            "iDisplayLength": 10,
+            "responsive": true,
+            "aLengthMenu": [10, 25, 50, 100],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "<?php echo base_url('admin/getTabelJsonProduk')?>" , 
+            "sAjaxSource": "<?php echo base_url('admin/getTabelJsonProduk') ?>",
             "sPaginationType": "full_numbers"
         });
     })
-        
-    function modalEditProduk(id){
+
+    function modalEditProduk(id) {
         $.ajax({
-            type :"post",
-            url: "<?php echo base_url('admin/modalEditProduk')?>",
-            data : "id="+id,
+            type: "post",
+            url: "<?php echo base_url('admin/modalEditProduk') ?>",
+            data: "id=" + id,
             dataType: 'json',
-            success: function(data){
+            success: function(data) {
                 $("#e_id").val(data['ID_PRODUK']);
                 $("#e_nama").val(data['NAMA_PRODUK']);
                 $("#ukuran").val(data['UKURAN']);
-                $("#e_kategori option[value='"+data['ID_KATEGORI']+"']").attr('selected',true);
+                $("#e_kategori option[value='" + data['ID_KATEGORI'] + "']").attr('selected', true);
                 $("#e_stok").html(data['STOK']);
                 $("#e_harga_beli").val(data['HARGA_BELI']);
                 $("#e_harga_jual").val(data['HARGA_JUAL']);
                 $("#e_barcode").val(data['BARCODE']);
                 $("#e_keterangan").val(data['KETERANGAN']);
-                if(data['FOTO']){
-                    $("#foto_preview").html("<img src='<?php echo site_url(); ?>/"+data['FOTO']+"' class='mt-4 img-thumbnail' width='150px'>");
+                if (data['FOTO']) {
+                    $("#foto_preview").html("<img src='<?php echo site_url(); ?>/" + data['FOTO'] + "' class='mt-4 img-thumbnail' width='150px'>");
                 }
                 $("#e_barcode").val();
-                
+                $("#e_tanpa_stok option").removeAttr('selected');
+                $("#e_tanpa_stok option[value='" + data['TANPA_STOK'] + "'").attr('selected', true).change();
                 $("#modalEdit").modal();
             }
         })
     }
-    function modalStok(id){
+
+    function modalStok(id) {
         $("#id").val(id);
         $("#modalStok").modal();
     }
-    function modalHistory(id){
+
+    function modalHistory(id) {
         $.ajax({
-            type :"post",
-            url: "<?php echo base_url('admin/modalHistory')?>",
-            data : "id="+id,
-            success: function(data){
+            type: "post",
+            url: "<?php echo base_url('admin/modalHistory') ?>",
+            data: "id=" + id,
+            success: function(data) {
                 $("#hist").html(data);
                 $("#modalHistory").modal();
             }
         })
     }
-    function deleteData(id){
-        if(confirm('Yakin Hapus Data?')){
-            window.location.href = "<?php echo base_url('admin/deleteProduk/')?>"+id;
+
+    function deleteData(id) {
+        if (confirm('Yakin Hapus Data?')) {
+            window.location.href = "<?php echo base_url('admin/deleteProduk/') ?>" + id;
         }
     }
-    function tidak(){
+
+    function tidak() {
         Swal.fire(
             'Mohon Maaf',
             'Anda tidak dapat menghapus data ini, karena ada transaksi yang terkait.',
             'warning'
         )
+    }
+
+    function ubahFlagStok(element, jenis) {
+        $(element).val() == 1 ? $("#" + jenis + "v_stok").hide() : $("#" + jenis + "v_stok").show();
     }
 </script>
