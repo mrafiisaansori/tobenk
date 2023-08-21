@@ -121,10 +121,10 @@
 	                            	<h5 class="font-size-14">Keterangan</h5>
 									<textarea name="keterangan" cols="6" rows="6" class="form-control"></textarea>
 								</div>
-								<div class="form-group form-group-custom mb-4">
+								<!-- <div class="form-group form-group-custom mb-4">
 	                            	<h5 class="font-size-14">Mockup <span style="font-weight:bold">(Image Max 2MB)</span></h5>
 									<input type="file" class="form-control" name="mockup" accept="image/png, image/jpeg">
-								</div>
+								</div> -->
 								<div class="form-group form-group-custom mb-4">
 	                            	<h5 class="font-size-14">File Mentah</h5>
 									<input type="text" class="form-control" name="file_mentah" placeholder="Masukkan Berupa Link">
@@ -157,13 +157,13 @@
 	                            		<h5 class="font-size-14">Deadline</h5>
 																	<input type="text" class="form-control datepicker2" data-language="en" id="estimasi" name="estimasi" readonly>
 	                            </div>
-															<div class="form-group form-group-custom mb-4">
+															<!-- <div class="form-group form-group-custom mb-4">
 	                            		<h5 class="font-size-14">Status Pengerjaan</h5>
 																	<select class="form-control" name="status">
 																		<option value="0">Dalam Proses</option>
 																		<option value="1">Selesai</option>
 																	</select>
-	                            </div>
+	                            </div> -->
 															<div class="form-group form-group-custom mb-4">
 	                            	<h5 class="font-size-14">Diskon</h5>
 	                                <input type="text" class="form-control" id="diskon" name="diskon" value="0" onblur="total()">

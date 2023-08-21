@@ -111,6 +111,20 @@ $identitas = $this->db->query("SELECT * FROM m_identitas LIMIT 1")->row();
           <td>:</td>
           <td><?php echo ($data->JENIS_BAYAR); ?> (<?php  if($data->ID_METODE_BAYAR==1) echo "Full"; else echo "DP"; ?>)</td>
         </tr>
+        <?php if(!$data->MOCKUP){ ?>
+        <tr>
+          <td colspan="4" align="center">
+            <table width="100%" style="margin-top:25px;border: 1px solid;">
+              <tr>
+                <td align="center">
+                  <b>File Desain</b><br>
+                  <?php echo $data->FILE_MENTAH; ?>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <?php } else { ?>
         <tr>
           <td colspan="4" align="center">
             <table width="100%" style="margin-top:25px;border: 1px solid;">
@@ -123,6 +137,7 @@ $identitas = $this->db->query("SELECT * FROM m_identitas LIMIT 1")->row();
             </table>
           </td>
         </tr>
+        <?php } ?>
       </table>
 
       <table width="100%" cellspacing='0' bordercolor='#000000'cellpadding='4' border='1' style='border: solid 1.5pt black; border-collapse: collapse;margin-top:20px;font-size:9pt'>

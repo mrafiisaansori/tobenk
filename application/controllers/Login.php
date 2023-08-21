@@ -32,9 +32,16 @@ class Login extends CI_Controller
 					$this->session->set_userdata($sesi);
 					redirect("kasir");
 				} elseif ($cek->LEVEL == 3) {
-					$sesi = array('nama_produksi' => $cek->NAMA, 'id_produksi' => $cek->ID, 'level' => $cek->LEVEL);
-					$this->session->set_userdata($sesi);
-					redirect("produksi");
+					if($this->session->userdata("id_qr")){
+						$sesi = array('nama_produksi' => $cek->NAMA, 'id_produksi' => $cek->ID, 'level' => $cek->LEVEL);
+						$this->session->set_userdata($sesi);
+						redirect("produksi/detailList/".base64_encode_fix($this->session->userdata("id_qr")));
+					}
+					else{
+						$sesi = array('nama_produksi' => $cek->NAMA, 'id_produksi' => $cek->ID, 'level' => $cek->LEVEL);
+						$this->session->set_userdata($sesi);
+						redirect("produksi");
+					}
 				} elseif ($cek->LEVEL == 4) {
 					$sesi = array('nama_desainer' => $cek->NAMA, 'id_desainer' => $cek->ID, 'level' => $cek->LEVEL);
 					$this->session->set_userdata($sesi);

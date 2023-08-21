@@ -21,8 +21,11 @@ class Welcome extends CI_Controller
 	}
 	public function qr($id)
 	{
+		if($this->session->userdata("id_produksi")){
+			redirect("produksi/detailList/".$id);
+		}
 		$id = base64_decode_fix($id);
-		$this->session->set_userdata("id", $id);
+		$this->session->set_userdata("id_qr", $id);
 		redirect("produksi");
 	}
 }

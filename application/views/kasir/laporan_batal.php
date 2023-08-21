@@ -2,9 +2,9 @@
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h4 class="page-title mb-1">Laporan Penjualan</h4>
+                <h4 class="page-title mb-1">Laporan Pembatalan Pesanan</h4>
                 <ol class="breadcrumb m-0">
-                <li class="breadcrumb-item active">Laporan Penjualan</li>
+                <li class="breadcrumb-item active">Laporan Pembatalan Pesanan</li>
                 </ol>
             </div>
             <div class="col-md-4">
@@ -17,7 +17,7 @@
 <div class="page-content-wrapper">
     <div class="container-fluid">
 			<div class="row">
-			    <div class="col-xl-3">
+			    <div class="col-xl-12">
 			        <div class="card">
 			        	<h6 class="card-header bg-transparent border-bottom mt-0"><b>Filter</b></h6>
 			            <div class="card-body">
@@ -46,7 +46,7 @@
 			            </div>
 			        </div>
 			    </div>
-			    <div class="col-xl-9">
+			    <div class="col-xl-12">
 			        <div class="card">
 			        	<h6 class="card-header bg-transparent border-bottom mt-0"><b>History Transaksi</b></h6>
 			            <div class="card-body">

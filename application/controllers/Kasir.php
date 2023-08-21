@@ -243,23 +243,23 @@ class Kasir extends CI_Controller
 				}
 			}
 
-			//End Cek Stok
-			$file_name="";
-			if ($_FILES['mockup']['name']) {
-				$config['upload_path'] = './upload/mockup/';
-				$config['allowed_types'] = 'jpg|png';
-				$config['max_size'] = 1046;
-				$this->load->library('upload', $config);
-				if (!$this->upload->do_upload('mockup')) {
-					$this->session->set_flashdata('judul', 'Produk');
-					$this->session->set_flashdata('status', $this->upload->display_errors());
-					$this->session->set_flashdata('type', 'error');
-					redirect('transaksi-full.html');
-				} else {
-					$upload_data = $this->upload->data();
-					$file_name = $upload_data['file_name'];
-				}
-			}
+			// //End Cek Stok
+			// $file_name="";
+			// if ($_FILES['mockup']['name']) {
+			// 	$config['upload_path'] = './upload/mockup/';
+			// 	$config['allowed_types'] = 'jpg|png';
+			// 	$config['max_size'] = 1046;
+			// 	$this->load->library('upload', $config);
+			// 	if (!$this->upload->do_upload('mockup')) {
+			// 		$this->session->set_flashdata('judul', 'Produk');
+			// 		$this->session->set_flashdata('status', $this->upload->display_errors());
+			// 		$this->session->set_flashdata('type', 'error');
+			// 		redirect('transaksi-full.html');
+			// 	} else {
+			// 		$upload_data = $this->upload->data();
+			// 		$file_name = $upload_data['file_name'];
+			// 	}
+			// }
 
 			$data = array(
 				'TANGGAL' => $tanggal,
@@ -284,10 +284,10 @@ class Kasir extends CI_Controller
 				// 'OS_PD' => $os_pd,
 				'ID_METODE_BAYAR' => $metode,
 				'BAYAR' => $bayar,
-				'STATUS_PENGERJAAN' => $status,
+				'STATUS_PENGERJAAN' => 0,
 				'LUNAS' => $lunas,
 				'FILE_MENTAH' => $file_mentah,
-				'MOCKUP' => $file_name
+				// 'MOCKUP' => $file_name
 			);
 			$this->db->insert('t_penjualan', $data);
 			$id_last = $this->db->insert_id();
@@ -763,6 +763,23 @@ class Kasir extends CI_Controller
 		$data['page'] = 'kasir/detail';
 		$this->load->view($this->_template, $data);
 	}
+	function status($id,$status)
+	{
+		$id = base64_decode_fix($id);
+		$data = array(
+			'STATUS_PENGERJAAN' => $status
+		);
+		$this->db->where('ID', $id);
+		$this->db->update('t_penjualan', $data);
+		$return = array(
+			'status' => true,
+			'judul' => 'Success',
+			'pesan' => "Berhasil Update Status",
+			'type' => 'success'
+		);
+		$this->session->set_flashdata($return);
+		redirect("kasir/detail/" . base64_encode_fix($id));
+	}
 	function selesai($id)
 	{
 		$id = base64_decode_fix($id);
@@ -787,13 +804,13 @@ class Kasir extends CI_Controller
 		$penjualan = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
 		if ($penjualan->ID_METODE_BAYAR == 1) {
 			$data = array(
-				'STATUS_PENGERJAAN' => 2,
+				'STATUS_PENGERJAAN' => 5,
 				'LUNAS' => 1,
 				'AMBIL' => date("Y-m-d H:i:s")
 			);
 		} else {
 			$data = array(
-				'STATUS_PENGERJAAN' => 2,
+				'STATUS_PENGERJAAN' => 5,
 				'LUNAS' => 1,
 				'BAYAR' => $penjualan->TOTAL - $penjualan->DISKON,
 				'AMBIL' => date("Y-m-d H:i:s")
@@ -987,4 +1004,16 @@ class Kasir extends CI_Controller
 		$query = $this->db->order_by('ID', 'DESC')->get_where("t_penjualan", ["ID_CUSTOMER" => $id_customer]);
 		echo json_encode($query->row());
 	}
+	function desain_selesai()
+    {
+        $data['data'] = $this->db->get_where('view_penjualan', array('STATUS_PENGERJAAN' => 1))->result();
+        $data['page'] = 'kasir/desain_selesai';
+        $this->load->view($this->_template, $data);
+    }
+	function produksi_selesai()
+    {
+        $data['data'] = $this->db->get_where('view_penjualan', array('STATUS_PENGERJAAN' => 4))->result();
+        $data['page'] = 'kasir/produksi_selesai';
+        $this->load->view($this->_template, $data);
+    }
 }

@@ -116,14 +116,29 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?php echo site_url('kasir/laporan'); ?>">
-                                                History Transaksi
+                                            <a class="nav-link" href="<?php echo site_url('kasir/desain_selesai'); ?>">
+                                                Desain Selesai
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?php echo site_url('kasir/laporan_batal'); ?>">
-                                                History Pembatalan Transaksi
+                                            <a class="nav-link" href="<?php echo site_url('kasir/produksi_selesai'); ?>">
+                                                Produksi Selesai
                                             </a>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Laporan <div class="arrow-down"></div>
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="topnav-components">
+                                                <div class="dropdown">  
+                                                    <a href="<?php echo site_url('kasir/laporan'); ?>" class="dropdown-item">
+                                                        <div class="d-inline-block icons-sm mr-2"><i class="uim uim-schedule"></i></div> Transaksi
+                                                    </a>
+                                                    <a href="<?php echo site_url('kasir/laporan_batal'); ?>" class="dropdown-item">
+                                                        <div class="d-inline-block icons-sm mr-2"><i class="uim uim-exclamation-triangle"></i></div> Pembatalan Transaksi
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="<?php echo site_url('kasir/customer'); ?>">

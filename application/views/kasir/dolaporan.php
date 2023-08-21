@@ -8,7 +8,8 @@
                             <th>Diskon</th>
                             <th width="300">Tagihan</th>
                             <th width="300">Terbayar</th>
-                            <th>Status</th>
+                            <th>Status Pengerjaan</th>
+                            <th>Status Pembayaran</th>
                             <th>Detail</th>
                         </tr>
                     </thead>
@@ -37,8 +38,18 @@
                                     <td>
                                         <?php echo formatRupiah($key->DISKON); ?>
                                     </td>
-                                    <td ><?php  $pnd=$key->TOTAL-$key->DISKON;  echo "<b>".formatRupiah($pnd)."</b>"; if($key->DISKON){ echo "<br><s>".formatRupiah($key->TOTAL)."</s>"; } $pendapatan+=$pnd;  ?></td>
+                                    <td ><?php  $pnd=$key->TOTAL-$key->DISKON;  echo formatRupiah($pnd); if($key->DISKON){ echo "<br><s>".formatRupiah($key->TOTAL)."</s>"; } $pendapatan+=$pnd;  ?></td>
                                     <td ><?php if($key->ID_METODE_BAYAR==1) { echo formatRupiah($pnd); $terbayar+=$pnd; $fa=0; }  else  { echo formatRupiah($key->BAYAR); $terbayar+=$key->BAYAR; $fa=$pnd-$key->BAYAR; }   $belum_bayar+=$fa;  ?></td>
+                                    <td>
+                                        <?php
+                                        if ($key->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
+                                        else if ($key->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span>";
+                                        else if ($key->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span>";
+                                        else if ($key->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span>";
+                                        else if ($key->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Produksi</span>";
+                                        else if ($key->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-success' style='font-size:10pt;'>Diambil</span>";
+                                        ?>
+                                    </td>
                                     <td ><?php  if($key->LUNAS==1) echo "<span class='badge badge-primary' style='font-size:10pt'>Lunas</span>"; else echo "<span class='badge badge-danger' style='font-size:10pt'>Belum Lunas</span><br><span style='font-size:9pt'>Kurang ".formatRupiah($fa)."</span>"; ?></td>
                                     <td>
                                     <a target="_blank" href="<?php echo site_url('kasir/detail/'.base64_encode_fix($key->ID)); ?>" class="btn btn-primary mr-1"><i class="mdi mdi-eye"></i></a>

@@ -10,7 +10,16 @@
                 </ol>
             </div>
             <div class="col-md-4">
-                
+			<?php if($data->STATUS_PENGERJAAN==0){ ?>
+					<?php  if($data->STATUS==1){ ?>
+					<a href="javascript:void(0)" onclick="hapus(<?php echo $data->ID; ?>)" class="btn btn-danger mb-3" style="float:right;"><i class="mdi mdi-trash-can mr-1"></i> Batalkan</a>
+					<?php  } ?>
+				<?php }  else if($data->STATUS_PENGERJAAN==1){  ?>
+				<a href="<?php echo site_url('kasir/status/'.base64_encode_fix($id).'/3'); ?>" class="btn btn-info" onclick="return confirm('Yakin Menyelesaikan Tahapan Desain?')" style="float:right;"><i class="mdi mdi-check-bold mr-1"></i> Selesaikan Desain</a>
+				<a href="<?php echo site_url('kasir/status/'.base64_encode_fix($id).'/2'); ?>" class="btn btn-danger" onclick="return confirm('Yakin Melakukan Revisi Tahapan Desain?')" style="float:right;margin-right:10px"><i class="mdi mdi-repeat-once mr-1"></i> Revisi Desain</a>
+				<?php }  else if($data->STATUS_PENGERJAAN==4){  ?>
+					<a href="<?php echo site_url('kasir/ambil/'.base64_encode_fix($id)); ?>" class="btn btn-success" onclick="return confirm('Dengan menekan tombol ini maka transaksi dinyatakan selesai dan pesanan sudah di ambil oleh customer, apakah anda yakin?')" style="float:right;"><i class="mdi mdi-check-bold mr-1"></i> Diambil Customer</a>
+				<?php } ?>
             </div>
         </div>
     </div>
@@ -80,7 +89,18 @@
 														</tr>
 														<tr>
 															<th style="background-color:#f8f9fa"><b>Status Pengerjaan</b></th>
-															<th><?php if($data->STATUS==1){ if($data->STATUS_PENGERJAAN==1) echo "<span style='font-size:10pt' class='badge badge-soft-success'>Selesai</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SELESAI)."</span>"; elseif($data->STATUS_PENGERJAAN==0)  echo "<span style='font-size:10pt' class='badge badge-soft-danger'>Proses Pengerjaan</span>"; if($data->STATUS_PENGERJAAN==2) echo "<span style='font-size:10pt' class='badge badge-soft-primary'>Diambil</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->AMBIL)."</span>"; } else { echo "<span style='font-size:10pt' class='badge badge-soft-secondary'>Dibatalkan</span>"; }  ?></th>
+															<th>
+																<?php if ($data->STATUS == 1) {
+																	if ($data->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
+																	else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span>";
+																	else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span>";
+																	else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span>";
+																	else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Produksi</span>";
+																	else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-success' style='font-size:10pt;'>Diambil</span>";
+																} else {
+																	echo "<span style='font-size:10pt' class='badge badge-soft-secondary'>Dibatalkan</span>";
+																}  ?>
+															</th>
 														</tr>
 														<tr>
 															<th style="background-color:#f8f9fa"><b>Keterangan</b></th>
@@ -96,64 +116,66 @@
 			    </div>
 					<div class="col-xl-7">
 						<div class="card">
-								<h6 class="card-header bg-transparent border-bottom mt-0"><b>Produk</b></h6>
-			            <div class="card-body">
-									<table class="table table-bordered"  style="font-size:10pt">
-												<tr style="background-color:#f8f9fa">
-													<td style="font-weight:bold;" align="center">Produk</td>
-													<td style="font-weight:bold;" align="center">Qty</td>
-													<td style="font-weight:bold;" align="center">Harga</td>
-													<td style="font-weight:bold;" align="center">Total</td>
+							<h6 class="card-header bg-transparent border-bottom mt-0"><b>Mockup & File Mentah</b></h6>
+			            	<div class="card-body">
+							<center>
+								<img height="150px" src="<?php echo site_url('upload/mockup/'.$data->MOCKUP); ?>" alt=""><br>
+								<?php if($data->MOCKUP){ ?><a target="_blank" href="<?php echo site_url('upload/mockup/'.$data->MOCKUP); ?>" class="btn btn-sm btn-success mt-2">Unduh Mockup</a><?php } ?>
+								<a target="_blank" href="<?php echo $data->FILE_MENTAH; ?>" class="btn btn-sm btn-info mt-2">Lihat File Mentah</a>
+							</center>
+			            	</div>
+			        	</div>
+						<div class="card">
+							<h6 class="card-header bg-transparent border-bottom mt-0"><b>Produk</b></h6>
+			            	<div class="card-body">
+								<table class="table table-bordered"  style="font-size:10pt">
+									<tr style="background-color:#f8f9fa">
+										<td style="font-weight:bold;" align="center">Produk</td>
+										<td style="font-weight:bold;" align="center">Qty</td>
+										<td style="font-weight:bold;" align="center">Harga</td>
+										<td style="font-weight:bold;" align="center">Total</td>
+									</tr>
+									<?php
+										$tot=0;
+										if($produk->num_rows()>0){
+											foreach ($produk->result() as $dat) {
+												?>
+												<tr>
+													<td><B><?php echo $dat->NAMA_PRODUK; ?> (<?php echo $dat->UKURAN; ?>)</B><br><span style="font-size:9pt"><?php echo $dat->KETERANGAN; ?></span></td>
+													<td align="center"><?php echo $dat->QTY; ?></td>
+													<td align="right"><?php echo formatRupiah($dat->HARGA_JUAL); ?></td>
+													<td align="right"><?php echo formatRupiah($dat->QTY*$dat->HARGA_JUAL); $tot+=$dat->QTY*$dat->HARGA_JUAL; ?></td>
 												</tr>
 												<?php
-												$tot=0;
-												if($produk->num_rows()>0){
-												foreach ($produk->result() as $dat) {
-													?>
-													<tr>
-														<td><B><?php echo $dat->NAMA_PRODUK; ?> (<?php echo $dat->UKURAN; ?>)</B><br><span style="font-size:9pt"><?php echo $dat->KETERANGAN; ?></span></td>
-														<td align="center"><?php echo $dat->QTY; ?></td>
-														<td align="right"><?php echo formatRupiah($dat->HARGA_JUAL); ?></td>
-														<td align="right"><?php echo formatRupiah($dat->QTY*$dat->HARGA_JUAL); $tot+=$dat->QTY*$dat->HARGA_JUAL; ?></td>
-													</tr>
-													<?php
-												}
 											}
-												?>
-												<tfoot>
-													<tr>
-														<td colspan="3" align="right" style="font-weight:bold;">Grand Total</td>
-														<td align="right"><?php echo formatRupiah($tot); ?></td>
-													</tr>
-													<tr>
-														<td colspan="3" align="right" style="font-weight:bold;">Diskon</td>
-														<td align="right"><?php echo formatRupiah($data->DISKON); ?></td>
-													</tr>
-													<tr>
-														<td colspan="3" align="right" style="font-weight:bold;">Tagihan</td>
-														<td align="right"><?php echo formatRupiah($tot-$data->DISKON);  $hd = $tot-$data->DISKON; ?></td>
-													</tr>
-													<tr>
-														<td colspan="3" align="right" style="font-weight:bold;">Dibayar</td>
-														<td align="right"><?php echo formatRupiah($data->BAYAR); ?></td>
-													</tr>
-													<tr>
-														<td colspan="3" align="right" style="font-weight:bold;"><?php  if($data->ID_METODE_BAYAR==1) echo "Kembalian"; else echo "Kurang Bayar"; ?></td>
-														<td align="right"><?php $tsemua = $data->BAYAR-$hd;  echo formatRupiah(abs($tsemua)); ?></td>
-													</tr>
-												</tfoot>
-											</table>
-			            </div>
-			        </div>
-							<?php if($data->STATUS_PENGERJAAN==0){ ?>
-									<?php  if($data->STATUS==1){ ?>
-									<!-- <a href="<?php //echo site_url('kasir/selesai/'.base64_encode_fix($id)); ?>" class="btn btn-block btn-success "><i class="mdi mdi-file-document-box-check mr-1"></i> Selesaikan Pekerjaan</a> -->
-									<a href="javascript:void(0)" onclick="hapus(<?php echo $data->ID; ?>)" class="btn btn-block btn-danger  mb-3"><i class="mdi mdi-trash-can mr-1"></i> Batalkan</a>
-									<?php  } ?>
-							<?php }  else if($data->STATUS_PENGERJAAN==1){  ?>
-							<!-- <a href="<?php //echo site_url('kasir/ambil/'.base64_encode_fix($id)); ?>" class="btn btn-block btn-primary mb-3" onclick="return confirm('Dengan menekan tombol ini, maka transaksi dianggap selesai dan pesanan telah diberikan kepada customer')"><i class="mdi mdi-check-bold mr-1"></i> Selesaikan Transaksi</a> -->
-							<?php } ?>
-			    </div>
+										}
+									?>
+									<tfoot>
+										<tr>
+											<td colspan="3" align="right" style="font-weight:bold;">Grand Total</td>
+											<td align="right"><?php echo formatRupiah($tot); ?></td>
+										</tr>
+										<tr>
+											<td colspan="3" align="right" style="font-weight:bold;">Diskon</td>
+											<td align="right"><?php echo formatRupiah($data->DISKON); ?></td>
+										</tr>
+										<tr>
+											<td colspan="3" align="right" style="font-weight:bold;">Tagihan</td>
+											<td align="right"><?php echo formatRupiah($tot-$data->DISKON);  $hd = $tot-$data->DISKON; ?></td>
+										</tr>
+										<tr>
+											<td colspan="3" align="right" style="font-weight:bold;">Dibayar</td>
+											<td align="right"><?php echo formatRupiah($data->BAYAR); ?></td>
+										</tr>
+										<tr>
+											<td colspan="3" align="right" style="font-weight:bold;"><?php  if($data->ID_METODE_BAYAR==1) echo "Kembalian"; else echo "Kurang Bayar"; ?></td>
+											<td align="right"><?php $tsemua = $data->BAYAR-$hd;  echo formatRupiah(abs($tsemua)); ?></td>
+										</tr>
+									</tfoot>
+								</table>
+			            	</div>
+			        	</div>
+			    	</div>
 
 			</div>
 	</div>

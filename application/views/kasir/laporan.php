@@ -17,7 +17,7 @@
 <div class="page-content-wrapper">
     <div class="container-fluid">
 			<div class="row">
-			    <div class="col-xl-3">
+			    <div class="col-xl-12">
 			        <div class="card">
 			        	<h6 class="card-header bg-transparent border-bottom mt-0"><b>Filter</b></h6>
 			            <div class="card-body">
@@ -46,7 +46,7 @@
 			            </div>
 			        </div>
 			    </div>
-			    <div class="col-xl-9">
+			    <div class="col-xl-12">
 			        <div class="card">
 			        	<h6 class="card-header bg-transparent border-bottom mt-0"><b>History Transaksi</b></h6>
 			            <div class="card-body">
