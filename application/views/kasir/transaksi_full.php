@@ -121,14 +121,14 @@
 	                            	<h5 class="font-size-14">Keterangan</h5>
 									<textarea name="keterangan" cols="6" rows="6" class="form-control"></textarea>
 								</div>
-								<!-- <div class="form-group form-group-custom mb-4">
-	                            	<h5 class="font-size-14">Mockup <span style="font-weight:bold">(Image Max 2MB)</span></h5>
-									<input type="file" class="form-control" name="mockup" accept="image/png, image/jpeg">
-								</div> -->
 								<div class="form-group form-group-custom mb-4">
+	                            	<h5 class="font-size-14">File Customer <span style="font-weight:bold;color:red">Only (CDR,PDF,JPG,JPEG,PNG) Max 2MB</span></h5>
+									<input type="file" class="form-control" name="file_customer" id="file_customer">
+								</div>
+								<!-- <div class="form-group form-group-custom mb-4">
 	                            	<h5 class="font-size-14">File Mentah</h5>
 									<input type="text" class="form-control" name="file_mentah" placeholder="Masukkan Berupa Link">
-								</div>
+								</div> -->
 	                            <div class="form-group form-group-custom mb-4">
 	                                <h5 class="font-size-14">Jenis Pembayaran</h5>
 	                                <select class="form-control" name="jenis">
@@ -618,6 +618,19 @@
 		// 	}
 		// });
 	}
+	$(document).ready(function() {
+		$('#file_customer').on('change', function(evt) {
+			if(this.files[0].size>2097152)
+			{
+				Swal.fire(
+					'File Tidak Sesuai',
+					'File Lebih Dari 2MB',
+					'error'
+				)
+				$("#file_customer").val("");
+			}
+		});
+	});
 
 
 </script>

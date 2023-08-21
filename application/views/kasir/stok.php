@@ -36,6 +36,7 @@
                                 <th>Kategori</th>
                                 <th>Stok</th>
                                 <th>Harga Jual</th>
+                                <th>Status</th>
                             </tr>
                             </thead>
                         </table>

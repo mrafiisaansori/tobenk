@@ -22,17 +22,17 @@
         if ($data->STATUS == 1) {
             if ($data->LUNAS == 1) { ?>
                 <div class="alert alert-primary" role="alert">
-                    Pembayaran Lunas &nbsp; <i class="mdi mdi-progress-check" style="font-size:12pt"></i>
+                    <i class="fas fa-check" style="font-size:12pt"></i> Pembayaran Lunas
                 </div>
             <?php } else { ?>
                 <div class="alert alert-danger" role="alert">
-                    Pembayaran Belum Lunas &nbsp; <i class="mdi mdi-pause-circle" style="font-size:12pt"></i>
+                    <i class="fas fa-atlas" style="font-size:12pt"></i>Pembayaran Belum Lunas
                 </div>
             <?php }
         } else {
             ?>
             <div class="alert alert-danger" role="alert">
-                Transaksi Dibatalkan &nbsp; <i class="mdi mdi-trash-o" style="font-size:12pt"></i>
+                <i class="mdi mdi-trash-o" style="font-size:12pt"></i>Transaksi Dibatalkan
             </div>
         <?php
         }
@@ -141,7 +141,13 @@
                                     <table class="table table-bordered" style="font-size:10pt">
                                         <tbody>
                                             <tr>
-                                                <th width="20%" style="background-color:#f8f9fa"><b>File Mentah</b></th>
+                                                <th width="30%" style="background-color:#f8f9fa"><b>File Dari Customer</b></th>
+                                                <th>
+                                                <?php if($data->FILE_CUSTOMER){ echo "<a target='_blank' href=".site_url('upload/file_customer/'.$data->FILE_CUSTOMER).">".$data->FILE_CUSTOMER."</a>"; } else echo "-"; ?>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th width="30%" style="background-color:#f8f9fa"><b>File Mentah</b></th>
                                                 <th>
                                                     <input type="text" class="form-control" name="file_mentah" value="<?= $data->FILE_MENTAH ?>">
                                                 </th>

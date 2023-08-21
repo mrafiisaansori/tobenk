@@ -105,7 +105,8 @@ class Kasir extends CI_Controller
 		$barang = $this->input->post("barang");
 		$cek = $this->db->query("SELECT * FROM m_produk WHERE ID='$barang'");
 		if ($cek->num_rows() > 0) {
-			if ($cek->row()->STOK > 0) {
+
+			if($cek->row()->TANPA_STOK==1){
 				if ($this->cart->contents()) {
 					$qty_old = 1;
 					foreach ($this->cart->contents() as $item) {
@@ -113,18 +114,14 @@ class Kasir extends CI_Controller
 							$qty_old = $item['qty'] + 1;
 						}
 					}
-					if ($qty_old <= $cek->row()->STOK) {
-						$data = array(
-							'id'      => $cek->row()->ID,
-							'qty'     => 1,
-							'price'   => $cek->row()->HARGA_JUAL,
-							'name'    => base64_encode_fix($cek->row()->NAMA)
-						);
-						$this->cart->insert($data);
-						echo "1";
-					} else {
-						echo "0";
-					}
+					$data = array(
+						'id'      => $cek->row()->ID,
+						'qty'     => 1,
+						'price'   => $cek->row()->HARGA_JUAL,
+						'name'    => base64_encode_fix($cek->row()->NAMA)
+					);
+					$this->cart->insert($data);
+					echo "1";
 				} else {
 					$data = array(
 						'id'      => $cek->row()->ID,
@@ -135,9 +132,44 @@ class Kasir extends CI_Controller
 					$this->cart->insert($data);
 					echo "1";
 				}
-			} else {
-				echo "0";
 			}
+			else
+			{
+				if ($cek->row()->STOK > 0) {
+					if ($this->cart->contents()) {
+						$qty_old = 1;
+						foreach ($this->cart->contents() as $item) {
+							if ($item['id'] == $cek->row()->ID) {
+								$qty_old = $item['qty'] + 1;
+							}
+						}
+						if ($qty_old <= $cek->row()->STOK) {
+							$data = array(
+								'id'      => $cek->row()->ID,
+								'qty'     => 1,
+								'price'   => $cek->row()->HARGA_JUAL,
+								'name'    => base64_encode_fix($cek->row()->NAMA)
+							);
+							$this->cart->insert($data);
+							echo "1";
+						} else {
+							echo "0";
+						}
+					} else {
+						$data = array(
+							'id'      => $cek->row()->ID,
+							'qty'     => 1,
+							'price'   => $cek->row()->HARGA_JUAL,
+							'name'    => base64_encode_fix($cek->row()->NAMA)
+						);
+						$this->cart->insert($data);
+						echo "1";
+					}
+				} else {
+					echo "0";
+				}
+			}
+
 		} else {
 			echo "99";
 		}
@@ -146,7 +178,22 @@ class Kasir extends CI_Controller
 	{
 		$produk = $this->input->post('produk');
 		$produk = $this->db->query("SELECT * FROM m_produk WHERE ID='$produk'")->row();
-		if ($this->input->post('qty') <= $produk->STOK) {
+		if($produk->TANPA_STOK==0){
+			if ($this->input->post('qty') <= $produk->STOK) {
+				$rowid = $this->input->post('rowid');
+				$qty = $this->input->post('qty');
+				$data = array(
+					'rowid'   => $rowid,
+					'qty'     => $qty
+				);
+				$this->cart->update($data);
+				echo 1;
+			} else {
+				echo 99;
+			}
+		}
+		else
+		{
 			$rowid = $this->input->post('rowid');
 			$qty = $this->input->post('qty');
 			$data = array(
@@ -155,8 +202,6 @@ class Kasir extends CI_Controller
 			);
 			$this->cart->update($data);
 			echo 1;
-		} else {
-			echo 99;
 		}
 	}
 	public function batal()
@@ -243,23 +288,23 @@ class Kasir extends CI_Controller
 				}
 			}
 
-			// //End Cek Stok
-			// $file_name="";
-			// if ($_FILES['mockup']['name']) {
-			// 	$config['upload_path'] = './upload/mockup/';
-			// 	$config['allowed_types'] = 'jpg|png';
-			// 	$config['max_size'] = 1046;
-			// 	$this->load->library('upload', $config);
-			// 	if (!$this->upload->do_upload('mockup')) {
-			// 		$this->session->set_flashdata('judul', 'Produk');
-			// 		$this->session->set_flashdata('status', $this->upload->display_errors());
-			// 		$this->session->set_flashdata('type', 'error');
-			// 		redirect('transaksi-full.html');
-			// 	} else {
-			// 		$upload_data = $this->upload->data();
-			// 		$file_name = $upload_data['file_name'];
-			// 	}
-			// }
+			//End Cek Stok
+			$file_name="";
+			if ($_FILES['file_customer']['name']) {
+				$config['upload_path'] = './upload/file_customer/';
+				$config['allowed_types'] = 'jpg|png|jpeg|pdf|cdr';
+				$config['max_size'] = 2046;
+				$this->load->library('upload', $config);
+				if (!$this->upload->do_upload('file_customer')) {
+					$this->session->set_flashdata('judul', 'Produk');
+					$this->session->set_flashdata('status', $this->upload->display_errors());
+					$this->session->set_flashdata('type', 'error');
+					redirect('transaksi-full.html');
+				} else {
+					$upload_data = $this->upload->data();
+					$file_name = $upload_data['file_name'];
+				}
+			}
 
 			$data = array(
 				'TANGGAL' => $tanggal,
@@ -287,7 +332,7 @@ class Kasir extends CI_Controller
 				'STATUS_PENGERJAAN' => 0,
 				'LUNAS' => $lunas,
 				'FILE_MENTAH' => $file_mentah,
-				// 'MOCKUP' => $file_name
+				'FILE_CUSTOMER' => $file_name
 			);
 			$this->db->insert('t_penjualan', $data);
 			$id_last = $this->db->insert_id();
@@ -369,7 +414,7 @@ class Kasir extends CI_Controller
 	}
 	function getTabelJsonProduk()
 	{
-		$aColumns = array('ID_PRODUK', 'NAMA_PRODUK', 'UKURAN', 'DESKRIPSI_KATEGORI', 'STOK', 'HARGA_JUAL');
+		$aColumns = array('ID_PRODUK', 'NAMA_PRODUK', 'UKURAN', 'DESKRIPSI_KATEGORI', 'STOK', 'HARGA_JUAL', 'TANPA_STOK');
 
 		//primary key
 		$sIndexColumn = "ID_PRODUK";
@@ -454,6 +499,11 @@ class Kasir extends CI_Controller
 		);
 		$seq_number = $_GET['iDisplayStart'] + 1;
 		foreach ($rResult as $data) {
+			if($data->TANPA_STOK==1){
+				$status="<span class='badge badge-danger'>Tanpa Stok</span>";
+			}else{
+				$status="<span class='badge badge-success'>Dengan Stok</span>";
+			}
 			$row = array();
 			$row[] = $seq_number;
 			$row[] = $data->NAMA_PRODUK;
@@ -461,6 +511,7 @@ class Kasir extends CI_Controller
 			$row[] = $data->DESKRIPSI_KATEGORI;
 			$row[] = $data->STOK;
 			$row[] = formatRupiah($data->HARGA_JUAL);
+			$row[] = $status;
 			$output['aaData'][] = $row;
 			$seq_number++;
 		}
@@ -609,7 +660,7 @@ class Kasir extends CI_Controller
 					$this->db->like('NAMA', $pencarian);
 				}
 			}
-			$produk = $this->db->get_where("m_produk", ["ID_KATEGORI" => $kategori, "STOK>" => 0]);
+			$produk = $this->db->get_where("m_produk", ["ID_KATEGORI" => $kategori]);
 		} else {
 			if ($pencarian) {
 				if (is_numeric($pencarian) == 1) {
@@ -618,30 +669,56 @@ class Kasir extends CI_Controller
 					$this->db->like('NAMA', $pencarian);
 				}
 			}
-			$produk = $this->db->get_where("m_produk", ["STOK>" => 0]);
+			$produk = $this->db->get("m_produk");
 		}
 		//echo $this->db->last_query();exit();
 		if ($produk->num_rows() > 0) {
 			foreach ($produk->result() as $key) {
-				if ($key->FOTO) {
-					$image = site_url($key->FOTO);
-				} else {
-					$image = site_url('upload/product/product.jpg');
+				if($key->TANPA_STOK==1){
+					if ($key->FOTO) {
+						$image = site_url($key->FOTO);
+					} else {
+						$image = site_url('upload/product/product.jpg');
+					}
+					echo '
+						<div class="col-md-3" style="cursor: pointer" onclick="beli(' . $key->ID . ')">
+								<div class="card">
+										<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
+										<div class="card-body">
+												<h4 class="card-title font-size-16 text-center">' . $key->NAMA .' ('.$key->UKURAN .')</h4>
+												<p class="card-text text-center" style="font-size:10pt">' . $key->KETERANGAN . '</p>
+												<center><p class="card-text">
+														<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>
+												</p></center>
+										</div>
+								</div>
+						</div>
+					';
 				}
-				echo '
-					<div class="col-md-3" style="cursor: pointer" onclick="beli(' . $key->ID . ')">
-							<div class="card">
-									<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
-									<div class="card-body">
-											<h4 class="card-title font-size-16 text-center">' . $key->NAMA .' ('.$key->UKURAN .')</h4>
-											<p class="card-text text-center" style="font-size:10pt">' . $key->KETERANGAN . '</p>
-											<center><p class="card-text">
-													<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>
-											</p></center>
+				else
+				{
+					if($key->TANPA_STOK==0){
+						if ($key->FOTO) {
+							$image = site_url($key->FOTO);
+						} else {
+							$image = site_url('upload/product/product.jpg');
+						}
+						echo '
+							<div class="col-md-3" style="cursor: pointer" onclick="beli(' . $key->ID . ')">
+									<div class="card">
+											<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
+											<div class="card-body">
+													<h4 class="card-title font-size-16 text-center">' . $key->NAMA .' ('.$key->UKURAN .')</h4>
+													<p class="card-text text-center" style="font-size:10pt">' . $key->KETERANGAN . '</p>
+													<center><p class="card-text">
+															<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>
+													</p></center>
+											</div>
 									</div>
 							</div>
-					</div>
-				';
+						';
+					}
+				}
 			}
 		} else {
 			echo '

@@ -15,11 +15,13 @@
 					<a href="javascript:void(0)" onclick="hapus(<?php echo $data->ID; ?>)" class="btn btn-danger mb-3" style="float:right;"><i class="mdi mdi-trash-can mr-1"></i> Batalkan</a>
 					<?php  } ?>
 				<?php }  else if($data->STATUS_PENGERJAAN==1){  ?>
-				<a href="<?php echo site_url('kasir/status/'.base64_encode_fix($id).'/3'); ?>" class="btn btn-info" onclick="return confirm('Yakin Menyelesaikan Tahapan Desain?')" style="float:right;"><i class="mdi mdi-check-bold mr-1"></i> Selesaikan Desain</a>
-				<a href="<?php echo site_url('kasir/status/'.base64_encode_fix($id).'/2'); ?>" class="btn btn-danger" onclick="return confirm('Yakin Melakukan Revisi Tahapan Desain?')" style="float:right;margin-right:10px"><i class="mdi mdi-repeat-once mr-1"></i> Revisi Desain</a>
+				<a href="<?php echo site_url('kasir/status/'.base64_encode_fix($id).'/3'); ?>" class="btn btn-success mr-1" onclick="return confirm('Yakin Menyelesaikan Tahapan Desain?')" style="float:right;"><i class="mdi mdi-check-bold mr-1"></i> Selesaikan Desain</a>
+				<a href="<?php echo site_url('kasir/status/'.base64_encode_fix($id).'/2'); ?>" class="btn btn-danger mr-1" onclick="return confirm('Yakin Melakukan Revisi Tahapan Desain?')" style="float:right;margin-right:10px"><i class="mdi mdi-repeat-once mr-1"></i> Revisi Desain</a>
 				<?php }  else if($data->STATUS_PENGERJAAN==4){  ?>
-					<a href="<?php echo site_url('kasir/ambil/'.base64_encode_fix($id)); ?>" class="btn btn-success" onclick="return confirm('Dengan menekan tombol ini maka transaksi dinyatakan selesai dan pesanan sudah di ambil oleh customer, apakah anda yakin?')" style="float:right;"><i class="mdi mdi-check-bold mr-1"></i> Diambil Customer</a>
+					<a href="<?php echo site_url('kasir/ambil/'.base64_encode_fix($id)); ?>" class="btn btn-success mr-1" onclick="return confirm('Dengan menekan tombol ini maka transaksi dinyatakan selesai dan pesanan sudah di ambil oleh customer, apakah anda yakin?')" style="float:right;"><i class="mdi mdi-check-bold mr-1"></i> Diambil Customer</a>
 				<?php } ?>
+			<a target="_blank" href="<?php echo site_url('kasir/cetak/'.base64_encode_fix($data->ID).'/'.base64_encode_fix($data->BAYAR)); ?>" class="btn btn-info mr-1" style="float:right;"><i class="mdi mdi-printer mr-1"></i> Cetak</a>
+
             </div>
         </div>
     </div>
@@ -31,17 +33,17 @@
 							if($data->STATUS==1){ 
 							if($data->LUNAS==1){ ?>
 						<div class="alert alert-primary" role="alert">
-								Pembayaran Lunas &nbsp; <i class="mdi mdi-progress-check" style="font-size:12pt"></i>
+							<i class="fas fa-check" style="font-size:12pt"></i> Pembayaran Lunas
 						</div>
 						<?php } else { ?>
 						<div class="alert alert-danger" role="alert">
-								Pembayaran Belum Lunas &nbsp; <i class="mdi mdi-pause-circle" style="font-size:12pt"></i>
+							<i class="fas fa-atlas" style="font-size:12pt"></i>Pembayaran Belum Lunas
 						</div>
 					<?php }}
 					else{
 						?>
 						<div class="alert alert-danger" role="alert">
-								Transaksi Dibatalkan &nbsp; <i class="mdi mdi-trash-o" style="font-size:12pt"></i>
+							<i class="mdi mdi-trash-o" style="font-size:12pt"></i>Transaksi Dibatalkan
 						</div>
 						<?php
 					}
@@ -120,8 +122,15 @@
 			            	<div class="card-body">
 							<center>
 								<img height="150px" src="<?php echo site_url('upload/mockup/'.$data->MOCKUP); ?>" alt=""><br>
-								<?php if($data->MOCKUP){ ?><a target="_blank" href="<?php echo site_url('upload/mockup/'.$data->MOCKUP); ?>" class="btn btn-sm btn-success mt-2">Unduh Mockup</a><?php } ?>
+								<?php if($data->FILE_MENTAH){ ?>
+									<a target="_blank" href="<?php echo site_url('upload/file_customer/'.$data->FILE_CUSTOMER); ?>" class="btn btn-sm btn-danger mt-2">Unduh File Dari Customer</a>
+								<?php } ?>
+								<?php if($data->MOCKUP){ ?>
+									<a target="_blank" href="<?php echo site_url('upload/mockup/'.$data->MOCKUP); ?>" class="btn btn-sm btn-success mt-2">Unduh Mockup</a>
+								<?php } ?>
+								<?php if($data->FILE_MENTAH){ ?>
 								<a target="_blank" href="<?php echo $data->FILE_MENTAH; ?>" class="btn btn-sm btn-info mt-2">Lihat File Mentah</a>
+								<?php } ?>
 							</center>
 			            	</div>
 			        	</div>
