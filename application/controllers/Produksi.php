@@ -86,7 +86,7 @@ class Produksi extends CI_Controller
         $offset = ($page - 1) * $per_page;
         //end pagination
 
-        $data = $this->db->query("SELECT * FROM view_penjualan WHERE STATUS_PENGERJAAN > 2 ORDER BY ID DESC LIMIT $per_page OFFSET $offset")->result();
+        $data = $this->db->query("SELECT * FROM view_penjualan WHERE  STATUS_PENGERJAAN = 3 ORDER BY ID DESC LIMIT $per_page OFFSET $offset")->result();
         $data['data'] = $data;
         $data['current_page'] = $page;
         $data['total_page'] = $total_page;
@@ -116,5 +116,22 @@ class Produksi extends CI_Controller
         );
         $this->session->set_flashdata($return);
         redirect("produksi/detailList/" . base64_encode_fix($id));
+    }
+
+
+    function historiKerjaan()
+    {
+        $data['data'] = $this->db->get_where('view_penjualan', array('STATUS_PENGERJAAN >' => 2))->result();
+        $data['page'] = 'produksi/histori_kerjaan';
+        $this->load->view($this->_template, $data);
+    }
+    function detailHistoriKerjaan($id)
+    {
+        $id = base64_decode_fix($id);
+        $data["id"] = $id;
+        $data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
+        $data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
+        $data['page'] = 'produksi/detail_histori_kerjaan';
+        $this->load->view($this->_template, $data);
     }
 }
