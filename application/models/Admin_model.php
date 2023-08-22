@@ -183,7 +183,7 @@ class Admin_model extends CI_Model
         $keterangan = $this->input->post('keterangan');
         $ukuran = $this->input->post('ukuran');
         $tanpa_stok = $this->input->post('tanpa_stok');
-        $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,STOK,HARGA_BELI,HARGA_JUAL,BARCODE,KETERANGAN,UKURAN,TANPA_STOK) VALUES ('$nama','$kategori','$stok','$harga_beli','$harga_jual','$barcode','$keterangan','$ukuran','$tanpa_stok')";
+        $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,KETERANGAN,TANPA_STOK) VALUES ('$nama','$kategori','$keterangan','$tanpa_stok')";
         $query = $this->db->query($query);
         if ($query) {
             $this->insertProdukDetail($this->db->insert_id());
@@ -203,7 +203,7 @@ class Admin_model extends CI_Model
         $keterangan = $this->input->post('keterangan');
         $ukuran = $this->input->post('ukuran');
         $tanpa_stok = $this->input->post('tanpa_stok');
-        $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,STOK,HARGA_BELI,HARGA_JUAL,BARCODE,FOTO,KETERANGAN,UKURAN,TANPA_STOK) VALUES ('$nama','$kategori','$stok','$harga_beli','$harga_jual','$barcode','$filename','$keterangan','$ukuran','$tanpa_stok')";
+        $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,FOTO,KETERANGAN,TANPA_STOK) VALUES ('$nama','$kategori','$filename','$keterangan','$tanpa_stok')";
         $query = $this->db->query($query);
         if ($query) {
             $this->insertProdukDetail($this->db->insert_id());
@@ -308,7 +308,7 @@ class Admin_model extends CI_Model
         $keterangan = $this->input->post('keterangan');
         $ukuran = $this->input->post('ukuran');
         $tanpa_stok = $this->input->post('tanpa_stok');
-        $query = "UPDATE m_produk SET NAMA='$nama',ID_KATEGORI='$kategori',HARGA_BELI='$harga_beli',HARGA_JUAL='$harga_jual',BARCODE='$barcode',KETERANGAN='$keterangan',UKURAN='$ukuran',TANPA_STOK='$tanpa_stok' WHERE ID='$id'";
+        $query = "UPDATE m_produk SET NAMA='$nama',ID_KATEGORI='$kategori',KETERANGAN='$keterangan',TANPA_STOK='$tanpa_stok' WHERE ID='$id'";
         $query = $this->db->query($query);
         if ($query) {
             return true;
@@ -326,7 +326,7 @@ class Admin_model extends CI_Model
         $barcode = $this->input->post('barcode');
         $keterangan = $this->input->post('keterangan');
         $ukuran = $this->input->post('ukuran');
-        $query = "UPDATE m_produk SET NAMA='$nama',ID_KATEGORI='$kategori',HARGA_BELI='$harga_beli',HARGA_JUAL='$harga_jual',BARCODE='$barcode',FOTO='$filename',KETERANGAN='$keterangan',UKURAN='$ukuran' WHERE ID='$id'";
+        $query = "UPDATE m_produk SET NAMA='$nama',ID_KATEGORI='$kategori',FOTO='$filename',KETERANGAN='$keterangan' WHERE ID='$id'";
         $query = $this->db->query($query);
         if ($query) {
             return true;

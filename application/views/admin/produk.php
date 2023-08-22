@@ -472,7 +472,7 @@
         <tr>
             <td>
                 <input type="text" name="ukuran[]" class="form-control" value='${ukuran}' required>
-                <input type="hidden" name="id[]" class="form-control" value='${id}'>
+                <input type="hidden" name="id_produk_detail[]" class="form-control" value='${id}'>
             </td>
             <td class='${jenis}v_stok' ${hide}>
                 <input class="form-control only-nums" type="text" name="stok[]" value="${stok}" required ${data ? 'disabled' : ''}>
@@ -499,7 +499,7 @@
     }
 
     function hapusUkuran(element) {
-        id = $(element).closest('tr').find('input[name="id[]"]').val();
+        id = $(element).closest('tr').find('input[name="id_produk_detail[]"]').val();
         if (id) {
             $.ajax({
                 type: "post",
@@ -521,7 +521,7 @@
     function saveUkuran(element) {
         const tr = $(element).closest('tr');
         const id_produk = $("#modalEdit").find('input[name="id"]').val();
-        const id_detail = tr.find('input[name="id[]"]').val();
+        const id_detail = tr.find('input[name="id_produk_detail[]"]').val();
         const ukuran = tr.find('input[name="ukuran[]"]').val();
         const stok = tr.find('input[name="stok[]"]').val();
         const harga_beli = tr.find('input[name="harga_beli[]"]').val();
@@ -541,7 +541,7 @@
             },
             success: function(msg) {
                 if (msg > 0) {
-                    tr.find('input[name="id[]"]').val(msg);
+                    tr.find('input[name="id_produk_detail[]"]').val(msg);
                     alert('Berhasil Disimpan');
                 } else {
                     alert('Gagal Disimpan');
