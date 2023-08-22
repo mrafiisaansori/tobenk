@@ -413,8 +413,8 @@ class Admin extends CI_Controller
 			$config['upload_path'] = './upload/product/';
 			$config['allowed_types'] = 'jpg|png|jpeg';
 			$config['max_size'] = 500;
-			$config['max_width'] = 800;
-			$config['max_height'] = 533;
+			// $config['max_width'] = 800;
+			// $config['max_height'] = 533;
 			$this->load->library('upload', $config);
 			if (!$this->upload->do_upload('foto')) {
 				$this->session->set_flashdata('judul', 'Produk');
@@ -509,8 +509,8 @@ class Admin extends CI_Controller
 			$config['upload_path'] = './upload/product/';
 			$config['allowed_types'] = 'jpg|png|jpeg';
 			$config['max_size'] = 500;
-			$config['max_width'] = 800;
-			$config['max_height'] = 533;
+			// $config['max_width'] = 800;
+			// $config['max_height'] = 533;
 			$this->load->library('upload', $config);
 			if (!$this->upload->do_upload('foto')) {
 				$this->session->set_flashdata('judul', 'Produk');
