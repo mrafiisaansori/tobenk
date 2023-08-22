@@ -315,7 +315,7 @@ class Admin extends CI_Controller
 			$row = array();
 			$row[] = $seq_number;
 			//$row[] = "<a target='_blank' href='".site_url('urgent/penyusutan/'.$data->ID_PRODUK)."'>".$data->NAMA_PRODUK."</a>";
-			$row[] = "<a onclick='modalHistory(" . $data->ID_PRODUK . ")' href='javascript:void(0)'>" . $data->NAMA_PRODUK . "</a>";
+			$row[] = $data->NAMA_PRODUK;
 			// $row[] = $data->UKURAN;
 			$row[] = $data->KETERANGAN;
 			$row[] = $data->DESKRIPSI_KATEGORI;
@@ -323,7 +323,7 @@ class Admin extends CI_Controller
 			$detail = $this->Admin_model->getProdukDetailByIdProduk($data->ID_PRODUK);
 			if ($detail) {
 				foreach ($detail as $d) {
-					$ukuran .= $d->UKURAN . " : " . $d->STOK . "<br>";
+					$ukuran .= "<a style='width:200px' class='btn btn-sm btn-success mb-1' onclick='modalHistory(" . $d->ID . ")' href='javascript:void(0)'>".$d->UKURAN . " (" . $d->STOK . ")</a><br>";
 				}
 			}
 			$row[] = $ukuran;
@@ -340,19 +340,29 @@ class Admin extends CI_Controller
 
 		echo json_encode($output);
 	}
+	function ukuranByProduk(){
+		$id=$this->input->post("id");
+		$cek=$this->db->get_where("m_produk_detail",["ID_PRODUK"=>$id]);
+		if($cek->num_rows()>0){
+			foreach ($cek->result() as $key) {
+				echo "<option value='".$key->ID."'>".$key->UKURAN."</option>";
+			}
+		}
+	}
 	function stokInsidentil()
 	{
+		$ukuran = $this->input->post("ukuran");
 		$jenis = $this->input->post("jenis");
 		$jumlah = $this->input->post("jumlah");
 		$id = $this->input->post("id");
 		$keterangan = $this->input->post("keterangan");
-		$insert_rekam = $this->Admin_model->insertRekamStok($id, $jumlah, $jenis, $keterangan);
+		$insert_rekam = $this->Admin_model->insertRekamStok2($id, $ukuran,$jumlah, $jenis, $keterangan);
 		if ($jenis == 1) {
 			$ket = "Restok";
-			$this->db->query("UPDATE m_produk SET STOK=STOK+$jumlah WHERE ID='$id'");
+			$this->db->query("UPDATE m_produk_detail SET STOK=STOK+$jumlah WHERE ID='$ukuran'");
 		} else {
 			$ket = "Retur";
-			$this->db->query("UPDATE m_produk SET STOK=STOK-$jumlah WHERE ID='$id'");
+			$this->db->query("UPDATE m_produk_detail SET STOK=STOK-$jumlah WHERE ID='$ukuran'");
 		}
 		$this->session->set_flashdata('judul', 'Berhasil');
 		$this->session->set_flashdata('status', $ket . ' Berhasil');
@@ -362,13 +372,10 @@ class Admin extends CI_Controller
 	function modalHistory()
 	{
 		$id = $this->input->post("id");
-		$produk = $this->db->get_where("m_produk", ["ID" => $id])->row();
-		$data = $this->db->get_where("t_rekam_stok", ["ID_PRODUK" => $id]);
-		$detail_produk = $this->Admin_model->getProdukDetailByIdProduk($id);
-		$arr_detail_produk = array_column(json_decode(json_encode($detail_produk), true), 'UKURAN', 'ID');
+		$produk = $this->db->get_where("view_produk_detail", ["ID" => $id])->row();
+		$data = $this->db->get_where("t_rekam_stok", ["ID_PRODUK_DETAIL" => $id]);
 		echo "<table class='table table-striped table-bordered'>
 		<tr>
-			<th>Ukuran</th>
 			<th>Keterangan</th>
 			<th>Jenis</th>
 			<th>Tanggal</th>
@@ -382,7 +389,6 @@ class Admin extends CI_Controller
 					$jenis = "<button class='btn btn-sm btn-danger'><i class='fas fa-minus-circle mr-1'></i>Keluar</button>";
 				}
 				echo "<tr>
-				<td>" . $arr_detail_produk[$key->ID_PRODUK_DETAIL] . "</td>
 				<td>" . $key->KETERANGAN . "</td>
 				<td>" . $jenis . "</td>
 				<td>" . tgl_jam_indo_lengkap($key->TANGGAL) . "</td>

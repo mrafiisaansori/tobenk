@@ -1,11 +1,11 @@
 <?php 
 if($this->cart->contents()):
 foreach ($this->cart->contents() as $items): 
-    $prod=$this->db->get_where("m_produk",["ID"=>$items['id']]);
+    $prod=$this->db->get_where("view_produk_detail",["ID"=>$items['id']]);
     ?>
     <tr>
     <td>
-        <?php echo base64_decode_fix($items['name']); ?> (<?php echo $prod->row()->UKURAN; ?>)<br><p style="font-size:9pt"><?php echo $prod->row()->KETERANGAN; ?></p><b><?php echo $this->cart->format_number($items['price']); ?></b>
+        <?php echo base64_decode_fix($items['name']); ?> (<?php echo $prod->row()->UKURAN; ?>)<br><b><?php echo $this->cart->format_number($items['price']); ?></b>
     </td>
     <td width="150px">
         <!-- <input id="demo3_22" type="text" value="33" name="demo3_22"> -->

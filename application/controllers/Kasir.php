@@ -103,7 +103,7 @@ class Kasir extends CI_Controller
 	public function beli()
 	{
 		$barang = $this->input->post("barang");
-		$cek = $this->db->query("SELECT * FROM m_produk WHERE ID='$barang'");
+		$cek = $this->db->query("SELECT * FROM view_produk_detail WHERE ID='$barang'");
 		if ($cek->num_rows() > 0) {
 
 			if($cek->row()->TANPA_STOK==1){
@@ -177,7 +177,7 @@ class Kasir extends CI_Controller
 	function gantiqty()
 	{
 		$produk = $this->input->post('produk');
-		$produk = $this->db->query("SELECT * FROM m_produk WHERE ID='$produk'")->row();
+		$produk = $this->db->query("SELECT * FROM view_produk_detail WHERE ID='$produk'")->row();
 		if($produk->TANPA_STOK==0){
 			if ($this->input->post('qty') <= $produk->STOK) {
 				$rowid = $this->input->post('rowid');
@@ -340,24 +340,26 @@ class Kasir extends CI_Controller
 			foreach ($this->cart->contents() as $items) {
 				$id = $items['id'];
 				$qty = $items['qty'];
-				$produk = $this->db->query("SELECT * FROM m_produk WHERE ID='$id'");
+				$produk = $this->db->query("SELECT * FROM view_produk_detail WHERE ID='$id'");
 				if ($produk->num_rows() > 0) {
 					$harga_beli = $produk->row()->HARGA_BELI;
 					$harga_jual = $items['price'];
+					$id_produk=$produk->row()->ID_PRODUK;
 					$data2 = array(
 						'ID_TRANSAKSI_PENJUALAN' => $id_last,
-						'ID_PRODUK' => $id,
+						'ID_PRODUK' => $id_produk,
 						'HARGA_BELI' => $harga_beli,
 						'HARGA_JUAL' => $harga_jual,
-						'QTY' => $qty
+						'QTY' => $qty,
+						'ID_PRODUK_DETAIL' => $id
 					);
 					$this->db->insert('t_detail_penjualan', $data2);
 					$jenis = 2;
 					$tanggal = date("Y-m-d H:i:s");
 					$keterangan = "Transaksi Penjualan Nomor " . sprintf("%06d", $id_last);
-					$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN) VALUES ('$id','$jenis','$qty','$tanggal','$keterangan')");
+					$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$id_produk','$jenis','$qty','$tanggal','$keterangan','$id')");
 				}
-				$this->db->query("UPDATE m_produk SET STOK=STOK-$qty WHERE ID='$id'");
+				$this->db->query("UPDATE m_produk_detail SET STOK=STOK-$qty WHERE ID='$id'");
 			}
 			$this->cart->destroy();
 			redirect("kasir/pilih/" . base64_encode_fix($id_last . "#" . $bayar));
@@ -660,7 +662,7 @@ class Kasir extends CI_Controller
 					$this->db->like('NAMA', $pencarian);
 				}
 			}
-			$produk = $this->db->get_where("m_produk", ["ID_KATEGORI" => $kategori]);
+			$produk = $this->db->get_where("view_produk_detail", ["ID_KATEGORI" => $kategori]);
 		} else {
 			if ($pencarian) {
 				if (is_numeric($pencarian) == 1) {
@@ -669,7 +671,7 @@ class Kasir extends CI_Controller
 					$this->db->like('NAMA', $pencarian);
 				}
 			}
-			$produk = $this->db->get("m_produk");
+			$produk = $this->db->get("view_produk_detail");
 		}
 		//echo $this->db->last_query();exit();
 		if ($produk->num_rows() > 0) {
@@ -685,8 +687,8 @@ class Kasir extends CI_Controller
 								<div class="card">
 										<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
 										<div class="card-body">
-												<h4 class="card-title font-size-16 text-center">' . $key->NAMA .' ('.$key->UKURAN .')</h4>
-												<p class="card-text text-center" style="font-size:10pt">' . $key->KETERANGAN . '</p>
+												<h4 class="card-title font-size-16 text-center">' . $key->NAMA.'</h4>
+												<p class="card-text text-center" style="font-size:10pt"><span class="badge badge-primary" style="font-size:10pt">' . $key->UKURAN . '</span></p>
 												<center><p class="card-text">
 														<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>
 												</p></center>
@@ -708,8 +710,8 @@ class Kasir extends CI_Controller
 									<div class="card">
 											<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
 											<div class="card-body">
-													<h4 class="card-title font-size-16 text-center">' . $key->NAMA .' ('.$key->UKURAN .')</h4>
-													<p class="card-text text-center" style="font-size:10pt">' . $key->KETERANGAN . '</p>
+													<h4 class="card-title font-size-16 text-center">' . $key->NAMA .'</h4>
+													<p class="card-text text-center" style="font-size:10pt"><span class="badge badge-primary" style="font-size:10pt">' . $key->UKURAN . '</span></p>
 													<center><p class="card-text">
 															<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>
 													</p></center>

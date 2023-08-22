@@ -154,8 +154,6 @@ $identitas = $this->db->query("SELECT * FROM m_identitas LIMIT 1")->row();
             <tr>
               <td style=" vertical-align: top;">
                 <b><?php echo $dat->NAMA_PRODUK." (".$dat->UKURAN.")"; ?></b>
-                <br>
-                <?php echo $dat->KETERANGAN; ?>
               </td>
               <td style=" vertical-align: top;">
                 <?php echo formatRupiah($dat->HARGA_JUAL); ?>

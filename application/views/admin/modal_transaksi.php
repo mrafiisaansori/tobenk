@@ -47,7 +47,18 @@ else{
               Resep <?php echo ($data->RESEP); ?><br>
               Pembayaran <?php echo ($data->JENIS_BAYAR); ?><br>
               Metode <?php if($data->ID_METODE_BAYAR==1) echo "Full Payment"; else echo "Down Payment"; ?><br>
-              <?php if($data->STATUS==1){ if($data->STATUS_PENGERJAAN==1) echo "Pekerjaan Selesai ".tgl_jam_indo_lengkap($data->SELESAI).""; elseif($data->STATUS_PENGERJAAN==0)  echo "Proses Pengerjaan"; if($data->STATUS_PENGERJAAN==2) echo "Telah Diambil ".tgl_jam_indo_lengkap($data->AMBIL); } else { echo "Dibatalkan"; }  ?><br>
+              <?php if ($data->STATUS == 1) {
+                if ($data->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
+                else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span>";
+                else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span>";
+                else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span>";
+                else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Produksi</span>";
+                else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-success' style='font-size:10pt;'>Diambil</span>";
+              } else {
+                echo "<span style='font-size:10pt' class='badge badge-soft-secondary'>Dibatalkan</span>";
+              }  ?>
+              <br>
+              File Dari Customer <?php if($data->FILE_CUSTOMER) { echo "<a target='_blank' href='".site_url("upload/file_customer/".$data->FILE_CUSTOMER)."'>".($data->FILE_CUSTOMER)."</a>"; } else { echo "-"; } ?><br>
               File Mentah <?php if($data->FILE_MENTAH) { echo "<a target='_blank' href='".$data->FILE_MENTAH."'>".($data->FILE_MENTAH)."</a>"; } else { echo "-"; } ?><br>
             </span>
             </td>

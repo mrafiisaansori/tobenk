@@ -276,8 +276,11 @@
                             </select>
                         </div>
                     </div>
+                    <input type="submit" value="Simpan" class="btn btn-primary" style="float:right">
+                    <br>
+                    <br>
                     <hr>
-                    <legend>
+                    <legend >
                         Ukuran
                         <div style="float:right;">
                             <button class="btn btn-success btn-sm" onclick="tambahUkuran('e_')" type="button"><i class="mdi mdi-plus mr-1"></i></button>
@@ -302,9 +305,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <input type="submit" value="Simpan" class="btn btn-primary">
-                </div>
             </form>
 
         </div>
@@ -322,6 +322,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="example-text-input" class="col-md-4 col-form-label">Ukuran</label>
+                        <div class="col-md-8">
+                            <select name="ukuran" id="ukuran_stok" class="form-control">
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Jenis</label>
                         <div class="col-md-8">
@@ -420,7 +427,16 @@
 
     function modalStok(id) {
         $("#id").val(id);
-        $("#modalStok").modal();
+        $.ajax({
+            type: "post",
+            url: "<?php echo base_url('admin/ukuranByProduk') ?>",
+            data: "id=" + id,
+            success: function(data) {
+                $("#ukuran_stok").html(data);
+                $("#modalStok").modal()
+            }
+        })
+        ;
     }
 
     function modalHistory(id) {
@@ -475,7 +491,7 @@
                 <input type="hidden" name="id_produk_detail[]" class="form-control" value='${id}'>
             </td>
             <td class='${jenis}v_stok' ${hide}>
-                <input class="form-control only-nums" type="text" name="stok[]" value="${stok}" required ${data ? 'disabled' : ''}>
+                <input class="form-control only-nums" type="text" name="stok[]" value="${stok}" required ${data ? 'disabled style="background: #dddddd;"' : ''}>
             </td>
             <td>
                 <input class="form-control only-num" type="text" name="harga_beli[]" value="${harga_beli}">

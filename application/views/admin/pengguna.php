@@ -53,6 +53,10 @@
                                             <td>
                                                 <?php if ($p->LEVEL == 1) { ?>
                                                     <span class="badge badge-primary">Admin</span>
+                                                <?php } else if ($p->LEVEL == 3) { ?>
+                                                    <span class="badge badge-danger">Produksi</span>
+                                                <?php } else if ($p->LEVEL == 4) { ?>
+                                                    <span class="badge badge-warning">Desiner</span>
                                                 <?php } else { ?>
                                                     <span class="badge badge-info">Kasir</span>
                                                 <?php } ?>
