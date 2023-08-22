@@ -364,8 +364,11 @@ class Admin extends CI_Controller
 		$id = $this->input->post("id");
 		$produk = $this->db->get_where("m_produk", ["ID" => $id])->row();
 		$data = $this->db->get_where("t_rekam_stok", ["ID_PRODUK" => $id]);
+		$detail_produk = $this->Admin_model->getProdukDetailByIdProduk($id);
+		$arr_detail_produk = array_column(json_decode(json_encode($detail_produk), true), 'UKURAN', 'ID');
 		echo "<table class='table table-striped table-bordered'>
 		<tr>
+			<th>Ukuran</th>
 			<th>Keterangan</th>
 			<th>Jenis</th>
 			<th>Tanggal</th>
@@ -379,6 +382,7 @@ class Admin extends CI_Controller
 					$jenis = "<button class='btn btn-sm btn-danger'><i class='fas fa-minus-circle mr-1'></i>Keluar</button>";
 				}
 				echo "<tr>
+				<td>" . $arr_detail_produk[$key->ID_PRODUK_DETAIL] . "</td>
 				<td>" . $key->KETERANGAN . "</td>
 				<td>" . $jenis . "</td>
 				<td>" . tgl_jam_indo_lengkap($key->TANGGAL) . "</td>
