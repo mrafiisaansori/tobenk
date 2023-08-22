@@ -36,12 +36,12 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nama</th>
-                                    <th>Ukuran</th>
+                                    <!-- <th>Ukuran</th> -->
                                     <th>Keterangan</th>
                                     <th>Kategori</th>
-                                    <th>Stok</th>
-                                    <th width="78px">Harga Beli</th>
-                                    <th width="78px">Harga Jual</th>
+                                    <th>Ukuran</th>
+                                    <!-- <th width="78px">Harga Beli</th>
+                                    <th width="78px">Harga Jual</th> -->
                                     <th width="130px">Action</th>
                                 </tr>
                             </thead>
@@ -54,8 +54,8 @@
     </div>
 </div>
 <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog " role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content ">
             <form action="<?php echo base_url('admin/tambahProduk') ?>" method="post" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Tambah Produk</h5>
@@ -79,12 +79,12 @@
                             <textarea name="keterangan" class="form-control" id="" rows="5" placeholder="Keterangan Produk"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Ukuran</label>
                         <div class="col-md-8">
                             <input class="form-control" type="text" name="ukuran">
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Kategori</label>
                         <div class="col-md-8">
@@ -97,16 +97,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="example-text-input" class="col-md-4 col-form-label">Tanpa Stok</label>
-                        <div class="col-md-8">
-                            <select name="tanpa_stok" id="" class="form-control" onchange="ubahFlagStok(this,'')">
-                                <option value="0">Tidak</option>
-                                <option value="1">Ya</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row" id="v_stok">
+                    <!-- <div class="form-group row" id="v_stok">
                         <label for="example-text-input" class="col-md-4 col-form-label">Stok</label>
                         <div class="col-md-8">
                             <input class="form-control" type="number" name="stok">
@@ -129,11 +120,65 @@
                         <div class="col-md-8">
                             <input class="form-control" type="text" name="barcode">
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Foto</label>
                         <div class="col-md-8">
-                            <input type="file" name="foto">
+                            <input type="file" name="foto" accept="image/jpeg,image/png,image/jpg">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="example-text-input" class="col-md-4 col-form-label">Tanpa Stok</label>
+                        <div class="col-md-8">
+                            <select name="tanpa_stok" id="tanpa_stok" class="form-control" onchange="ubahFlagStok(this,'')">
+                                <option value="0">Tidak</option>
+                                <option value="1">Ya</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <legend>
+                        Ukuran
+                        <div style="float:right;">
+                            <button class="btn btn-success btn-sm" onclick="tambahUkuran('')" type="button"><i class="mdi mdi-plus mr-1"></i></button>
+                        </div>
+                    </legend>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <table class='table table-bordered'>
+                                <thead>
+                                    <tr>
+                                        <th>Ukuran</th>
+                                        <th class='v_stok'>Stok</th>
+                                        <th>Harga Beli</th>
+                                        <th>Harga Jual</th>
+                                        <th>Barcode</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="v_ukuran">
+                                    <tr>
+                                        <td>
+                                            <input type="text" name="ukuran[]" class="form-control" required>
+                                        </td>
+                                        <td class='v_stok'>
+                                            <input class="form-control only-nums" type="text" name="stok[]" value="0" required>
+                                        </td>
+                                        <td>
+                                            <input class="form-control only-num" type="text" name="harga_beli[]">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="harga_jual[]" class="form-control only-num">
+                                        </td>
+                                        <td>
+                                            <input class="form-control" type="text" name="barcode[]">
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -145,7 +190,7 @@
     </div>
 </div>
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog " role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form action="<?php echo base_url('admin/editProduk') ?>" method="post" enctype="multipart/form-data">
                 <div class="modal-header">
@@ -171,12 +216,12 @@
                             <textarea name="keterangan" class="form-control" id="e_keterangan" rows="5" placeholder="Keterangan"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <!-- <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Ukuran</label>
                         <div class="col-md-8">
                             <input class="form-control" type="text" name="ukuran" id="ukuran">
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group row">
                         <label for="example-text-input" class="col-md-4 col-form-label">Kategori</label>
                         <div class="col-md-8">
@@ -190,15 +235,14 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-md-4 col-form-label">Tanpa Stok</label>
+                        <label for="example-text-input" class="col-md-4 col-form-label">Foto</label>
                         <div class="col-md-8">
-                            <select name="tanpa_stok" id="e_tanpa_stok" class="form-control" onchange="ubahFlagStok(this,'e_')">
-                                <option value="0">Tidak</option>
-                                <option value="1">Ya</option>
-                            </select>
+                            <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/jpg">
+                            <br>
+                            <span id="foto_preview"></span>
                         </div>
                     </div>
-                    <div class="form-group row" id="e_v_stok">
+                    <!-- <div class="form-group row" id="e_v_stok">
                         <label for="example-text-input" class="col-md-4 col-form-label">Stok</label>
                         <div class="col-md-8">
                             <span id="e_stok"></span>
@@ -221,13 +265,40 @@
                         <div class="col-md-8">
                             <input class="form-control" type="text" id="e_barcode" name="barcode">
                         </div>
-                    </div>
+                    </div> -->
+
                     <div class="form-group row">
-                        <label for="example-text-input" class="col-md-4 col-form-label">Foto</label>
+                        <label for="example-text-input" class="col-md-4 col-form-label">Tanpa Stok</label>
                         <div class="col-md-8">
-                            <input type="file" id="foto" name="foto">
-                            <br>
-                            <span id="foto_preview"></span>
+                            <select name="tanpa_stok" id="e_tanpa_stok" class="form-control" onchange="ubahFlagStok(this,'e_')">
+                                <option value="0">Tidak</option>
+                                <option value="1">Ya</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <legend>
+                        Ukuran
+                        <div style="float:right;">
+                            <button class="btn btn-success btn-sm" onclick="tambahUkuran('e_')" type="button"><i class="mdi mdi-plus mr-1"></i></button>
+                        </div>
+                    </legend>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <table class='table table-bordered'>
+                                <thead>
+                                    <tr>
+                                        <th>Ukuran</th>
+                                        <th class='e_v_stok'>Stok</th>
+                                        <th>Harga Beli</th>
+                                        <th>Harga Jual</th>
+                                        <th>Barcode</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="e_v_ukuran">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -318,7 +389,11 @@
             url: "<?php echo base_url('admin/modalEditProduk') ?>",
             data: "id=" + id,
             dataType: 'json',
-            success: function(data) {
+            success: function(resp) {
+                const {
+                    data,
+                    detail_produk
+                } = resp;
                 $("#e_id").val(data['ID_PRODUK']);
                 $("#e_nama").val(data['NAMA_PRODUK']);
                 $("#ukuran").val(data['UKURAN']);
@@ -334,6 +409,10 @@
                 $("#e_barcode").val();
                 $("#e_tanpa_stok option").removeAttr('selected');
                 $("#e_tanpa_stok option[value='" + data['TANPA_STOK'] + "'").attr('selected', true).change();
+                $("#e_v_ukuran").html("");
+                detail_produk.forEach((detail) => {
+                    tambahUkuran('e_', detail);
+                });
                 $("#modalEdit").modal();
             }
         })
@@ -371,6 +450,103 @@
     }
 
     function ubahFlagStok(element, jenis) {
-        $(element).val() == 1 ? $("#" + jenis + "v_stok").hide() : $("#" + jenis + "v_stok").show();
+        $(element).val() == 1 ? $("." + jenis + "v_stok").hide() : $("." + jenis + "v_stok").show();
+    }
+
+    function tambahUkuran(jenis, data = null) {
+        const ukuran = data ? data.UKURAN : "";
+        const stok = data ? data.STOK : "0";
+        const harga_beli = data ? data.HARGA_BELI : "";
+        const harga_jual = data ? data.HARGA_JUAL : "";
+        const barcode = data ? data.BARCODE : "";
+        const id = data ? data.ID : "";
+
+        console.table(ukuran, stok, harga_beli, harga_jual, barcode, id);
+
+        var hide = $("#" + jenis + "tanpa_stok").val() == 1 ? "style='display:none;'" : "";
+        var saveButton = jenis == "e_" ?
+            `<button class="btn btn-primary btn-sm mr-1" onclick="saveUkuran(this)" type="button">
+                    <i class="mdi mdi mdi-check-bold mr-1"></i>
+            </button>` : ``;
+        $('#' + jenis + "v_ukuran").append(`
+        <tr>
+            <td>
+                <input type="text" name="ukuran[]" class="form-control" value='${ukuran}' required>
+                <input type="hidden" name="id[]" class="form-control" value='${id}'>
+            </td>
+            <td class='${jenis}v_stok' ${hide}>
+                <input class="form-control only-nums" type="text" name="stok[]" value="${stok}" required ${data ? 'disabled' : ''}>
+            </td>
+            <td>
+                <input class="form-control only-num" type="text" name="harga_beli[]" value="${harga_beli}">
+            </td>
+            <td>
+                <input type="text" name="harga_jual[]" class="form-control only-num" value="${harga_jual}">
+            </td>
+            <td>
+                <input class="form-control" type="text" name="barcode[]" value="${barcode}">
+            </td>
+            <td>
+                <div class="d-flex">
+                    ${saveButton}
+                    <button class="btn btn-danger btn-sm" onclick="hapusUkuran(this)" type="button">
+                    <i class="mdi mdi-delete mr-1"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        `);
+    }
+
+    function hapusUkuran(element) {
+        id = $(element).closest('tr').find('input[name="id[]"]').val();
+        if (id) {
+            $.ajax({
+                type: "post",
+                url: "<?php echo base_url('admin/hapusUkuran') ?>",
+                data: "id=" + id,
+                success: function(msg) {
+                    if (msg == 1) {
+                        $(element).closest('tr').remove();
+                    } else {
+                        alert('Ukuran sudah terpakai, tidak dapat dihapus');
+                    }
+                }
+            })
+        } else {
+            $(element).closest('tr').remove();
+        }
+    }
+
+    function saveUkuran(element) {
+        const tr = $(element).closest('tr');
+        const id_produk = $("#modalEdit").find('input[name="id"]').val();
+        const id_detail = tr.find('input[name="id[]"]').val();
+        const ukuran = tr.find('input[name="ukuran[]"]').val();
+        const stok = tr.find('input[name="stok[]"]').val();
+        const harga_beli = tr.find('input[name="harga_beli[]"]').val();
+        const harga_jual = tr.find('input[name="harga_jual[]"]').val();
+        const barcode = tr.find('input[name="barcode[]"]').val();
+        $.ajax({
+            type: "post",
+            url: "<?php echo base_url('admin/saveUkuran') ?>",
+            data: {
+                id_produk,
+                id_detail,
+                ukuran,
+                stok,
+                harga_beli,
+                harga_jual,
+                barcode
+            },
+            success: function(msg) {
+                if (msg > 0) {
+                    tr.find('input[name="id[]"]').val(msg);
+                    alert('Berhasil Disimpan');
+                } else {
+                    alert('Gagal Disimpan');
+                }
+            }
+        })
     }
 </script>

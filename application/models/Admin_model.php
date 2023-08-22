@@ -186,6 +186,7 @@ class Admin_model extends CI_Model
         $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,STOK,HARGA_BELI,HARGA_JUAL,BARCODE,KETERANGAN,UKURAN,TANPA_STOK) VALUES ('$nama','$kategori','$stok','$harga_beli','$harga_jual','$barcode','$keterangan','$ukuran','$tanpa_stok')";
         $query = $this->db->query($query);
         if ($query) {
+            $this->insertProdukDetail($this->db->insert_id());
             return $this->db->insert_id();
         } else {
             return false;
@@ -205,10 +206,42 @@ class Admin_model extends CI_Model
         $query = "INSERT INTO m_produk (NAMA,ID_KATEGORI,STOK,HARGA_BELI,HARGA_JUAL,BARCODE,FOTO,KETERANGAN,UKURAN,TANPA_STOK) VALUES ('$nama','$kategori','$stok','$harga_beli','$harga_jual','$barcode','$filename','$keterangan','$ukuran','$tanpa_stok')";
         $query = $this->db->query($query);
         if ($query) {
+            $this->insertProdukDetail($this->db->insert_id());
             return $this->db->insert_id();
         } else {
             return false;
         }
+    }
+    function insertProdukDetail($id_produk)
+    {
+        $ukuran = $this->input->post('ukuran');
+        $stok = $this->input->post('stok');
+        $harga_beli = $this->input->post('harga_beli');
+        $harga_jual = $this->input->post('harga_jual');
+        $barcode = $this->input->post('barcode');
+
+
+        for ($i = 0; $i < count($ukuran); $i++) {
+            $data_insert = array(
+                'ID_PRODUK' => $id_produk,
+                'UKURAN' => $ukuran[$i],
+                'STOK' => $stok[$i],
+                'HARGA_BELI' => $harga_beli[$i],
+                'HARGA_JUAL' => $harga_jual[$i],
+                'BARCODE' => $barcode[$i],
+            );
+            $this->db->insert('m_produk_detail', $data_insert);
+            $id_produk_detail = $this->db->insert_id();
+            $rekam_insert[] = array(
+                'ID_PRODUK' => $id_produk,
+                'ID_PRODUK_DETAIL' => $id_produk_detail,
+                'JENIS' => 1,
+                'QTY' => $stok[$i],
+                'TANGGAL' => date('Y-m-d H:i:sa'),
+                'KETERANGAN' => 'Stok Opname'
+            );
+        }
+        $this->db->insert_batch('t_rekam_stok', $rekam_insert);
     }
     function getProdukById($id)
     {
@@ -219,6 +252,22 @@ class Admin_model extends CI_Model
         } else {
             return null;
         }
+    }
+    function getProdukDetailByIdProduk($id)
+    {
+        return $this->db->get_where('m_produk_detail', array('ID_PRODUK' => $id))->result();
+    }
+    function getPenjualanByIdPd($id)
+    {
+        return $this->db->get_where('t_detail_penjualan', array('ID_PRODUK_DETAIL' => $id))->result();
+    }
+    function getPembelianByIdPd($id)
+    {
+        return $this->db->get_where('t_detail_pembelian', array('ID_PRODUK_DETAIL' => $id))->result();
+    }
+    function getReturByIdPd($id)
+    {
+        return $this->db->get_where('t_detail_retur', array('ID_PRODUK_DETAIL' => $id))->result();
     }
     function insertRekamStok($produk, $stok, $jenis, $keterangan)
     {
@@ -273,6 +322,7 @@ class Admin_model extends CI_Model
         $query = "DELETE FROM m_produk WHERE ID='$id'";
         $query = $this->db->query($query);
         if ($query) {
+            $this->db->delete('m_produk_detail', array('ID_PRODUK' => $id));
             return true;
         } else {
             return false;

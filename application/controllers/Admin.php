@@ -221,7 +221,7 @@ class Admin extends CI_Controller
 	}
 	function getTabelJsonProduk()
 	{
-		$aColumns = array('ID_PRODUK', 'NAMA_PRODUK', 'UKURAN','KETERANGAN', 'DESKRIPSI_KATEGORI', 'STOK', 'HARGA_BELI', 'HARGA_JUAL', 'ID_KATEGORI');
+		$aColumns = array('ID_PRODUK', 'NAMA_PRODUK', 'KETERANGAN', 'DESKRIPSI_KATEGORI', 'UKURAN', 'ID_KATEGORI');
 
 		//primary key
 		$sIndexColumn = "ID_PRODUK";
@@ -306,22 +306,29 @@ class Admin extends CI_Controller
 		);
 		$seq_number = $_GET['iDisplayStart'] + 1;
 		foreach ($rResult as $data) {
-			$cek_transaksi = $this->db->get_where("t_detail_penjualan", ["ID_PRODUK" => $data->ID_PRODUK]);
-			if ($cek_transaksi->num_rows() == 0) {
-				$delete = "onclick='deleteData(" . $data->ID_PRODUK . ")'";
-			} else {
-				$delete = "onclick='tidak()'";
-			}
+			// $cek_transaksi = $this->db->get_where("t_detail_penjualan", ["ID_PRODUK" => $data->ID_PRODUK]);
+			// if ($cek_transaksi->num_rows() == 0) {
+			$delete = "onclick='deleteData(" . $data->ID_PRODUK . ")'";
+			// } else {
+			// 	$delete = "onclick='tidak()'";
+			// }
 			$row = array();
 			$row[] = $seq_number;
 			//$row[] = "<a target='_blank' href='".site_url('urgent/penyusutan/'.$data->ID_PRODUK)."'>".$data->NAMA_PRODUK."</a>";
 			$row[] = "<a onclick='modalHistory(" . $data->ID_PRODUK . ")' href='javascript:void(0)'>" . $data->NAMA_PRODUK . "</a>";
-			$row[] = $data->UKURAN;
+			// $row[] = $data->UKURAN;
 			$row[] = $data->KETERANGAN;
 			$row[] = $data->DESKRIPSI_KATEGORI;
-			$row[] = $data->STOK;
-			$row[] = formatRupiah($data->HARGA_BELI);
-			$row[] = formatRupiah($data->HARGA_JUAL);
+			$ukuran = "";
+			$detail = $this->Admin_model->getProdukDetailByIdProduk($data->ID_PRODUK);
+			if ($detail) {
+				foreach ($detail as $d) {
+					$ukuran .= $d->UKURAN . " : " . $d->STOK . "<br>";
+				}
+			}
+			$row[] = $ukuran;
+			// $row[] = formatRupiah($data->HARGA_BELI);
+			// $row[] = formatRupiah($data->HARGA_JUAL);
 			$row[] = "
 			<a onclick='modalStok(" . $data->ID_PRODUK . ")' class='btn btn-info mr-1' style='color:white;'><i class='fas fa-luggage-cart'></i></a>
 				<a onclick='modalEditProduk(" . $data->ID_PRODUK . ")' class='btn btn-warning mr-1' style='color:white;'><i class='mdi mdi-pencil'></i></a>
@@ -400,7 +407,7 @@ class Admin extends CI_Controller
 	{
 		if ($_FILES['foto']['name']) {
 			$config['upload_path'] = './upload/product/';
-			$config['allowed_types'] = 'jpg|png';
+			$config['allowed_types'] = 'jpg|png|jpeg';
 			$config['max_size'] = 500;
 			$config['max_width'] = 800;
 			$config['max_height'] = 533;
@@ -420,8 +427,8 @@ class Admin extends CI_Controller
 		}
 
 		if ($insert) {
-			$data = $this->Admin_model->getProdukById($insert);
-			$insert_rekam = $this->Admin_model->insertRekamStok($insert, $data->STOK, '1', 'Stok Opname');
+			// $data = $this->Admin_model->getProdukById($insert);
+			// $insert_rekam = $this->Admin_model->insertRekamStok($insert, $data->STOK, '1', 'Stok Opname');
 			$this->session->set_flashdata('judul', 'Produk');
 			$this->session->set_flashdata('status', 'Berhasil tambah data');
 			$this->session->set_flashdata('type', 'success');
@@ -436,7 +443,59 @@ class Admin extends CI_Controller
 	{
 		$id = $this->input->post('id');
 		$data = $this->Admin_model->getProdukById($id);
-		echo json_encode($data);
+		$detail_produk = $this->Admin_model->getProdukDetailByIdProduk($id);
+		echo json_encode(['data' => $data, 'detail_produk' => $detail_produk]);
+	}
+	function saveUkuran()
+	{
+		$id_produk = $this->input->post('id_produk');
+		$id_detail = $this->input->post('id_detail');
+		$ukuran = $this->input->post('ukuran');
+		$harga_beli = $this->input->post('harga_beli');
+		$harga_jual = $this->input->post('harga_jual');
+		$stok = $this->input->post('stok');
+		$barcode = $this->input->post('barcode');
+
+		$data = array(
+			"UKURAN" => $ukuran,
+			"HARGA_BELI" => $harga_beli,
+			"HARGA_JUAL" => $harga_jual,
+			"BARCODE" => $barcode,
+
+		);
+		if ($id_detail) { //edit
+			$this->db->update('m_produk_detail', $data, ['ID' => $id_detail]);
+			echo $id_detail;
+		} else {
+			$data['STOK'] = $stok;
+			$data['ID_PRODUK'] = $id_produk;
+			$this->db->insert('m_produk_detail', $data);
+			$id_produk_detail = $this->db->insert_id();
+			$rekam = array(
+				'ID_PRODUK' => $id_produk,
+				'ID_PRODUK_DETAIL' => $id_produk_detail,
+				'JENIS' => 1,
+				'QTY' => $stok,
+				'TANGGAL' => date('Y-m-d H:i:sa'),
+				'KETERANGAN' => 'Stok Opname'
+			);
+			$this->db->insert('t_rekam_stok', $rekam);
+			echo $id_produk_detail;
+		}
+	}
+	function hapusUkuran()
+	{
+		$id = $this->input->post('id');
+		$penjualan = count($this->Admin_model->getPenjualanByIdPd($id));
+		$pembelian = count($this->Admin_model->getPembelianByIdPd($id));
+		$retur = count($this->Admin_model->getReturByIdPd($id));
+
+		if ($penjualan > 0 || $pembelian > 0 || $retur > 0) {
+			echo 0;
+		} else {
+			$delete = $this->db->delete('m_produk_detail', ['ID' => $id]);
+			echo 1;
+		}
 	}
 	function editProduk()
 	{
@@ -444,7 +503,7 @@ class Admin extends CI_Controller
 
 		if ($_FILES['foto']['name']) {
 			$config['upload_path'] = './upload/product/';
-			$config['allowed_types'] = 'jpg|png';
+			$config['allowed_types'] = 'jpg|png|jpeg';
 			$config['max_size'] = 500;
 			$config['max_width'] = 800;
 			$config['max_height'] = 533;
@@ -476,27 +535,61 @@ class Admin extends CI_Controller
 	function deleteProduk($id)
 	{
 		$data = $this->Admin_model->getProdukById($id);
-		$keterangan = $data->NAMA_PRODUK . "#" . $data->DESKRIPSI_KATEGORI . "#Delete Data";
-		$insert_rekam = $this->Admin_model->insertRekamStok($id, $data->STOK, '2', $keterangan);
-		if ($insert_rekam) {
-			$delete = $this->Admin_model->deleteProduk($id);
-			if ($delete) {
-				unlink($data->FOTO);
-				$this->session->set_flashdata('judul', 'Produk');
-				$this->session->set_flashdata('status', 'Berhasil hapus data');
-				$this->session->set_flashdata('type', 'success');
-			} else {
-				$this->session->set_flashdata('judul', 'Produk');
-				$this->session->set_flashdata('status', 'Gagal hapus data');
-				$this->session->set_flashdata('type', 'error');
+		$produk_detail = $this->Admin_model->getProdukDetailByIdProduk($id);
+		if ($produk_detail) {
+			foreach ($produk_detail as $pd) {
+				$penjualan = count($this->Admin_model->getPenjualanByIdPd($pd->ID));
+				$pembelian = count($this->Admin_model->getPembelianByIdPd($pd->ID));
+				$retur = count($this->Admin_model->getReturByIdPd($pd->ID));
+				if ($penjualan > 0 || $pembelian > 0 || $retur > 0) {
+					$this->session->set_flashdata('judul', 'Produk');
+					$this->session->set_flashdata('status', 'Gagal hapus data, produk telah digunakan');
+					$this->session->set_flashdata('type', 'error');
+					redirect('admin/produk.html');
+				}
 			}
-		} else {
+			$insert_rekam = [];
+			foreach ($produk_detail as $pd) {
+				$insert_rekam[] = array(
+					'ID_PRODUK' => $id,
+					'ID_PRODUK_DETAIL' => $pd->ID,
+					'JENIS' => 2,
+					'QTY' => $pd->STOK,
+					'TANGGAL' => date('Y-m-d H:i:sa'),
+					'KETERANGAN' => $data->NAMA_PRODUK . "#" . $data->DESKRIPSI_KATEGORI . "#" . $pd->UKURAN . "#Delete Data"
+				);
+			}
+			$this->db->insert_batch('t_rekam_stok', $insert_rekam);
+			$delete = $this->Admin_model->deleteProduk($id);
+			unlink($data->FOTO);
 			$this->session->set_flashdata('judul', 'Produk');
-			$this->session->set_flashdata('status', 'Gagal hapus data');
-			$this->session->set_flashdata('type', 'error');
+			$this->session->set_flashdata('status', 'Berhasil hapus data');
+			$this->session->set_flashdata('type', 'success');
 		}
 
 		redirect('admin/produk.html');
+
+		// $keterangan = $data->NAMA_PRODUK . "#" . $data->DESKRIPSI_KATEGORI . "#Delete Data";
+		// $insert_rekam = $this->Admin_model->insertRekamStok($id, $data->STOK, '2', $keterangan);
+		// if ($insert_rekam) {
+		// 	$delete = $this->Admin_model->deleteProduk($id);
+		// 	if ($delete) {
+		// 		unlink($data->FOTO);
+		// 		$this->session->set_flashdata('judul', 'Produk');
+		// 		$this->session->set_flashdata('status', 'Berhasil hapus data');
+		// 		$this->session->set_flashdata('type', 'success');
+		// 	} else {
+		// 		$this->session->set_flashdata('judul', 'Produk');
+		// 		$this->session->set_flashdata('status', 'Gagal hapus data');
+		// 		$this->session->set_flashdata('type', 'error');
+		// 	}
+		// } else {
+		// 	$this->session->set_flashdata('judul', 'Produk');
+		// 	$this->session->set_flashdata('status', 'Gagal hapus data');
+		// 	$this->session->set_flashdata('type', 'error');
+		// }
+
+		// redirect('admin/produk.html');
 	}
 	//END PRODUK
 

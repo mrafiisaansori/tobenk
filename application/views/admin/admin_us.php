@@ -4,322 +4,322 @@
 
 
 
-    <head>
+<head>
 
-        <meta charset="utf-8" />
+    <meta charset="utf-8" />
 
-        <?php $identitas = $this->db->get("m_identitas")->row(); ?>
+    <?php $identitas = $this->db->get("m_identitas")->row(); ?>
 
-        <title>Administrator</title>
+    <title>Administrator</title>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <meta content="Point Of Sales" name="description" />
+    <meta content="Point Of Sales" name="description" />
 
-        <meta content="" name="author" />
+    <meta content="" name="author" />
 
-        <!-- App favicon -->
+    <!-- App favicon -->
 
-        <link rel="shortcut icon" href="<?php echo base_url()?>upload/logo/logo.png">
+    <link rel="shortcut icon" href="<?php echo base_url() ?>upload/logo/logo.png">
 
 
 
-        <!-- DataTables -->
-        <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-        <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- DataTables -->
+    <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
-        <!-- Responsive datatable examples -->
-        <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />     
+    <!-- Responsive datatable examples -->
+    <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
 
-        <!-- datepicker -->
+    <!-- datepicker -->
 
-        <link href="<?php echo base_url()?>theme/Vertical/dist/assets/libs/air-datepicker/css/datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/air-datepicker/css/datepicker.min.css" rel="stylesheet" type="text/css" />
 
-         <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
 
 
-        <!-- jvectormap -->
+    <!-- jvectormap -->
 
-        <link href="<?php echo base_url()?>theme/Vertical/dist/assets/libs/jqvmap/jqvmap.min.css" rel="stylesheet" />
+    <link href="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/jqvmap/jqvmap.min.css" rel="stylesheet" />
 
 
 
-        <!-- Bootstrap Css -->
+    <!-- Bootstrap Css -->
 
-        <link href="<?php echo base_url()?>theme/Vertical/dist/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url() ?>theme/Vertical/dist/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
-        <!-- Icons Css -->
+    <!-- Icons Css -->
 
-        <link href="<?php echo base_url()?>theme/Vertical/dist/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url() ?>theme/Vertical/dist/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 
-        <!-- App Css-->
+    <!-- App Css-->
 
-        <link href="<?php echo base_url()?>theme/Vertical/dist/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="<?php echo base_url()?>theme/select2.min.css">
-         <!-- JAVASCRIPT -->
-         <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/jquery/jquery.min.js"></script>
+    <link href="<?php echo base_url() ?>theme/Vertical/dist/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="<?php echo base_url() ?>theme/select2.min.css">
+    <!-- JAVASCRIPT -->
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/jquery/jquery.min.js"></script>
 
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/metismenu/metisMenu.min.js"></script>
 
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/simplebar/simplebar.min.js"></script>
 
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/node-waves/waves.min.js"></script>
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/node-waves/waves.min.js"></script>
 
 
-        <script src="<?php echo site_url('theme/jquery.maskMoney.js'); ?>" type="text/javascript"></script>
+    <script src="<?php echo site_url('theme/jquery.maskMoney.js'); ?>" type="text/javascript"></script>
 
-        <script src="https://unicons.iconscout.com/release/v2.0.1/script/monochrome/bundle.js"></script>
+    <script src="https://unicons.iconscout.com/release/v2.0.1/script/monochrome/bundle.js"></script>
 
-    
-        <script src="<?php echo base_url()?>theme/select2.min.js"></script>
 
-        <!-- datepicker -->
+    <script src="<?php echo base_url() ?>theme/select2.min.js"></script>
 
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/air-datepicker/js/datepicker.min.js"></script>
+    <!-- datepicker -->
 
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/air-datepicker/js/i18n/datepicker.en.js"></script>
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/air-datepicker/js/datepicker.min.js"></script>
 
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/air-datepicker/js/i18n/datepicker.en.js"></script>
 
 
 
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/jquery-knob/jquery.knob.min.js"></script> 
 
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/jquery-knob/jquery.knob.min.js"></script>
 
-        <!-- Jq vector map -->
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/jqvmap/jquery.vmap.min.js"></script>
+    <!-- Jq vector map -->
 
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/libs/jqvmap/maps/jquery.vmap.usa.js"></script>
-        <!-- Required datatable js -->
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <!-- Buttons examples -->
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/jszip/jszip.min.js"></script>
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/pdfmake/build/pdfmake.min.js"></script>
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/pdfmake/build/vfs_fonts.js"></script>
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
-        <!-- Responsive examples -->
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/jqvmap/jquery.vmap.min.js"></script>
 
-        <!-- Datatable init js -->
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/js/pages/datatables.init.js"></script>
-         <!-- Responsive Table css -->
-         <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/RWD-Table-Patterns/css/rwd-table.min.css" rel="stylesheet" type="text/css" />
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/libs/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- Required datatable js -->
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/jszip/jszip.min.js"></script>
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Responsive examples -->
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
-        <style>
-            .datepicker{
-                z-index: 9999 !important;
-            }
-        </style>
-    </head>
+    <!-- Datatable init js -->
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/js/pages/datatables.init.js"></script>
+    <!-- Responsive Table css -->
+    <link href="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/RWD-Table-Patterns/css/rwd-table.min.css" rel="stylesheet" type="text/css" />
 
+    <style>
+        .datepicker {
+            z-index: 9999 !important;
+        }
+    </style>
+</head>
 
 
-    <body data-topbar="colored">
 
+<body data-topbar="colored">
 
 
-        <!-- Begin page -->
 
-        <div id="layout-wrapper">
+    <!-- Begin page -->
 
+    <div id="layout-wrapper">
 
 
-            <header id="page-topbar">
 
-                <div class="navbar-header">
+        <header id="page-topbar">
 
-                    <div class="d-flex">
+            <div class="navbar-header">
 
-                        <!-- LOGO -->
+                <div class="d-flex">
 
-                        <div class="navbar-brand-box">
+                    <!-- LOGO -->
 
-                            <a href="" class="logo logo-dark">
+                    <div class="navbar-brand-box">
 
-                                <span class="logo-sm">
+                        <a href="" class="logo logo-dark">
 
-                                    <img src="<?php echo base_url()?>upload/logo/logo.png" alt="" height="40">
+                            <span class="logo-sm">
 
-                                </span>
+                                <img src="<?php echo base_url() ?>upload/logo/logo.png" alt="" height="40">
 
-                                <span class="logo-lg">
+                            </span>
 
-                                    <img src="<?php echo base_url()?>upload/logo/logo-dark.png" alt="" height="45">
+                            <span class="logo-lg">
 
-                                </span>
+                                <img src="<?php echo base_url() ?>upload/logo/logo-dark.png" alt="" height="45">
 
-                            </a>
+                            </span>
 
+                        </a>
 
 
-                            <a href="" class="logo logo-light">
 
-                                <span class="logo-sm">
+                        <a href="" class="logo logo-light">
 
-                                    <img src="<?php echo base_url()?>theme/Vertical/dist/assets/images/logo-sm-light.png" alt="" height="22">
+                            <span class="logo-sm">
 
-                                </span>
+                                <img src="<?php echo base_url() ?>theme/Vertical/dist/assets/images/logo-sm-light.png" alt="" height="22">
 
-                                <span class="logo-lg">
+                            </span>
 
-                                    <img src="<?php echo base_url()?>theme/Vertical/dist/assets/images/logo-light.png" alt="" height="20">
+                            <span class="logo-lg">
 
-                                </span>
+                                <img src="<?php echo base_url() ?>theme/Vertical/dist/assets/images/logo-light.png" alt="" height="20">
 
-                            </a>
+                            </span>
 
-                        </div>
-
-
-
-                        <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
-
-                            <i class="mdi mdi-backburger"></i>
-
-                        </button>
-
-
-
-                        <!-- App Search-->
-
-                        
+                        </a>
 
                     </div>
 
 
 
-                    <div class="d-flex">
+                    <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
+
+                        <i class="mdi mdi-backburger"></i>
+
+                    </button>
 
 
 
-                        <div class="dropdown d-inline-block d-lg-none ml-2">
-
-                            <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown"
-
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                                <i class="mdi mdi-magnify"></i>
-
-                            </button>
-
-                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0"
-
-                                aria-labelledby="page-header-search-dropdown">
-
-                    
-
-                                <form class="p-3">
-
-                                    <div class="form-group m-0">
-
-                                        <div class="input-group">
-
-                                            <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
-
-                                            <div class="input-group-append">
-
-                                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </form>
-
-                            </div>
-
-                        </div>
-
-            
+                    <!-- App Search-->
 
 
-
-
-                 
-                        <div class="dropdown d-inline-block">
-
-                            <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                                <img class="rounded-circle header-profile-user" src="<?php echo base_url()?>theme/Vertical/dist/assets/images/users/avatar-1.jpg" alt="Header Avatar">
-
-                                <span class="d-none d-sm-inline-block ml-1"><?php echo strtolower($this->session->userdata('nama_admin')); ?></span>
-
-                                <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
-
-                            </button>
-
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="<?php echo site_url('admin/ubah-password.html'); ?>"><i class="mdi mdi-home font-size-16 align-middle mr-1"></i> Ubah Password</a>
-
-
-                                <a class="dropdown-item" href="<?php echo site_url('logout'); ?>"><i class="mdi mdi-logout font-size-16 align-middle mr-1"></i> Logout</a>
-
-                            </div>
-
-                        </div>
-
-            
-
-                    </div>
 
                 </div>
 
 
 
-            </header>
+                <div class="d-flex">
 
 
 
-            <!-- ========== Left Sidebar Start ========== -->
+                    <div class="dropdown d-inline-block d-lg-none ml-2">
 
-            <div class="vertical-menu">
+                        <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
+                            <i class="mdi mdi-magnify"></i>
 
+                        </button>
 
-                <div data-simplebar class="h-100">
-
-
-
-                    <!--- Sidemenu -->
-
-                    <div id="sidebar-menu">
-
-                        <!-- Left Menu Start -->
-
-                        <ul class="metismenu list-unstyled" id="side-menu">
-
-                            <li class="menu-title">Master</li>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0" aria-labelledby="page-header-search-dropdown">
 
 
 
-                            <li>
+                            <form class="p-3">
 
-                                <a href="<?php echo site_url('admin'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'dashboard'){ echo "active";}?>">
+                                <div class="form-group m-0">
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                                    <div class="input-group">
 
-                                    <span>Dashboard</span>
+                                        <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
 
-                                </a>
+                                        <div class="input-group-append">
 
-                            </li>
-                            
-                            <!-- <li>
+                                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
 
-                                <a href="<?php //echo site_url('admin/identitas.html'); ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'identitas'){ echo "active";}?>">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+                    <div class="dropdown d-inline-block">
+
+                        <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                            <img class="rounded-circle header-profile-user" src="<?php echo base_url() ?>theme/Vertical/dist/assets/images/users/avatar-1.jpg" alt="Header Avatar">
+
+                            <span class="d-none d-sm-inline-block ml-1"><?php echo strtolower($this->session->userdata('nama_admin')); ?></span>
+
+                            <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
+
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="<?php echo site_url('admin/ubah-password.html'); ?>"><i class="mdi mdi-home font-size-16 align-middle mr-1"></i> Ubah Password</a>
+
+
+                            <a class="dropdown-item" href="<?php echo site_url('logout'); ?>"><i class="mdi mdi-logout font-size-16 align-middle mr-1"></i> Logout</a>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+
+
+        </header>
+
+
+
+        <!-- ========== Left Sidebar Start ========== -->
+
+        <div class="vertical-menu">
+
+
+
+            <div data-simplebar class="h-100">
+
+
+
+                <!--- Sidemenu -->
+
+                <div id="sidebar-menu">
+
+                    <!-- Left Menu Start -->
+
+                    <ul class="metismenu list-unstyled" id="side-menu">
+
+                        <li class="menu-title">Master</li>
+
+
+
+                        <li>
+
+                            <a href="<?php echo site_url('admin'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'dashboard') {
+                                                                                                echo "active";
+                                                                                            } ?>">
+
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+
+                                <span>Dashboard</span>
+
+                            </a>
+
+                        </li>
+
+                        <!-- <li>
+
+                                <a href="<?php //echo site_url('admin/identitas.html'); 
+                                            ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'identitas'){ echo "active";}
+                                                                                                                ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -329,58 +329,68 @@
 
                             </li> -->
 
-                            <li>
+                        <li>
 
-                                <a href="<?php echo site_url('admin/pengguna.html'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'pengguna'){ echo "active";}?>">
+                            <a href="<?php echo site_url('admin/pengguna.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'pengguna') {
+                                                                                                                echo "active";
+                                                                                                            } ?>">
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                    <span>Pengguna</span>
+                                <span>Pengguna</span>
 
-                                </a>
+                            </a>
 
-                            </li>
-                            
+                        </li>
 
-                            <li>
 
-                                <a href="<?php echo site_url('admin/kategori.html'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'kategori'){ echo "active";}?>">
+                        <li>
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                            <a href="<?php echo site_url('admin/kategori.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'kategori') {
+                                                                                                                echo "active";
+                                                                                                            } ?>">
 
-                                    <span>Kategori</span>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                </a>
+                                <span>Kategori</span>
 
-                            </li>
+                            </a>
 
-                            <li>
+                        </li>
 
-                                <a href="<?php echo site_url('admin/produk.html'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'produk'){ echo "active";}?>">
+                        <li>
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                            <a href="<?php echo site_url('admin/produk.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'produk') {
+                                                                                                            echo "active";
+                                                                                                        } ?>">
 
-                                    <span>Produk</span>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                </a>
+                                <span>Produk</span>
 
-                            </li>
-                            
-                            <li>
+                            </a>
 
-                                <a href="<?php echo site_url('admin/supplier.html'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'supplier'){ echo "active";}?>">
+                        </li>
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                        <li>
 
-                                    <span>Supplier</span>
+                            <a href="<?php echo site_url('admin/supplier.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'supplier') {
+                                                                                                                echo "active";
+                                                                                                            } ?>">
 
-                                </a>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                            </li>
+                                <span>Supplier</span>
 
-                            <!--<li>
+                            </a>
 
-                                <a href="<?php //echo site_url('admin/jenis-bayar.html'); ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'jenis-bayar'){ echo "active";}?>">
+                        </li>
+
+                        <!--<li>
+
+                                <a href="<?php //echo site_url('admin/jenis-bayar.html'); 
+                                            ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'jenis-bayar'){ echo "active";}
+                                                                                                                    ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -391,33 +401,39 @@
                             </li>-->
 
 
-                            <li class="menu-title">Transaksi</li>
+                        <li class="menu-title">Transaksi</li>
 
-                            <li>
+                        <li>
 
-                                <a href="<?php echo site_url('admin/pembelian.html'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'pembelian'){ echo "active";}?>">
+                            <a href="<?php echo site_url('admin/pembelian.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'pembelian') {
+                                                                                                                echo "active";
+                                                                                                            } ?>">
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                    <span>Pembelian</span>
+                                <span>Pembelian</span>
 
-                                </a>
+                            </a>
 
-                            </li>
-                            <li>
+                        </li>
+                        <li>
 
-                                <a href="<?php echo site_url('admin/retur.html'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'retur'){ echo "active";}?>">
+                            <a href="<?php echo site_url('admin/retur.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'retur') {
+                                                                                                            echo "active";
+                                                                                                        } ?>">
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                    <span>Retur</span>
+                                <span>Retur</span>
 
-                                </a>
+                            </a>
 
-                            </li>
-                            <!--<li>
+                        </li>
+                        <!--<li>
 
-                                <a href="<?php //echo site_url('admin/transaksi-keuangan.html'); ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'transaksi-keuangan'){ echo "active";}?>">
+                                <a href="<?php //echo site_url('admin/transaksi-keuangan.html'); 
+                                            ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'transaksi-keuangan'){ echo "active";}
+                                                                                                                            ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -427,45 +443,53 @@
 
                             </li>-->
 
-                            <li class="menu-title">Laporan</li>
+                        <li class="menu-title">Laporan</li>
 
-                            <li>
+                        <li>
 
-                                <a href="<?php echo site_url('admin/laporan-penjualan.html'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'laporan-penjualan'){ echo "active";}?>">
+                            <a href="<?php echo site_url('admin/laporan-penjualan.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'laporan-penjualan') {
+                                                                                                                        echo "active";
+                                                                                                                    } ?>">
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                    <span>Penjualan</span>
+                                <span>Penjualan</span>
 
-                                </a>
+                            </a>
 
-                            </li>
-                            <li>
+                        </li>
+                        <li>
 
-                                <a href="<?php echo site_url('admin/laporan-penjualan-hapus.html'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'laporan-penjualan-hapus'){ echo "active";}?>">
+                            <a href="<?php echo site_url('admin/laporan-penjualan-hapus.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'laporan-penjualan-hapus') {
+                                                                                                                            echo "active";
+                                                                                                                        } ?>">
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                    <span>Batal Penjualan</span>
+                                <span>Batal Penjualan</span>
 
-                                </a>
+                            </a>
 
-                            </li>
-                            <li>
+                        </li>
+                        <li>
 
-                                <a href="<?php echo site_url('admin/customer.html'); ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'customer'){ echo "active";}?>">
+                            <a href="<?php echo site_url('admin/customer.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'customer') {
+                                                                                                                echo "active";
+                                                                                                            } ?>">
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                    <span>Customer</span>
+                                <span>Customer</span>
 
-                                </a>
+                            </a>
 
-                            </li>
-                            
-                            <!--<li>
+                        </li>
 
-                                <a href="<?php //echo site_url('admin/laporan-penyusutan.html'); ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'laporan-penyusutan'){ echo "active";}?>">
+                        <!--<li>
+
+                                <a href="<?php //echo site_url('admin/laporan-penyusutan.html'); 
+                                            ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'laporan-penyusutan'){ echo "active";}
+                                                                                                                            ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -475,9 +499,11 @@
 
                             </li>-->
 
-                            <!-- <li>
+                        <!-- <li>
 
-                                <a href="<?php //echo site_url('admin/laporan-pendapatan.html'); ?>" class="waves-effect <?php// if($this->session->userdata('menu') == 'laporan-pendapatan'){ echo "active";}?>">
+                                <a href="<?php //echo site_url('admin/laporan-pendapatan.html'); 
+                                            ?>" class="waves-effect <? php // if($this->session->userdata('menu') == 'laporan-pendapatan'){ echo "active";}
+                                                                                                                            ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -486,9 +512,11 @@
                                 </a>
 
                             </li> -->
-                            <!--<li>
+                        <!--<li>
 
-                                <a href="<?php //echo site_url('admin/laporan-stok.html'); ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'laporan-stok'){ echo "active";}?>">
+                                <a href="<?php //echo site_url('admin/laporan-stok.html'); 
+                                            ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'laporan-stok'){ echo "active";}
+                                                                                                                    ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -497,9 +525,11 @@
                                 </a>
 
                             </li>  -->
-                            <!--<li>
+                        <!--<li>
 
-                                <a href="<?php //echo site_url('admin/laporan-keuangan.html'); ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'laporans'){ echo "active";}?>">
+                                <a href="<?php //echo site_url('admin/laporan-keuangan.html'); 
+                                            ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'laporans'){ echo "active";}
+                                                                                                                        ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -508,73 +538,71 @@
                                 </a>
 
                             </li>-->
-                            
-                            
-
-
-                        </ul>
 
 
 
-                    </div>
 
-                    <!-- Sidebar -->
+                    </ul>
+
+
 
                 </div>
+
+                <!-- Sidebar -->
 
             </div>
 
-            <!-- Left Sidebar End -->
+        </div>
+
+        <!-- Left Sidebar End -->
 
 
 
-            <!-- ============================================================== -->
+        <!-- ============================================================== -->
 
-            <!-- Start right Content here -->
+        <!-- Start right Content here -->
 
-            <!-- ============================================================== -->
+        <!-- ============================================================== -->
 
-            <div class="main-content">
-
-
-
-                <div class="page-content">
-
-                    
-
-                    <!-- Page-Title -->
-
-                    <?php $this->load->view($page);?>
-
-                    <!-- end page-content-wrapper -->
-
-                </div>
-
-                <!-- End Page-content -->
+        <div class="main-content">
 
 
 
-                
+            <div class="page-content">
 
-                <footer class="footer">
 
-                    <div class="container-fluid">
 
-                        <div class="row">
+                <!-- Page-Title -->
 
-                            <div class="col-sm-6">
+                <?php $this->load->view($page); ?>
 
-                                Copyright © 2023
+                <!-- end page-content-wrapper -->
 
-                            </div>
+            </div>
 
-                            <div class="col-sm-6">
+            <!-- End Page-content -->
 
-                                <div class="text-sm-right d-none d-sm-block">
+
+
+
+
+            <footer class="footer">
+
+                <div class="container-fluid">
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+
+                            Copyright © 2023
+
+                        </div>
+
+                        <div class="col-sm-6">
+
+                            <div class="text-sm-right d-none d-sm-block">
 
                                 <?php echo $identitas->NAMA; ?>
-
-                                </div>
 
                             </div>
 
@@ -582,110 +610,118 @@
 
                     </div>
 
-                </footer>
+                </div>
 
-            </div>
-
-            <!-- end main content-->
-
-
+            </footer>
 
         </div>
 
-        <!-- END layout-wrapper -->
+        <!-- end main content-->
 
 
 
-        <!-- Right Sidebar -->
+    </div>
 
-        <div class="right-bar">
-
-            <div data-simplebar class="h-100">
-
-    
-
-                <!-- Nav tabs -->
-
-                <ul class="nav nav-tabs nav-tabs-custom rightbar-nav-tab nav-justified" role="tablist">
-
-                    <li class="nav-item">
-
-                        <a class="nav-link py-3 active" data-toggle="tab" href="#chat-tab" role="tab">
-
-                            <i class="mdi mdi-message-text font-size-22"></i>
-
-                        </a>
-
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a class="nav-link py-3" data-toggle="tab" href="#tasks-tab" role="tab">
-
-                            <i class="mdi mdi-format-list-checkbox font-size-22"></i>
-
-                        </a>
-
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a class="nav-link py-3" data-toggle="tab" href="#settings-tab" role="tab">
-
-                            <i class="mdi mdi-settings font-size-22"></i>
-
-                        </a>
-
-                    </li>
-
-                </ul>
+    <!-- END layout-wrapper -->
 
 
 
+    <!-- Right Sidebar -->
 
-            </div> <!-- end slimscroll-menu-->
+    <div class="right-bar">
 
-        </div>
-
-        <!-- /Right-bar -->
-
-
-
-        <!-- Right bar overlay-->
-
-        <div class="rightbar-overlay"></div>
+        <div data-simplebar class="h-100">
 
 
 
-       
+            <!-- Nav tabs -->
 
-        
-        <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/RWD-Table-Patterns/js/rwd-table.min.js"></script>
-        <script src="<?php echo base_url()?>theme/Vertical/dist/assets/js/app.js"></script>
+            <ul class="nav nav-tabs nav-tabs-custom rightbar-nav-tab nav-justified" role="tablist">
 
-        <script type="text/javascript">
-            <?php
-            if($this->session->flashdata('status'))
-            {
-                ?>
-                Swal.fire(
-                  '<?php echo $this->session->flashdata('judul'); ?>',
-                  '<?php echo $this->session->flashdata('status'); ?>',
-                  '<?php echo $this->session->flashdata('type'); ?>'
-                )
-                <?php
-            }
-            ?>
-            $(document).ready(function(){
-                $(".datepicker2").datepicker({
-                    dateFormat: "yyyy-mm-dd",
-                });
-                
-                $(".select2-input").select2();
+                <li class="nav-item">
+
+                    <a class="nav-link py-3 active" data-toggle="tab" href="#chat-tab" role="tab">
+
+                        <i class="mdi mdi-message-text font-size-22"></i>
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link py-3" data-toggle="tab" href="#tasks-tab" role="tab">
+
+                        <i class="mdi mdi-format-list-checkbox font-size-22"></i>
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link py-3" data-toggle="tab" href="#settings-tab" role="tab">
+
+                        <i class="mdi mdi-settings font-size-22"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+
+
+
+        </div> <!-- end slimscroll-menu-->
+
+    </div>
+
+    <!-- /Right-bar -->
+
+
+
+    <!-- Right bar overlay-->
+
+    <div class="rightbar-overlay"></div>
+
+
+
+
+
+
+    <script src="<?php echo site_url('theme/Vertical/dist'); ?>/assets/libs/RWD-Table-Patterns/js/rwd-table.min.js"></script>
+    <script src="<?php echo base_url() ?>theme/Vertical/dist/assets/js/app.js"></script>
+
+    <script type="text/javascript">
+        <?php
+        if ($this->session->flashdata('status')) {
+        ?>
+            Swal.fire(
+                '<?php echo $this->session->flashdata('judul'); ?>',
+                '<?php echo $this->session->flashdata('status'); ?>',
+                '<?php echo $this->session->flashdata('type'); ?>'
+            )
+        <?php
+        }
+        ?>
+        $(document).ready(function() {
+            $(".datepicker2").datepicker({
+                dateFormat: "yyyy-mm-dd",
             });
-        </script>
+
+            $(".select2-input").select2();
+
+            $(".only-num").on("keypress keyup blur", function(event) {
+                $(this).val($(this).val().replace(/[^\d].+/, ""));
+                if ((event.which < 48 || event.which > 57)) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 
 
-    </body>
+</body>
 
 </html>
