@@ -39,7 +39,7 @@
                             <tbody>
                                 <?php
                                 $no=1;
-                                $customer = $this->db->get("m_customer");
+                                $customer = $this->db->get_where("m_customer",["STATUS"=>1]);
                                 if($customer->num_rows()>0){
                                     foreach ($customer->result() as $key) {
                                         $transaksi=$this->db->get_where("t_penjualan",["ID_CUSTOMER"=>$key->ID]);
@@ -56,7 +56,11 @@
                                             <td><?php echo $key->ALAMAT; ?></td>
                                             <td><?php echo $key->NO_TELP; ?></td>
                                             <td><?php echo $transaksi->num_rows(); ?></td>
-                                            <td><?php echo '<a href="'.site_url("admin/detailCustomer/".base64_encode_fix($key->ID)).'" class="btn btn-primary mr-1"><i class="mdi mdi-file mr-1"></i>Lihat</a>'; ?></td>
+                                            <td>
+                                                <?php echo '<a href="'.site_url("admin/detailCustomer/".base64_encode_fix($key->ID)).'" class="btn btn-primary mr-1"><i class="mdi mdi-file mr-1"></i>Lihat</a>'; ?>
+                                                <a href="<?php echo site_url('admin/hapusCustomer/'.base64_encode_fix($key->ID)); ?>" onclick="return confirm('Yakin menghapus data customer ini?')" class="btn btn-danger"><i class="mdi mdi-trash-can mr-1"> </i> Hapus</a>
+                                            
+                                            </td>
                                         </tr>
                                         <?php
                                     }

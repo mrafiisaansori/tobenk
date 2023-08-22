@@ -1517,6 +1517,23 @@ class Admin extends CI_Controller
 		$data['page'] = 'admin/customer';
 		$this->load->view($this->_template, $data);
 	}
+	function hapusCustomer($id)
+	{
+		$id = base64_decode_fix($id);
+		$data = array(
+			'STATUS' => 0,
+		);
+		$this->db->where('ID', $id);
+		$this->db->update('m_customer', $data);
+		$return = array(
+			'status' => true,
+			'judul' => 'Success',
+			'pesan' => "Berhasil Menghapus Customer",
+			'type' => 'success'
+		);
+		$this->session->set_flashdata($return);
+		redirect("admin/customer.html");
+	}
 	function getTabelJsonCustomer()
 	{
 		$aColumns = array('ID', 'NAMA', 'ALAMAT', 'NO_TELP', 'STATUS');
