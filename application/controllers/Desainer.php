@@ -77,6 +77,19 @@ class Desainer extends CI_Controller
         $data['page'] = 'desainer/list_kerjaan';
         $this->load->view($this->_template, $data);
     }
+    public function cetak($id, $bayar)
+	{
+		$id = base64_decode_fix($id);
+		$bayar = base64_decode_fix($bayar);
+		$identitas = $this->db->get("m_identitas")->row();
+		$all = base64_encode_fix($id . "#" . $identitas->NAMA);
+		$data['link'] = $all;
+		$data['bayar'] = $bayar;
+		$data['data'] = $this->db->query("SELECT * FROM view_penjualan WHERE ID='$id'")->row();
+		$data['produk'] = $this->db->query("SELECT * FROM view_detail_penjualan WHERE ID_TRANSAKSI_PENJUALAN='$id'")->result();
+		$data['page'] = 'desainer/cetak';
+		$this->load->view($data['page'], $data);
+	}
     function detailList($id)
     {
         $id = base64_decode_fix($id);

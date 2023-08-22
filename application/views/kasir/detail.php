@@ -37,13 +37,13 @@
 						</div>
 						<?php } else { ?>
 						<div class="alert alert-danger" role="alert">
-							<i class="fas fa-atlas" style="font-size:12pt"></i>Pembayaran Belum Lunas
+							<i class="fas fa-atlas" style="font-size:12pt"></i> Pembayaran Belum Lunas
 						</div>
 					<?php }}
 					else{
 						?>
 						<div class="alert alert-danger" role="alert">
-							<i class="mdi mdi-trash-o" style="font-size:12pt"></i>Transaksi Dibatalkan
+							<i class="mdi mdi-trash-o" style="font-size:12pt"></i> Transaksi Dibatalkan
 						</div>
 						<?php
 					}
@@ -97,8 +97,8 @@
 																	else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span>";
 																	else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span>";
 																	else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span>";
-																	else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Produksi</span>";
-																	else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-success' style='font-size:10pt;'>Diambil</span>";
+																	else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span>";
+																	else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span>";
 																} else {
 																	echo "<span style='font-size:10pt' class='badge badge-soft-secondary'>Dibatalkan</span>";
 																}  ?>
@@ -107,6 +107,10 @@
 														<tr>
 															<th style="background-color:#f8f9fa"><b>Keterangan</b></th>
 															<th><?php echo $data->KETERANGAN ?></th>
+														</tr>
+														<tr>
+															<th style="background-color:#f8f9fa"><b>File Customer</b></th>
+															<th><?php if($data->FILE_CUSTOMER) echo "<a target='_blank' href='".site_url('upload/file_customer/'.$data->FILE_CUSTOMER)."'>".$data->FILE_CUSTOMER."</a>"; else echo "-"; ?></th>
 														</tr>
 													</tbody>
 												</table>

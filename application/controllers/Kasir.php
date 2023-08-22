@@ -264,7 +264,7 @@ class Kasir extends CI_Controller
 				//Cek Stok
 				$id = $items['id'];
 				$qty = $items['qty'];
-				$produk = $this->db->query("SELECT * FROM m_produk WHERE ID='$id'");
+				$produk = $this->db->query("SELECT * FROM view_produk_detail WHERE ID='$id'");
 				if ($produk->num_rows() > 0) {
 					if ($qty > $produk->row()->STOK) {
 						$lebih += 1;
@@ -281,11 +281,7 @@ class Kasir extends CI_Controller
 					'type' => 'warning'
 				);
 				$this->session->set_flashdata($return);
-				if ($this->agent->is_mobile()) {
-					redirect('transaksi-mobile.html');
-				} else {
-					redirect('transaksi-full.html');
-				}
+				redirect('transaksi-full.html');
 			}
 
 			//End Cek Stok

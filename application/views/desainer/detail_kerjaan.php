@@ -10,7 +10,8 @@
                 </ol>
             </div>
             <div class="col-md-4">
-                <a href="<?= base_url('desainer/list') ?>" class="btn btn-warning" style="float:right;">Kembali</a>
+            <a href="<?= base_url('desainer/list') ?>" class="btn btn-warning mr-1" style="float:right;"><i class="mdi mdi-chevron-triple-left mr-1"></i> Kembali</a>
+			<a target="_blank" href="<?php echo site_url('desainer/cetak/'.base64_encode_fix($data->ID).'/'.base64_encode_fix($data->BAYAR)); ?>" class="btn btn-info mr-1" style="float:right;"><i class="mdi mdi-printer mr-1"></i> Cetak</a>
             </div>
         </div>
     </div>
@@ -26,13 +27,13 @@
                 </div>
             <?php } else { ?>
                 <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-atlas" style="font-size:12pt"></i>Pembayaran Belum Lunas
+                    <i class="fas fa-atlas" style="font-size:12pt"></i> Pembayaran Belum Lunas
                 </div>
             <?php }
         } else {
             ?>
             <div class="alert alert-danger" role="alert">
-                <i class="mdi mdi-trash-o" style="font-size:12pt"></i>Transaksi Dibatalkan
+                <i class="mdi mdi-trash-o" style="font-size:12pt"></i> Transaksi Dibatalkan
             </div>
         <?php
         }
@@ -86,8 +87,8 @@
                                                     else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span>";
                                                     else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span>";
                                                     else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span>";
-                                                    else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Produksi</span>";
-                                                    else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-success' style='font-size:10pt;'>Diambil</span>";
+                                                    else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span>";
+                                                    else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span>";
                                                 } else {
                                                     echo "<span style='font-size:10pt' class='badge badge-soft-secondary'>Dibatalkan</span>";
                                                 }  ?></th>
@@ -149,13 +150,21 @@
                                             <tr>
                                                 <th width="30%" style="background-color:#f8f9fa"><b>File Mentah</b></th>
                                                 <th>
+                                                    <?php if ($data->STATUS_PENGERJAAN < 3){ ?>
                                                     <input type="text" class="form-control" name="file_mentah" value="<?= $data->FILE_MENTAH ?>">
+                                                    <?php }
+                                                    else
+                                                    {
+                                                        echo $data->FILE_MENTAH;
+                                                    } ?>
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th style="background-color:#f8f9fa"><b>Mockup</b></th>
                                                 <th style="">
+                                                    <?php if ($data->STATUS_PENGERJAAN < 3){ ?>
                                                     <input type="file" name="mockup" accept="image/*">
+                                                    <?php } else { echo $data->MOCKUP; } ?>
                                                     <?php
                                                     if (file_exists('./upload/mockup/' . $data->MOCKUP) && $data->MOCKUP != null) {
                                                         echo "<a style='float:right;' href='" . base_url() . "upload/mockup/" . $data->MOCKUP . "' target='_blank' class='btn btn-sm btn-primary'>Lihat</a>";

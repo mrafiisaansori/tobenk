@@ -26,9 +26,16 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body noti border">
                         <?php if (!$data) {
-                            echo "<center><h2 style='color:red;'>Belum Ada List Kerjaan</h2></center>";
+                            echo '<div class="text-center">
+                            <div class="icons-xl uim-icon-warning my-4">
+                                <span class="uim-svg" style=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em"><path class="uim-tertiary" d="M20.05713,22H3.94287A3.02288,3.02288,0,0,1,1.3252,17.46631L9.38232,3.51123a3.02272,3.02272,0,0,1,5.23536,0L22.6748,17.46631A3.02288,3.02288,0,0,1,20.05713,22Z"></path><circle cx="12" cy="17" r="1" class="uim-primary"></circle><path class="uim-primary" d="M12,14a1,1,0,0,1-1-1V9a1,1,0,0,1,2,0v4A1,1,0,0,1,12,14Z"></path></svg></span>
+                            </div>
+                            <h4 class="alert-heading font-size-20">Warning</h4>
+                            <p class="text-muted">Belum Ada List Pekerjaan</p>
+                            
+                        </div>';
                         } else { ?>
                             <div class="d-flex justify-content-center">
                                 <div class="row">
@@ -55,13 +62,13 @@
                                                         $deadline = tgl_indo_lengkap($dataVal->ESTIMASI_SELESAI);
                                                     } else if ($selisih == -1) {
                                                         $color = 'bg-danger';
-                                                        $deadline = 'BESOK';
+                                                        $deadline = 'Besok';
                                                     } else if ($selisih == 0) {
                                                         $color = 'bg-success';
-                                                        $deadline = 'HARI INI';
+                                                        $deadline = 'Hari Ini';
                                                     } else {
                                                         $color = 'bg-danger';
-                                                        $deadline = 'LEWAT ' . $selisih . ' HARI';
+                                                        $deadline = 'Lewat ' . $selisih . ' Hari';
                                                     }
 
                                                     ?>
