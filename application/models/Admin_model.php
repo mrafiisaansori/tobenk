@@ -253,6 +253,10 @@ class Admin_model extends CI_Model
             return null;
         }
     }
+    function getProdukDetailById($id)
+    {
+        return $this->db->get_where('m_produk_detail', array('ID' => $id))->row();
+    }
     function getProdukDetailByIdProduk($id)
     {
         return $this->db->get_where('m_produk_detail', array('ID_PRODUK' => $id))->result();
@@ -280,6 +284,19 @@ class Admin_model extends CI_Model
         } else {
             return false;
         }
+    }
+    function insertRekamStok2($produk, $produk_detail, $stok, $jenis, $keterangan)
+    {
+        $insert = array(
+            'ID_PRODUK' => $produk,
+            'ID_PRODUK_DETAIL' => $produk_detail,
+            'JENIS' => $jenis,
+            'QTY' => $stok,
+            'TANGGAL' => date('Y-m-d H:i:sa'),
+            'KETERANGAN' => $keterangan
+        );
+        $this->db->insert('t_rekam_stok', $insert);
+        return true;
     }
     function updateProduk($id)
     {
@@ -504,7 +521,7 @@ class Admin_model extends CI_Model
     }
     function cariProduk($cari)
     {
-        $query = "SELECT * FROM view_produk WHERE NAMA_PRODUK LIKE '%$cari%'";
+        $query = "SELECT * FROM view_produk WHERE NAMA_PRODUK LIKE '%$cari%' AND TANPA_STOK = 0";
         $query = $this->db->query($query);
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -515,12 +532,13 @@ class Admin_model extends CI_Model
     function insertDetailPembelian($id_pembelian, $stok_lama)
     {
         $produk = $this->input->post('produk');
+        $produk_detail = $this->input->post('produk_detail');
         $harga_beli = str_replace(".", "", $this->input->post('harga_beli'));
         $jumlah = $this->input->post('jumlah');
         $supplier = $this->input->post('supplier');
 
-        $query = "INSERT INTO t_detail_pembelian (ID_TRANSAKSI_PEMBELIAN,ID_PRODUK,HARGA_BELI,QTY,QTY_LAMA,ID_SUPPLIER)
-        VALUES ('$id_pembelian','$produk','$harga_beli','$jumlah','$stok_lama','$supplier')";
+        $query = "INSERT INTO t_detail_pembelian (ID_TRANSAKSI_PEMBELIAN,ID_PRODUK,HARGA_BELI,QTY,QTY_LAMA,ID_SUPPLIER,ID_PRODUK_DETAIL)
+        VALUES ('$id_pembelian','$produk','$harga_beli','$jumlah','$stok_lama','$supplier','$produk_detail')";
         $query = $this->db->query($query);
 
         if ($query) {
@@ -545,6 +563,22 @@ class Admin_model extends CI_Model
             return false;
         }
     }
+    function ubahStokProduk2($id_produk, $jumlah, $jenis)
+    {
+        $set_stok = '';
+        if ($jenis == 1) {
+            $set_stok = "SET STOK=STOK+$jumlah";
+        } else {
+            $set_stok = "SET STOK=STOK-$jumlah";
+        }
+        $query = "UPDATE m_produk_detail $set_stok WHERE ID='$id_produk'";
+        $query = $this->db->query($query);
+        if ($query) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     function ubahStokHargaProduk($id_produk, $jumlah, $jenis, $harga_beli)
     {
         $set_stok = '';
@@ -554,6 +588,22 @@ class Admin_model extends CI_Model
             $set_stok = "SET STOK=STOK-$jumlah";
         }
         $query = "UPDATE m_produk $set_stok,HARGA_BELI='$harga_beli' WHERE ID='$id_produk'";
+        $query = $this->db->query($query);
+        if ($query) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function ubahStokHargaProdukDetail($id_produk_detail, $jumlah, $jenis, $harga_beli)
+    {
+        $set_stok = '';
+        if ($jenis == 1) {
+            $set_stok = "SET STOK=STOK+$jumlah";
+        } else {
+            $set_stok = "SET STOK=STOK-$jumlah";
+        }
+        $query = "UPDATE m_produk_detail $set_stok,HARGA_BELI='$harga_beli' WHERE ID='$id_produk_detail'";
         $query = $this->db->query($query);
         if ($query) {
             return true;
@@ -684,12 +734,13 @@ class Admin_model extends CI_Model
     function insertDetailRetur($id_retur, $stok_lama)
     {
         $produk = $this->input->post('produk');
+        $produk_detail = $this->input->post('produk_detail');
         $jumlah = $this->input->post('jumlah');
         $supplier = $this->input->post('supplier');
         $keterangan = $this->input->post('keterangan');
 
-        $query = "INSERT INTO t_detail_retur (ID_TRANSAKSI_RETUR,ID_PRODUK,QTY,QTY_LAMA,ID_SUPPLIER,KETERANGAN) VALUES 
-        ('$id_retur','$produk','$jumlah','$stok_lama','$supplier','$keterangan')";
+        $query = "INSERT INTO t_detail_retur (ID_TRANSAKSI_RETUR,ID_PRODUK,QTY,QTY_LAMA,ID_SUPPLIER,KETERANGAN,ID_PRODUK_DETAIL) VALUES 
+        ('$id_retur','$produk','$jumlah','$stok_lama','$supplier','$keterangan','$produk_detail')";
         $query = $this->db->query($query);
         if ($query) {
             return true;

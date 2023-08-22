@@ -395,8 +395,8 @@ class Admin extends CI_Controller
 	}
 	function getHargaBeli()
 	{
-		$id = $this->input->post("id_produk");
-		$data = $this->db->get_where("m_produk", ["ID" => $id]);
+		$id = $this->input->post("id_produk_detail");
+		$data = $this->db->get_where("m_produk_detail", ["ID" => $id]);
 		if ($data->num_rows() > 0) {
 			echo formatRupiah($data->row()->HARGA_BELI);
 		} else {
@@ -947,13 +947,26 @@ class Admin extends CI_Controller
 			echo "<option value=''>Data tidak ditemukan</option>";
 		}
 	}
+	function getUkuran()
+	{
+		$id_produk = $this->input->post('id_produk');
+		$ukuran = $this->Admin_model->getProdukDetailByIdProduk($id_produk);
+		if ($ukuran) {
+			echo "<option value=''>Pilih Ukuran</option>";
+			foreach ($ukuran as $u) {
+				echo "<option value='" . $u->ID . "'>" . $u->UKURAN . "</option>";
+			}
+		}
+	}
 	function tambahDetailPembelian($id_pembelian)
 	{
 		$produk = $this->input->post('produk');
+		$produk_detail = $this->input->post('produk_detail');
 		$jumlah = $this->input->post('jumlah');
 		$dataProduk = $this->Admin_model->getProdukById($produk);
-		$stok_lama = $dataProduk->STOK;
-		$dataPembelian = $this->Admin_model->getPembelianById($id_pembelian);
+		$dataProdukDetail = $this->Admin_model->getProdukDetailById($produk_detail);
+		$stok_lama = $dataProdukDetail->STOK;
+		// $dataPembelian = $this->Admin_model->getPembelianById($id_pembelian);
 		$insert = $this->Admin_model->insertDetailPembelian($id_pembelian, $stok_lama);
 		if ($insert) {
 			//insert rekam
@@ -1016,10 +1029,20 @@ class Admin extends CI_Controller
 				//insert rekam
 				$keterangan = "Pembelian barang dengan No Nota : <a target='_blank' href='" . site_url('admin/detail-pembelian-' . $pembelian->ID_PEMBELIAN . '.html') . "'>" . $pembelian->NO_NOTA . "</a>";
 				$stok = $dp->QTY;
-				$this->Admin_model->insertRekamStok($dp->ID_PRODUK, $stok, '1', $keterangan);
+				// $this->Admin_model->insertRekamStok($dp->ID_PRODUK, $stok, '1', $keterangan);
+				$this->db->insert('t_rekam_stok', array(
+					'ID_PRODUK' => $dp->ID_PRODUK,
+					'ID_PRODUK_DETAIL' => $dp->ID_PRODUK_DETAIL,
+					'QTY' => $stok,
+					'KETERANGAN' => $keterangan,
+					'JENIS' => '1',
+					'TANGGAL' => date('Y-m-d H:i:s')
+				));
+				// exit();
 				//ubah stok produk
 				$harga_beli = $this->input->post('harga_produk_' . $dp->ID_DETAIL_PEMBELIAN);
-				$this->Admin_model->ubahStokHargaProduk($dp->ID_PRODUK, $stok, 1, $harga_beli);
+				// $this->Admin_model->ubahStokHargaProduk($dp->ID_PRODUK, $stok, 1, $harga_beli);
+				$this->Admin_model->ubahStokHargaProdukDetail($dp->ID_PRODUK_DETAIL, $stok, 1, $harga_beli);
 			}
 			$update = $this->Admin_model->updateStatusPembelian($id_pembelian);
 			if ($update) {
@@ -1197,8 +1220,8 @@ class Admin extends CI_Controller
 		$detailRetur = $this->Admin_model->getDetailReturByIdRetur($id_retur);
 		if ($detailRetur) {
 			foreach ($detailRetur as $dr) {
-				$this->Admin_model->insertRekamStok($dr->ID_PRODUK, $dr->QTY, '1', 'Pembatalan retur dari admin');
-				$this->Admin_model->ubahStokProduk($dr->ID_PRODUK, $dr->QTY, 1);
+				$this->Admin_model->insertRekamStok2($dr->ID_PRODUK, $dr->ID_PRODUK_DETAIL, $dr->QTY, '1', 'Pembatalan retur dari admin');
+				$this->Admin_model->ubahStokProduk2($dr->ID_PRODUK_DETAIL, $dr->QTY, 1);
 				$this->Admin_model->deleteDetailRetur($dr->ID_DETAIL_RETUR);
 			}
 		}
@@ -1228,17 +1251,19 @@ class Admin extends CI_Controller
 	function tambahDetailRetur($id_retur)
 	{
 		$produk = $this->input->post('produk');
+		$produk_detail = $this->input->post('produk_detail');
 		$jumlah = $this->input->post('jumlah');
 		$ret = $this->db->get_where("t_retur", ["ID" => $id_retur])->row();
 		$keterangan = "Retur barang dengan No Nota <a target='_blank' href='" . site_url('admin/detail-retur-' . $ret->ID . '.html') . "'>" . $ret->NO_NOTA . "</a> , Keterangan (" . $this->input->post('keterangan') . ")";
 		//echo $keterangan;exit();
 		$dataProduk = $this->Admin_model->getProdukById($produk);
-		if ($jumlah <= $dataProduk->STOK) {
+		$dataProdukDetail = $this->Admin_model->getProdukDetailById($produk_detail);
+		if ($jumlah <= $dataProdukDetail->STOK) {
 			$insertDetail = $this->Admin_model->insertDetailRetur($id_retur, $dataProduk->STOK);
 			if ($insertDetail) {
 				//rekam
-				$insert_rekam = $this->Admin_model->insertRekamStok($produk, $jumlah, '2', $keterangan);
-				$update_stok = $this->Admin_model->ubahStokProduk($produk, $jumlah, 2);
+				$insert_rekam = $this->Admin_model->insertRekamStok2($produk, $produk_detail, $jumlah, '2', $keterangan);
+				$update_stok = $this->Admin_model->ubahStokProduk2($produk_detail, $jumlah, 2);
 			} else {
 				$this->session->set_flashdata('judul', 'Detail Retur');
 				$this->session->set_flashdata('status', 'Gagal retur , coba ulangi kembali');
@@ -1254,9 +1279,10 @@ class Admin extends CI_Controller
 	function deleteDetailRetur($id_retur, $id_detail_retur)
 	{
 		$detailRetur = $this->Admin_model->getDetailReturById($id_detail_retur);
-		$insert_rekam = $this->Admin_model->insertRekamStok($detailRetur->ID_PRODUK, $detailRetur->QTY, '1', 'Pembatalan retur dari admin');
+		$insert_rekam = $this->Admin_model->insertRekamStok2($detailRetur->ID_PRODUK, $detailRetur->ID_PRODUK_DETAIL, $detailRetur->QTY, '1', 'Pembatalan retur dari admin');
+
 		if ($insert_rekam) {
-			$update_stok = $this->Admin_model->ubahStokProduk($detailRetur->ID_PRODUK, $detailRetur->QTY, 1);
+			$update_stok = $this->Admin_model->ubahStokProduk2($detailRetur->ID_PRODUK_DETAIL, $detailRetur->QTY, 1);
 			$delete = $this->Admin_model->deleteDetailRetur($id_detail_retur);
 			if ($delete) {
 				$this->session->set_flashdata('judul', 'Detail Retur');
@@ -1264,12 +1290,12 @@ class Admin extends CI_Controller
 				$this->session->set_flashdata('type', 'success');
 			} else {
 				$this->session->set_flashdata('judul', 'Detail Retur');
-				$this->session->set_flashdata('status', 'Gagal pembatalan retur , coba ulangi kembali');
+				$this->session->set_flashdata('status', 'Gagal pembatalan retur , coba ulangi kembali 1');
 				$this->session->set_flashdata('type', 'error');
 			}
 		} else {
 			$this->session->set_flashdata('judul', 'Detail Retur');
-			$this->session->set_flashdata('status', 'Gagal pembatalan retur , coba ulangi kembali');
+			$this->session->set_flashdata('status', 'Gagal pembatalan retur , coba ulangi kembali 2');
 			$this->session->set_flashdata('type', 'error');
 		}
 		redirect('admin/detail-retur-' . $id_retur . '.html');
