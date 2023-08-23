@@ -373,6 +373,7 @@ class Admin extends CI_Controller
 	{
 		$id = $this->input->post("id");
 		$produk = $this->db->get_where("view_produk_detail", ["ID" => $id])->row();
+		if($produk->TANPA_STOK==0){
 		$data = $this->db->get_where("t_rekam_stok", ["ID_PRODUK_DETAIL" => $id]);
 		echo "<table class='table table-striped table-bordered'>
 		<tr>
@@ -402,6 +403,11 @@ class Admin extends CI_Controller
 		<td><b>" . $produk->STOK . "</b></td>
 		</tr>
 		</table>";
+		}
+		else
+		{
+			echo "<center>Produk Tanpa Stok</center>";
+		}
 	}
 	function getHargaBeli()
 	{

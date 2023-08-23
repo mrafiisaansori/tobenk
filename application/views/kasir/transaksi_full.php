@@ -174,7 +174,7 @@
 	                                <input type="text" class="form-control" id="bayar" name="bayar" required="">
 	                            </div>
 			                    <div class="mt-4">
-			                        <button class="btn btn-primary waves-effect waves-light" style="width:100%;" type="submit"><span id='total_belanja'></span></button>
+			                        <button class="btn btn-primary waves-effect waves-light" style="width:100%;font-size:16pt" type="submit"><span id='total_belanja'></span></button>
 			                    </div>
 			                </div>
 			                </form>

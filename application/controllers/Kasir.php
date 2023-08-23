@@ -266,9 +266,14 @@ class Kasir extends CI_Controller
 				$qty = $items['qty'];
 				$produk = $this->db->query("SELECT * FROM view_produk_detail WHERE ID='$id'");
 				if ($produk->num_rows() > 0) {
-					if ($qty > $produk->row()->STOK) {
-						$lebih += 1;
-						$notes .= $produk->row()->NAMA . " (" . $produk->row()->NAMA . ")\r\n";
+					if ($produk->row()->TANPA_STOK==0) {
+						if ($qty > $produk->row()->STOK) {
+							$lebih += 1;
+							$notes .= $produk->row()->NAMA . " (" . $produk->row()->NAMA . ")\r\n";
+						}
+					}
+					else{
+						$lebih=0;
 					}
 				}
 			}
@@ -355,7 +360,9 @@ class Kasir extends CI_Controller
 					$keterangan = "Transaksi Penjualan Nomor " . sprintf("%06d", $id_last);
 					$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$id_produk','$jenis','$qty','$tanggal','$keterangan','$id')");
 				}
-				$this->db->query("UPDATE m_produk_detail SET STOK=STOK-$qty WHERE ID='$id'");
+				if ($produk->row()->TANPA_STOK==0){
+					$this->db->query("UPDATE m_produk_detail SET STOK=STOK-$qty WHERE ID='$id'");
+				}
 			}
 			$this->cart->destroy();
 			redirect("kasir/pilih/" . base64_encode_fix($id_last . "#" . $bayar));
