@@ -23,17 +23,17 @@
                 <?php
                 if ($data->STATUS == 1) {
                     if ($data->LUNAS == 1) { ?>
-                        <div class="alert alert-primary" role="alert">
+                        <div class="alert alert-primary" role="alert" hidden>
                             Pembayaran Lunas &nbsp; <i class="mdi mdi-progress-check" style="font-size:12pt"></i>
                         </div>
                     <?php } else { ?>
-                        <div class="alert alert-danger" role="alert">
+                        <div class="alert alert-danger" role="alert" hidden>
                             Pembayaran Belum Lunas &nbsp; <i class="mdi mdi-pause-circle" style="font-size:12pt"></i>
                         </div>
                     <?php }
                 } else {
                     ?>
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-danger" role="alert" hidden>
                         Transaksi Dibatalkan &nbsp; <i class="mdi mdi-trash-o" style="font-size:12pt"></i>
                     </div>
                 <?php

@@ -10,8 +10,8 @@
                 </ol>
             </div>
             <div class="col-md-4">
-            <a href="<?= base_url('desainer/list') ?>" class="btn btn-warning mr-1" style="float:right;"><i class="mdi mdi-chevron-triple-left mr-1"></i> Kembali</a>
-			<a target="_blank" href="<?php echo site_url('desainer/cetak/'.base64_encode_fix($data->ID).'/'.base64_encode_fix($data->BAYAR)); ?>" class="btn btn-info mr-1" style="float:right;"><i class="mdi mdi-printer mr-1"></i> Cetak</a>
+                <a href="<?= base_url('desainer/list') ?>" class="btn btn-warning mr-1" style="float:right;"><i class="mdi mdi-chevron-triple-left mr-1"></i> Kembali</a>
+                <a target="_blank" href="<?php echo site_url('desainer/cetak/' . base64_encode_fix($data->ID) . '/' . base64_encode_fix($data->BAYAR)); ?>" class="btn btn-info mr-1" style="float:right;"><i class="mdi mdi-printer mr-1"></i> Cetak</a>
             </div>
         </div>
     </div>
@@ -22,17 +22,17 @@
         <?php
         if ($data->STATUS == 1) {
             if ($data->LUNAS == 1) { ?>
-                <div class="alert alert-primary" role="alert">
+                <div class="alert alert-primary" role="alert" hidden>
                     <i class="fas fa-check" style="font-size:12pt"></i> Pembayaran Lunas
                 </div>
             <?php } else { ?>
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-danger" role="alert" hidden>
                     <i class="fas fa-atlas" style="font-size:12pt"></i> Pembayaran Belum Lunas
                 </div>
             <?php }
         } else {
             ?>
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger" role="alert" hidden>
                 <i class="mdi mdi-trash-o" style="font-size:12pt"></i> Transaksi Dibatalkan
             </div>
         <?php
@@ -144,17 +144,17 @@
                                             <tr>
                                                 <th width="30%" style="background-color:#f8f9fa"><b>File Dari Customer</b></th>
                                                 <th>
-                                                <?php if($data->FILE_CUSTOMER){ echo "<a target='_blank' href=".site_url('upload/file_customer/'.$data->FILE_CUSTOMER).">".$data->FILE_CUSTOMER."</a>"; } else echo "-"; ?>
+                                                    <?php if ($data->FILE_CUSTOMER) {
+                                                        echo "<a target='_blank' href=" . site_url('upload/file_customer/' . $data->FILE_CUSTOMER) . ">" . $data->FILE_CUSTOMER . "</a>";
+                                                    } else echo "-"; ?>
                                                 </th>
                                             </tr>
                                             <tr>
                                                 <th width="30%" style="background-color:#f8f9fa"><b>File Mentah</b></th>
                                                 <th>
-                                                    <?php if ($data->STATUS_PENGERJAAN < 3){ ?>
-                                                    <input type="text" class="form-control" name="file_mentah" value="<?= $data->FILE_MENTAH ?>">
-                                                    <?php }
-                                                    else
-                                                    {
+                                                    <?php if ($data->STATUS_PENGERJAAN < 3) { ?>
+                                                        <input type="text" class="form-control" name="file_mentah" value="<?= $data->FILE_MENTAH ?>">
+                                                    <?php } else {
                                                         echo $data->FILE_MENTAH;
                                                     } ?>
                                                 </th>
@@ -162,9 +162,11 @@
                                             <tr>
                                                 <th style="background-color:#f8f9fa"><b>Mockup</b></th>
                                                 <th style="">
-                                                    <?php if ($data->STATUS_PENGERJAAN < 3){ ?>
-                                                    <input type="file" name="mockup" accept="image/*">
-                                                    <?php } else { echo $data->MOCKUP; } ?>
+                                                    <?php if ($data->STATUS_PENGERJAAN < 3) { ?>
+                                                        <input type="file" name="mockup" accept="image/*">
+                                                    <?php } else {
+                                                        echo $data->MOCKUP;
+                                                    } ?>
                                                     <?php
                                                     if (file_exists('./upload/mockup/' . $data->MOCKUP) && $data->MOCKUP != null) {
                                                         echo "<a style='float:right;' href='" . base_url() . "upload/mockup/" . $data->MOCKUP . "' target='_blank' class='btn btn-sm btn-primary'>Lihat</a>";
