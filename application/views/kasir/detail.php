@@ -93,12 +93,12 @@
 															<th style="background-color:#f8f9fa"><b>Status Pengerjaan</b></th>
 															<th>
 																<?php if ($data->STATUS == 1) {
-																	if ($data->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
-																	else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span>";
-																	else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span>";
-																	else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span>";
-																	else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span>";
-																	else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span>";
+																	 if ($data->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
+																	 else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_1)."</span>";
+																	 else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_2)."</span>";
+																	 else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_3)."</span>";
+																	 else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_4)."</span>";
+																	 else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_5)."</span>";
 																} else {
 																	echo "<span style='font-size:10pt' class='badge badge-soft-secondary'>Dibatalkan</span>";
 																}  ?>
@@ -181,11 +181,14 @@
 											<td align="right"><?php echo formatRupiah($data->BAYAR); ?></td>
 										</tr>
 										<tr>
-											<td colspan="3" align="right" style="font-weight:bold;"><?php  if($data->ID_METODE_BAYAR==1) echo "Kembalian"; else echo "Kurang Bayar"; ?></td>
-											<td align="right"><?php $tsemua = $data->BAYAR-$hd;  echo formatRupiah(abs($tsemua)); ?></td>
+											<td colspan="3" align="right" style="font-weight:bold;"><?php $tsemua = $data->BAYAR-$hd;  $notif=""; if($data->ID_METODE_BAYAR==1) { echo "Kembalian";  } else { echo "Kurang Bayar"; $notif=" sisa pelunasannya ".formatRupiah($tsemua); } ?></td>
+											<td align="right"><?php  echo formatRupiah(abs($tsemua)); ?></td>
 										</tr>
 									</tfoot>
 								</table>
+								<?php if($data->STATUS_PENGERJAAN==4){ ?>
+								<a style="width:100%" class="btn btn-primary" href="https://wa.me/<?php echo $data->NO_TELP; ?>?text=Halo kak, orderan nomor *<?php echo sprintf("%06d",$data->ID); ?>* Sudah bisa diambil ya<?php echo $notif; ?>, terima kasih" target="_blank"><i class="mdi mdi-whatsapp mr-1"></i>Kirim WhatsApp Ke Customer</a>
+								<?php } ?>
 			            	</div>
 			        	</div>
 			    	</div>

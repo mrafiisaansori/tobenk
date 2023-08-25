@@ -155,7 +155,7 @@
 															
 															<div class="form-group form-group-custom mb-4">
 	                            		<h5 class="font-size-14">Deadline</h5>
-																	<input type="text" class="form-control datepicker2" data-language="en" id="estimasi" name="estimasi" readonly required>
+																	<input type="text" class="form-control datepicker2" data-language="en" id="estimasi" name="estimasi" value="<?php echo date('Y-m-d'); ?>" readonly required>
 	                            </div>
 															<!-- <div class="form-group form-group-custom mb-4">
 	                            		<h5 class="font-size-14">Status Pengerjaan</h5>

@@ -107,7 +107,7 @@ class Produksi extends CI_Controller
     {
         $id = base64_decode_fix($id);
         $tgl = date("Y-m-d H:i:s");
-        $this->db->query("UPDATE t_penjualan SET STATUS_PENGERJAAN=4,SELESAI='$tgl' WHERE ID='$id'");
+        $this->db->query("UPDATE t_penjualan SET STATUS_PENGERJAAN=4,SELESAI='$tgl',SP_4='$tgl' WHERE ID='$id'");
         $return = array(
             'status' => true,
             'judul' => 'Success',

@@ -125,6 +125,7 @@ class Desainer extends CI_Controller
         if ($this->upload->do_upload('mockup')) {
             $data_update['MOCKUP'] = $this->upload->data('file_name');
             $data_update['STATUS_PENGERJAAN'] = 1;
+            $data_update['SP_1'] = date('Y-m-d H:i:s');
         }
         $this->db->update("t_penjualan", $data_update, ["ID" => $id]);
         //unlink last mockup

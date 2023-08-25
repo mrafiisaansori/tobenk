@@ -215,6 +215,8 @@ $identitas = $this->db->query("SELECT * FROM m_identitas LIMIT 1")->row();
           </td>
         </tr>
       </table>
+      <br>
+      <span style='color:red'> (*) Barang yang sudah dibeli tidak dapat dikembalikan </span>
   </div>
 </div>
 </body>

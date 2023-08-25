@@ -849,7 +849,8 @@ class Kasir extends CI_Controller
 	{
 		$id = base64_decode_fix($id);
 		$data = array(
-			'STATUS_PENGERJAAN' => $status
+			'STATUS_PENGERJAAN' => $status,
+			'SP_'.$status => date('Y-m-d H:i:s')
 		);
 		$this->db->where('ID', $id);
 		$this->db->update('t_penjualan', $data);
@@ -888,14 +889,16 @@ class Kasir extends CI_Controller
 			$data = array(
 				'STATUS_PENGERJAAN' => 5,
 				'LUNAS' => 1,
-				'AMBIL' => date("Y-m-d H:i:s")
+				'AMBIL' => date("Y-m-d H:i:s"),
+				'SP_5' => date("Y-m-d H:i:s")
 			);
 		} else {
 			$data = array(
 				'STATUS_PENGERJAAN' => 5,
 				'LUNAS' => 1,
 				'BAYAR' => $penjualan->TOTAL - $penjualan->DISKON,
-				'AMBIL' => date("Y-m-d H:i:s")
+				'AMBIL' => date("Y-m-d H:i:s"),
+				'SP_5' => date("Y-m-d H:i:s")
 			);
 		}
 
