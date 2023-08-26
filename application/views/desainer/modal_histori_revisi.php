@@ -19,8 +19,19 @@
                     </thead>
                     <tbody>
                         <?php $no = 1; ?>
-                        <?php if ($data) { ?>
+                        <?php
+                        if (count($data) == 1) {
+                            $data = null;
+                        }
+                        ?>
+                        <?php if ($data) {
+                            $num_histori = 1; ?>
                             <?php foreach ($data as $dataVal) { ?>
+                                <?php if ($num_histori < count($data)) {
+                                    $num_histori++;
+                                } else {
+                                    continue;
+                                } ?>
                                 <tr>
                                     <td>
                                         <?= $no++; ?>
@@ -46,7 +57,7 @@
                             <?php } ?>
                         <?php } else { ?>
                             <tr>
-                                <td colspan="4">Tidak Ada Datas</td>
+                                <td colspan="4">Tidak Ada Data</td>
                             </tr>
                         <?php } ?>
                     </tbody>

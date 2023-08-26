@@ -81,9 +81,19 @@ if ($data->STATUS == 1) {
         </tr>
       </thead>
       <tbody>
-
-        <?php if ($histori_revisi) { ?>
+        <?php
+        if (count($histori_revisi) == 1) {
+          $histori_revisi = null;
+        }
+        ?>
+        <?php if ($histori_revisi) {
+          $num_histori = 1; ?>
           <?php foreach ($histori_revisi as $hr) { ?>
+            <?php if ($num_histori < count($histori_revisi)) {
+              $num_histori++;
+            } else {
+              continue;
+            } ?>
             <tr>
               <td>
 
