@@ -100,6 +100,7 @@ class Produksi extends CI_Controller
         $data["id"] = $id;
         $data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
         $data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
+        $data['revisi'] = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->row();
         $data['page'] = 'produksi/detail_kerjaan';
         $this->load->view($this->_template, $data);
     }
@@ -131,7 +132,14 @@ class Produksi extends CI_Controller
         $data["id"] = $id;
         $data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
         $data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
+        $data['revisi'] = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->row();
         $data['page'] = 'produksi/detail_histori_kerjaan';
         $this->load->view($this->_template, $data);
+    }
+    function modalHistoriRevisi($id)
+    {
+        $id = base64_decode_fix($id);
+        $data['data'] = $this->db->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->result();
+        $this->load->view("desainer/modal_histori_revisi", $data);
     }
 }

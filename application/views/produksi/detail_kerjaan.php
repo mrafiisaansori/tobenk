@@ -71,12 +71,12 @@
                                             Metode <?php if ($data->ID_METODE_BAYAR == 1) echo "Full Payment";
                                                     else echo "Down Payment"; ?><br>
                                             <?php if ($data->STATUS == 1) {
-                                                 if ($data->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
-                                                 else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span>&nbsp;<span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_1)."</span>";
-                                                 else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span>&nbsp;<span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_2)."</span>";
-                                                 else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span>&nbsp;<span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_3)."</span>";
-                                                 else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span>&nbsp;<span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_4)."</span>";
-                                                 else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span>&nbsp;<span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_5)."</span>";
+                                                if ($data->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
+                                                else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span>&nbsp;<span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_1) . "</span>";
+                                                else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span>&nbsp;<span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_2) . "</span>";
+                                                else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span>&nbsp;<span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_3) . "</span>";
+                                                else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span>&nbsp;<span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_4) . "</span>";
+                                                else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span>&nbsp;<span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_5) . "</span>";
                                             } else {
                                                 echo "Dibatalkan";
                                             }  ?><br>
@@ -95,11 +95,13 @@
                         <table class="table table-bordered" style="font-size:12pt">
                             <tbody>
                                 <tr style="background-color:#f8f9fa;font-size:10pt;font-weight:bold;">
-                                    <td><i class="fas fa-file-alt mr-1"></i> Mockup</td>
+                                    <td><i class="fas fa-file-alt mr-1"></i> Mockup
+                                        <button class="btn btn-info btn-sm" id="btnHistoriRevisi" style="float:right;">Histori Revisi</button>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td align="center">
-                                        <img height="150px" src="<?php echo site_url('upload/mockup/' . $data->MOCKUP); ?>" alt="">
+                                        <img height="150px" src="<?php echo site_url('upload/mockup/' . $revisi->MOCKUP); ?>" alt="">
                                     </td>
                                 </tr>
                             </tbody>
@@ -135,6 +137,8 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalHistoriRevisi" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+</div>
 
 
 
@@ -193,4 +197,21 @@
             });
         }
     }
+    let waitModal = 0;
+    $("#btnHistoriRevisi").click(function() {
+        if (waitModal == 1) return;
+        waitModal = 1;
+        $(this).html('Harap tunggu....');
+        $.ajax({
+            type: "post",
+            url: "<?= base_url('produksi/modalHistoriRevisi/' . base64_encode_fix($data->ID)) ?>",
+            cache: false,
+            success: function(msg) {
+                waitModal = 0;
+                $("#btnHistoriRevisi").html('Histori Revisi');
+                $("#modalHistoriRevisi").html(msg);
+                $("#modalHistoriRevisi").modal("show");
+            }
+        })
+    });
 </script>

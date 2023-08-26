@@ -106,7 +106,7 @@ class Kasir extends CI_Controller
 		$cek = $this->db->query("SELECT * FROM view_produk_detail WHERE ID='$barang'");
 		if ($cek->num_rows() > 0) {
 
-			if($cek->row()->TANPA_STOK==1){
+			if ($cek->row()->TANPA_STOK == 1) {
 				if ($this->cart->contents()) {
 					$qty_old = 1;
 					foreach ($this->cart->contents() as $item) {
@@ -132,9 +132,7 @@ class Kasir extends CI_Controller
 					$this->cart->insert($data);
 					echo "1";
 				}
-			}
-			else
-			{
+			} else {
 				if ($cek->row()->STOK > 0) {
 					if ($this->cart->contents()) {
 						$qty_old = 1;
@@ -169,7 +167,6 @@ class Kasir extends CI_Controller
 					echo "0";
 				}
 			}
-
 		} else {
 			echo "99";
 		}
@@ -178,7 +175,7 @@ class Kasir extends CI_Controller
 	{
 		$produk = $this->input->post('produk');
 		$produk = $this->db->query("SELECT * FROM view_produk_detail WHERE ID='$produk'")->row();
-		if($produk->TANPA_STOK==0){
+		if ($produk->TANPA_STOK == 0) {
 			if ($this->input->post('qty') <= $produk->STOK) {
 				$rowid = $this->input->post('rowid');
 				$qty = $this->input->post('qty');
@@ -191,9 +188,7 @@ class Kasir extends CI_Controller
 			} else {
 				echo 99;
 			}
-		}
-		else
-		{
+		} else {
 			$rowid = $this->input->post('rowid');
 			$qty = $this->input->post('qty');
 			$data = array(
@@ -244,7 +239,7 @@ class Kasir extends CI_Controller
 		$status = $this->input->post("status");
 		$file_mentah = $this->input->post("file_mentah");
 
-		
+
 		$id_kasir = $this->session->userdata("id_kasir");
 		$tanggal = date("Y-m-d");
 		$jam = date("H:i:s");
@@ -266,14 +261,13 @@ class Kasir extends CI_Controller
 				$qty = $items['qty'];
 				$produk = $this->db->query("SELECT * FROM view_produk_detail WHERE ID='$id'");
 				if ($produk->num_rows() > 0) {
-					if ($produk->row()->TANPA_STOK==0) {
+					if ($produk->row()->TANPA_STOK == 0) {
 						if ($qty > $produk->row()->STOK) {
 							$lebih += 1;
 							$notes .= $produk->row()->NAMA . " (" . $produk->row()->NAMA . ")\r\n";
 						}
-					}
-					else{
-						$lebih=0;
+					} else {
+						$lebih = 0;
 					}
 				}
 			}
@@ -290,7 +284,7 @@ class Kasir extends CI_Controller
 			}
 
 			//End Cek Stok
-			$file_name="";
+			$file_name = "";
 			if ($_FILES['file_customer']['name']) {
 				$config['upload_path'] = './upload/file_customer/';
 				$config['allowed_types'] = 'jpg|png|jpeg|pdf|cdr';
@@ -345,7 +339,7 @@ class Kasir extends CI_Controller
 				if ($produk->num_rows() > 0) {
 					$harga_beli = $produk->row()->HARGA_BELI;
 					$harga_jual = $items['price'];
-					$id_produk=$produk->row()->ID_PRODUK;
+					$id_produk = $produk->row()->ID_PRODUK;
 					$data2 = array(
 						'ID_TRANSAKSI_PENJUALAN' => $id_last,
 						'ID_PRODUK' => $id_produk,
@@ -360,7 +354,7 @@ class Kasir extends CI_Controller
 					$keterangan = "Transaksi Penjualan Nomor " . sprintf("%06d", $id_last);
 					$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$id_produk','$jenis','$qty','$tanggal','$keterangan','$id')");
 				}
-				if ($produk->row()->TANPA_STOK==0){
+				if ($produk->row()->TANPA_STOK == 0) {
 					$this->db->query("UPDATE m_produk_detail SET STOK=STOK-$qty WHERE ID='$id'");
 				}
 			}
@@ -504,10 +498,10 @@ class Kasir extends CI_Controller
 		);
 		$seq_number = $_GET['iDisplayStart'] + 1;
 		foreach ($rResult as $data) {
-			if($data->TANPA_STOK==1){
-				$status="<span class='badge badge-danger'>Tanpa Stok</span>";
-			}else{
-				$status="<span class='badge badge-success'>Dengan Stok</span>";
+			if ($data->TANPA_STOK == 1) {
+				$status = "<span class='badge badge-danger'>Tanpa Stok</span>";
+			} else {
+				$status = "<span class='badge badge-success'>Dengan Stok</span>";
 			}
 			$row = array();
 			$row[] = $seq_number;
@@ -679,7 +673,7 @@ class Kasir extends CI_Controller
 		//echo $this->db->last_query();exit();
 		if ($produk->num_rows() > 0) {
 			foreach ($produk->result() as $key) {
-				if($key->TANPA_STOK==1){
+				if ($key->TANPA_STOK == 1) {
 					if ($key->FOTO) {
 						$image = site_url($key->FOTO);
 					} else {
@@ -690,7 +684,7 @@ class Kasir extends CI_Controller
 								<div class="card">
 										<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
 										<div class="card-body">
-												<h4 class="card-title font-size-16 text-center">' . $key->NAMA.'</h4>
+												<h4 class="card-title font-size-16 text-center">' . $key->NAMA . '</h4>
 												<p class="card-text text-center" style="font-size:10pt"><span class="badge badge-primary" style="font-size:10pt">' . $key->UKURAN . '</span></p>
 												<center><p class="card-text">
 														<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>
@@ -699,10 +693,8 @@ class Kasir extends CI_Controller
 								</div>
 						</div>
 					';
-				}
-				else
-				{
-					if($key->TANPA_STOK==0){
+				} else {
+					if ($key->TANPA_STOK == 0) {
 						if ($key->FOTO) {
 							$image = site_url($key->FOTO);
 						} else {
@@ -713,7 +705,7 @@ class Kasir extends CI_Controller
 									<div class="card">
 											<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
 											<div class="card-body">
-													<h4 class="card-title font-size-16 text-center">' . $key->NAMA .'</h4>
+													<h4 class="card-title font-size-16 text-center">' . $key->NAMA . '</h4>
 													<p class="card-text text-center" style="font-size:10pt"><span class="badge badge-primary" style="font-size:10pt">' . $key->UKURAN . '</span></p>
 													<center><p class="card-text">
 															<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>
@@ -840,17 +832,71 @@ class Kasir extends CI_Controller
 		$data["id"] = $id;
 		$data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
 		$data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
+		$data['revisi'] = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->row();
 		$hal = array('menu' => 'laporan');
 		$this->session->set_userdata($hal);
 		$data['page'] = 'kasir/detail';
 		$this->load->view($this->_template, $data);
 	}
-	function status($id,$status)
+	function simpanRevisiDesain($id)
+	{
+		$id = base64_decode_fix($id);
+		$revisi = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->row();
+		if ($_FILES['file_customer']['name']) {
+			$config['upload_path'] = './upload/file_customer_revisi/';
+			$config['allowed_types'] = 'jpg|png|jpeg';
+			$config['file_name'] = base64_encode_fix($_FILES['file_customer']['name']);
+			$this->load->library('upload', $config);
+			if ($this->upload->do_upload('file_customer')) {
+				$data['FILE_CUSTOMER'] = $this->upload->data('file_name');
+			} else {
+				$return = array(
+					'status' => true,
+					'judul' => 'Failed',
+					'pesan' => $this->upload->display_errors(),
+					'type' => 'error'
+				);
+				$this->session->set_flashdata($return);
+				redirect("kasir/detail/" . base64_encode_fix($id));
+			}
+		}
+		//update revisi penjualan
+		$this->db->update('t_penjualan', ['STATUS_PENGERJAAN' => 2, 'SP_2' => date("Y-m-d H:i:s")], ['ID' => $id]);
+
+		//update revisi desain
+		$data['KETERANGAN'] = $this->input->post("keterangan");
+		$data['WAKTU_REVISI'] = date("Y-m-d H:i:s");
+		$this->db->update('t_revisi_desain', $data, ['ID' => $revisi->ID]);
+		//unlink file customer
+		if ($revisi->FILE_CUSTOMER) {
+			unlink("./upload/file_customer_revisi/" . $revisi->FILE_CUSTOMER);
+		}
+
+
+		$return = array(
+			'status' => true,
+			'judul' => 'Success',
+			'pesan' => "Berhasil Revisi",
+			'type' => 'success'
+		);
+		$this->session->set_flashdata($return);
+		redirect("kasir/detail/" . base64_encode_fix($id));
+	}
+
+	function modalHistoriRevisi($id)
+	{
+		$id = base64_decode_fix($id);
+		$data['data'] = $this->db->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->result();
+		$this->load->view("desainer/modal_histori_revisi", $data);
+	}
+
+
+	function status($id, $status)
 	{
 		$id = base64_decode_fix($id);
 		$data = array(
 			'STATUS_PENGERJAAN' => $status,
-			'SP_'.$status => date('Y-m-d H:i:s')
+			'SP_' . $status => date('Y-m-d H:i:s')
 		);
 		$this->db->where('ID', $id);
 		$this->db->update('t_penjualan', $data);
@@ -1090,15 +1136,15 @@ class Kasir extends CI_Controller
 		echo json_encode($query->row());
 	}
 	function desain_selesai()
-    {
-        $data['data'] = $this->db->get_where('view_penjualan', array('STATUS_PENGERJAAN' => 1))->result();
-        $data['page'] = 'kasir/desain_selesai';
-        $this->load->view($this->_template, $data);
-    }
+	{
+		$data['data'] = $this->db->get_where('view_penjualan', array('STATUS_PENGERJAAN' => 1))->result();
+		$data['page'] = 'kasir/desain_selesai';
+		$this->load->view($this->_template, $data);
+	}
 	function produksi_selesai()
-    {
-        $data['data'] = $this->db->get_where('view_penjualan', array('STATUS_PENGERJAAN' => 4))->result();
-        $data['page'] = 'kasir/produksi_selesai';
-        $this->load->view($this->_template, $data);
-    }
+	{
+		$data['data'] = $this->db->get_where('view_penjualan', array('STATUS_PENGERJAAN' => 4))->result();
+		$data['page'] = 'kasir/produksi_selesai';
+		$this->load->view($this->_template, $data);
+	}
 }

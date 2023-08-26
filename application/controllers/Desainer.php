@@ -96,6 +96,7 @@ class Desainer extends CI_Controller
         $data["id"] = $id;
         $data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
         $data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
+        $data['revisi'] = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->row();
         $data['page'] = 'desainer/detail_kerjaan';
         $this->load->view($this->_template, $data);
     }
@@ -118,20 +119,32 @@ class Desainer extends CI_Controller
             'FILE_MENTAH' => $this->input->post('file_mentah'),
         );
 
+        $revisi = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->row();
         $config['upload_path']          = './upload/mockup/';
         $config['allowed_types']        = 'jpg|png|jpeg';
         $config['file_name']            = base64_encode_fix($_FILES['mockup']['name']);
         $this->load->library('upload', $config);
         if ($this->upload->do_upload('mockup')) {
-            $data_update['MOCKUP'] = $this->upload->data('file_name');
+            $data_revisi['MOCKUP'] = $this->upload->data('file_name');
             $data_update['STATUS_PENGERJAAN'] = 1;
             $data_update['SP_1'] = date('Y-m-d H:i:s');
         }
         $this->db->update("t_penjualan", $data_update, ["ID" => $id]);
-        //unlink last mockup
-        if (isset($data_update['MOCKUP']) && $data_update['MOCKUP'] != "") {
-            unlink("./upload/mockup/" . $detail->MOCKUP);
+
+        //unlink last mockup & insert to revisi
+        if (isset($data_revisi['MOCKUP'])) {
+            if (count($revisi) == 0 || $detail->STATUS_PENGERJAAN == 2) { //revisi atau pertama kali upload
+                $data_revisi['ID_PENJUALAN'] = $id;
+                $data_revisi['WAKTU'] = date('Y-m-d H:i:s');
+                $this->db->insert('t_revisi_desain', $data_revisi);
+            } else {
+                $this->db->update("t_revisi_desain", $data_revisi, ["ID" => $revisi->ID]);
+                if ($revisi->MOCKUP != null) {
+                    unlink("./upload/mockup/" . $revisi->MOCKUP);
+                }
+            }
         }
+
         $return = array(
             'status' => true,
             'judul' => 'Success',
@@ -140,5 +153,11 @@ class Desainer extends CI_Controller
         );
         $this->session->set_flashdata($return);
         redirect("desainer/detailList/" . base64_encode_fix($id));
+    }
+    function modalHistoriRevisi($id)
+    {
+        $id = base64_decode_fix($id);
+        $data['data'] = $this->db->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->result();
+        $this->load->view("desainer/modal_histori_revisi", $data);
     }
 }

@@ -38,18 +38,19 @@
                         </div>';
                         } else { ?>
                             <div class="d-flex justify-content-center">
-                                <div class="row">
+                                <div class="row col-md-12">
                                     <?php foreach ($data as $dataVal) : ?>
                                         <div class="col-md-3">
                                             <a href="<?= base_url('produksi/detailList/' . base64_encode_fix($dataVal->ID)) ?>">
-                                                <div class="card" style="border: 1px solid #6c757d;text-align:center;">
+                                                <div class="card" style="border: 1px solid #6c757d;text-align:center;width:100%;">
                                                     <div class="card-header text-align-center bg-primary">
                                                         <h4 style="color:white !important;">
                                                             No. <?php echo sprintf("%06d", $dataVal->ID); ?>
                                                         </h4>
                                                     </div>
+                                                    <?php $revisi = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $dataVal->ID])->row(); ?>
                                                     <div class="card-body" style="border-top: 1px solid #6c757d;border-bottom: 1px solid #6c757d;">
-                                                        <img class="img-fluid" src="<?= base_url('upload/mockup/' . $dataVal->MOCKUP) ?>" alt="img  <?php echo sprintf("%06d", $dataVal->ID); ?>">
+                                                        <img class="img-fluid" src="<?= base_url('upload/mockup/' . $revisi->MOCKUP) ?>" alt="img  <?php echo sprintf("%06d", $revisi->ID); ?>">
                                                     </div>
                                                     <?php
                                                     //date diff

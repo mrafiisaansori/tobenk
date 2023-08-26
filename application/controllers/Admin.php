@@ -323,7 +323,7 @@ class Admin extends CI_Controller
 			$detail = $this->Admin_model->getProdukDetailByIdProduk($data->ID_PRODUK);
 			if ($detail) {
 				foreach ($detail as $d) {
-					$ukuran .= "<a style='width:200px' class='btn btn-sm btn-success mb-1' onclick='modalHistory(" . $d->ID . ")' href='javascript:void(0)'>".$d->UKURAN . " (" . $d->STOK . ")</a><br>";
+					$ukuran .= "<a style='width:200px' class='btn btn-sm btn-success mb-1' onclick='modalHistory(" . $d->ID . ")' href='javascript:void(0)'>" . $d->UKURAN . " (" . $d->STOK . ")</a><br>";
 				}
 			}
 			$row[] = $ukuran;
@@ -340,12 +340,13 @@ class Admin extends CI_Controller
 
 		echo json_encode($output);
 	}
-	function ukuranByProduk(){
-		$id=$this->input->post("id");
-		$cek=$this->db->get_where("m_produk_detail",["ID_PRODUK"=>$id]);
-		if($cek->num_rows()>0){
+	function ukuranByProduk()
+	{
+		$id = $this->input->post("id");
+		$cek = $this->db->get_where("m_produk_detail", ["ID_PRODUK" => $id]);
+		if ($cek->num_rows() > 0) {
 			foreach ($cek->result() as $key) {
-				echo "<option value='".$key->ID."'>".$key->UKURAN."</option>";
+				echo "<option value='" . $key->ID . "'>" . $key->UKURAN . "</option>";
 			}
 		}
 	}
@@ -356,7 +357,7 @@ class Admin extends CI_Controller
 		$jumlah = $this->input->post("jumlah");
 		$id = $this->input->post("id");
 		$keterangan = $this->input->post("keterangan");
-		$insert_rekam = $this->Admin_model->insertRekamStok2($id, $ukuran,$jumlah, $jenis, $keterangan);
+		$insert_rekam = $this->Admin_model->insertRekamStok2($id, $ukuran, $jumlah, $jenis, $keterangan);
 		if ($jenis == 1) {
 			$ket = "Restok";
 			$this->db->query("UPDATE m_produk_detail SET STOK=STOK+$jumlah WHERE ID='$ukuran'");
@@ -373,39 +374,37 @@ class Admin extends CI_Controller
 	{
 		$id = $this->input->post("id");
 		$produk = $this->db->get_where("view_produk_detail", ["ID" => $id])->row();
-		if($produk->TANPA_STOK==0){
-		$data = $this->db->get_where("t_rekam_stok", ["ID_PRODUK_DETAIL" => $id]);
-		echo "<table class='table table-striped table-bordered'>
+		if ($produk->TANPA_STOK == 0) {
+			$data = $this->db->get_where("t_rekam_stok", ["ID_PRODUK_DETAIL" => $id]);
+			echo "<table class='table table-striped table-bordered'>
 		<tr>
 			<th>Keterangan</th>
 			<th>Jenis</th>
 			<th>Tanggal</th>
 			<th>Qty</th>
 		</tr>";
-		if ($data->num_rows() > 0) {
-			foreach ($data->result() as $key) {
-				if ($key->JENIS == 1) {
-					$jenis = "<button class='btn btn-sm btn-primary'><i class='fas fa-plus-circle mr-1'></i>Masuk</button>";
-				} else {
-					$jenis = "<button class='btn btn-sm btn-danger'><i class='fas fa-minus-circle mr-1'></i>Keluar</button>";
-				}
-				echo "<tr>
+			if ($data->num_rows() > 0) {
+				foreach ($data->result() as $key) {
+					if ($key->JENIS == 1) {
+						$jenis = "<button class='btn btn-sm btn-primary'><i class='fas fa-plus-circle mr-1'></i>Masuk</button>";
+					} else {
+						$jenis = "<button class='btn btn-sm btn-danger'><i class='fas fa-minus-circle mr-1'></i>Keluar</button>";
+					}
+					echo "<tr>
 				<td>" . $key->KETERANGAN . "</td>
 				<td>" . $jenis . "</td>
 				<td>" . tgl_jam_indo_lengkap($key->TANGGAL) . "</td>
 				<td>" . $key->QTY . "</td>
 				</tr>";
+				}
 			}
-		}
-		echo "
+			echo "
 		<tr>
 		<td colspan='3' align='center'><b>Stok Saat Ini</b></td>
 		<td><b>" . $produk->STOK . "</b></td>
 		</tr>
 		</table>";
-		}
-		else
-		{
+		} else {
 			echo "<center>Produk Tanpa Stok</center>";
 		}
 	}
@@ -1399,6 +1398,8 @@ class Admin extends CI_Controller
 	{
 		$id = $this->input->post("id");
 		$data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
+		$data['revisi'] = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->row();
+		$data['histori_revisi'] = $this->db->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->result();
 		$data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
 		$this->load->view('admin/modal_transaksi', $data);
 	}

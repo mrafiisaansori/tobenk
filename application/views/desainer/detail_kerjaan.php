@@ -84,11 +84,11 @@
                                             <th style="background-color:#f8f9fa"><b>Status Pengerjaan</b></th>
                                             <th><?php if ($data->STATUS == 1) {
                                                     if ($data->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
-                                                    else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_1)."</span>";
-                                                    else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_2)."</span>";
-                                                    else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_3)."</span>";
-                                                    else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_4)."</span>";
-                                                    else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span><br><span style='font-size:9pt'>".tgl_jam_indo_lengkap($data->SP_5)."</span>";
+                                                    else if ($data->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_1) . "</span>";
+                                                    else if ($data->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_2) . "</span>";
+                                                    else if ($data->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_3) . "</span>";
+                                                    else if ($data->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_4) . "</span>";
+                                                    else if ($data->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($data->SP_5) . "</span>";
                                                 } else {
                                                     echo "<span style='font-size:10pt' class='badge badge-soft-secondary'>Dibatalkan</span>";
                                                 }  ?></th>
@@ -136,7 +136,10 @@
 
                     <div class="col-md-12">
                         <div class="card">
-                            <h6 class="card-header bg-transparent border-bottom mt-0"><b>Desain</b></h6>
+                            <h6 class="card-header bg-transparent border-bottom mt-0">
+                                <b>Desain</b>
+                                <button class="btn btn-info btn-sm" id="btnHistoriRevisi" style="float:right;">Histori Revisi</button>
+                            </h6>
                             <div class="card-body">
                                 <form action="<?= base_url('desainer/uploadDesain/' . base64_encode_fix($data->ID)) ?>" method="post" enctype="multipart/form-data">
                                     <table class="table table-bordered" style="font-size:10pt">
@@ -165,11 +168,14 @@
                                                     <?php if ($data->STATUS_PENGERJAAN < 3) { ?>
                                                         <input type="file" name="mockup" accept="image/*">
                                                     <?php } else {
-                                                        echo $data->MOCKUP;
+                                                        // echo $data->MOCKUP;
+                                                        echo $revisi ? $revisi->MOCKUP : '';
                                                     } ?>
                                                     <?php
-                                                    if (file_exists('./upload/mockup/' . $data->MOCKUP) && $data->MOCKUP != null) {
-                                                        echo "<a style='float:right;' href='" . base_url() . "upload/mockup/" . $data->MOCKUP . "' target='_blank' class='btn btn-sm btn-primary'>Lihat</a>";
+                                                    if ($revisi) {
+                                                        if (file_exists('./upload/mockup/' . $revisi->MOCKUP) && $revisi->MOCKUP != null) {
+                                                            echo "<a style='float:right;' href='" . base_url() . "upload/mockup/" . $revisi->MOCKUP . "' target='_blank' class='btn btn-sm btn-primary'>Lihat</a>";
+                                                        }
                                                     }
                                                     ?>
                                                 </th>
@@ -190,7 +196,8 @@
     </div>
 </div>
 
-
+<div class="modal fade" id="modalHistoriRevisi" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+</div>
 
 
 
@@ -248,4 +255,22 @@
             });
         }
     }
+
+    let waitModal = 0;
+    $("#btnHistoriRevisi").click(function() {
+        if (waitModal == 1) return;
+        waitModal = 1;
+        $(this).html('Harap tunggu....');
+        $.ajax({
+            type: "post",
+            url: "<?= base_url('desainer/modalHistoriRevisi/' . base64_encode_fix($data->ID)) ?>",
+            cache: false,
+            success: function(msg) {
+                waitModal = 0;
+                $("#btnHistoriRevisi").html('Histori Revisi');
+                $("#modalHistoriRevisi").html(msg);
+                $("#modalHistoriRevisi").modal("show");
+            }
+        })
+    });
 </script>
