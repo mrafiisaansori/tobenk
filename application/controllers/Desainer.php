@@ -73,7 +73,7 @@ class Desainer extends CI_Controller
 
     function list()
     {
-        $data['data'] = $this->db->query("SELECT * FROM view_penjualan WHERE  STATUS_PENGERJAAN < 3")->result();
+        $data['data'] = $this->db->query("SELECT * FROM view_penjualan WHERE  STATUS_PENGERJAAN < 3 AND STATUS=1")->result();
         $data['page'] = 'desainer/list_kerjaan';
         $this->load->view($this->_template, $data);
     }

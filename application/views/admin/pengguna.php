@@ -57,7 +57,9 @@
                                                     <span class="badge badge-danger">Produksi</span>
                                                 <?php } else if ($p->LEVEL == 4) { ?>
                                                     <span class="badge badge-warning">Desiner</span>
-                                                <?php } else { ?>
+                                                <?php } else if ($p->LEVEL == 5) { ?>
+                                                    <span class="badge badge-secondary">Manager Toko</span>
+                                                <?php }  else { ?>
                                                     <span class="badge badge-info">Kasir</span>
                                                 <?php } ?>
                                             </td>
@@ -122,6 +124,7 @@
                                 <option value="2">Kasir</option>
                                 <option value="3">Produksi</option>
                                 <option value="4">Desainer</option>
+                                <option value="5">Manager Toko</option>
                             </select>
                         </div>
                     </div>
@@ -171,6 +174,7 @@
                                 <option value="2">Kasir</option>
                                 <option value="3">Produksi</option>
                                 <option value="4">Desainer</option>
+                                <option value="5">Manager Toko</option>
                             </select>
                         </div>
                     </div>

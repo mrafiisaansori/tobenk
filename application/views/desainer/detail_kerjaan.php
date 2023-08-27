@@ -135,6 +135,9 @@
                     </div>
 
                     <div class="col-md-12">
+                        <?php
+                        $edit=$this->db->get_where("t_detail_penjualan_edit",["ID_DETAIL_TRANSAKSI_PENJUALAN"=>$dat->ID,"STATUS"=>0]); 
+                        if($edit->num_rows()==0){ ?>
                         <div class="card">
                             <h6 class="card-header bg-transparent border-bottom mt-0">
                                 <b>Desain</b>
@@ -188,6 +191,21 @@
                                 </form>
                             </div>
                         </div>
+                        <?php } else { ?>
+                            <div class="card noti border mt-4 mt-lg-0 mb-0">
+                                <div class="card-body">
+
+                                    <div class="text-center">
+                                        <div class="icons-xl uim-icon-warning my-4">
+                                            <span class="uim-svg" style=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em"><path class="uim-tertiary" d="M20.05713,22H3.94287A3.02288,3.02288,0,0,1,1.3252,17.46631L9.38232,3.51123a3.02272,3.02272,0,0,1,5.23536,0L22.6748,17.46631A3.02288,3.02288,0,0,1,20.05713,22Z"></path><circle cx="12" cy="17" r="1" class="uim-primary"></circle><path class="uim-primary" d="M12,14a1,1,0,0,1-1-1V9a1,1,0,0,1,2,0v4A1,1,0,0,1,12,14Z"></path></svg></span>
+                                        </div>
+                                        <h4 class="alert-heading font-size-20">Pesanan Tidak Dapat Diproses</h4>
+                                        <p class="text-muted">Terdapat perubahan pada pesanan dan belum di ACC oleh manager toko silahkan hubungi Kasir</p>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

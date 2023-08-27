@@ -10,19 +10,6 @@
 				</ol>
 			</div>
 			<div class="col-md-4">
-				<?php if ($data->STATUS_PENGERJAAN == 0) { ?>
-					<?php if ($data->STATUS == 1) { ?>
-						<a href="javascript:void(0)" onclick="hapus(<?php echo $data->ID; ?>)" class="btn btn-danger mb-3" style="float:right;"><i class="mdi mdi-trash-can mr-1"></i> Batalkan</a>
-					<?php  } ?>
-				<?php } else if ($data->STATUS_PENGERJAAN == 1) {  ?>
-					<a href="<?php echo site_url('kasir/status/' . base64_encode_fix($id) . '/3'); ?>" class="btn btn-success mr-1" onclick="return confirm('Yakin Menyelesaikan Tahapan Desain?')" style="float:right;"><i class="mdi mdi-check-bold mr-1"></i> Selesaikan Desain</a>
-					<button class="btn btn-danger mr-1" data-target="#modalRevisi" data-toggle="modal" style="float:right;margin-right:10px"><i class="mdi mdi-repeat-once mr-1"></i> Revisi Desain</button>
-				<?php } else if ($data->STATUS_PENGERJAAN == 4) {  ?>
-					<a href="<?php echo site_url('kasir/ambil/' . base64_encode_fix($id)); ?>" class="btn btn-success mr-1" onclick="return confirm('Dengan menekan tombol ini maka transaksi dinyatakan selesai dan pesanan sudah di ambil oleh customer, apakah anda yakin?')" style="float:right;"><i class="mdi mdi-check-bold mr-1"></i> Diambil Customer</a>
-				<?php } ?>
-				<?php if ($data->STATUS == 1) { ?>
-				<a target="_blank" href="<?php echo site_url('kasir/cetak/' . base64_encode_fix($data->ID) . '/' . base64_encode_fix($data->BAYAR)); ?>" class="btn btn-info mr-1" style="float:right;"><i class="mdi mdi-printer mr-1"></i> Cetak</a>
-				<?php } ?>
 			</div>
 		</div>
 	</div>
@@ -125,73 +112,65 @@
 			</div>
 			<div class="col-xl-7">
 				<div class="card">
-					<h6 class="card-header bg-transparent border-bottom mt-0">
-						<b>Mockup & File Mentah</b>
-						<button class="btn btn-info btn-sm" id="btnHistoriRevisi" style="float:right;">Histori Revisi</button>
-					</h6>
-					<div class="card-body">
-						<center>
-							<?php if ($revisi) { ?>
-								<img height="150px" src="<?php echo site_url('upload/mockup/' . $revisi->MOCKUP); ?>" alt=""><br>
-								<?php if ($data->FILE_CUSTOMER) { ?>
-									<a target="_blank" href="<?php echo site_url('upload/file_customer/' . $data->FILE_CUSTOMER); ?>" class="btn btn-sm btn-danger mt-2">Unduh File Dari Customer</a>
-								<?php } ?>
-								<?php if ($revisi->MOCKUP) { ?>
-									<a target="_blank" href="<?php echo site_url('upload/mockup/' . $revisi->MOCKUP); ?>" class="btn btn-sm btn-success mt-2">Unduh Mockup</a>
-								<?php } ?>
-								<?php if ($data->FILE_MENTAH) { ?>
-									<a target="_blank" href="<?php echo $data->FILE_MENTAH; ?>" class="btn btn-sm btn-info mt-2">Lihat File Mentah</a>
-								<?php } ?>
-							<?php } ?>
-						</center>
-					</div>
-				</div>
-				<div class="card">
 					<h6 class="card-header bg-transparent border-bottom mt-0"><b>Produk</b></h6>
 					<div class="card-body">
 						<table class="table table-bordered" style="font-size:10pt">
 							<tr style="background-color:#f8f9fa">
+								<td style="font-weight:bold;" align="center">No</td>
 								<td style="font-weight:bold;" align="center">Produk</td>
 								<td style="font-weight:bold;" align="center">Qty</td>
 								<td style="font-weight:bold;" align="center">Harga</td>
 								<td style="font-weight:bold;" align="center">Total</td>
+								<td style="font-weight:bold;" align="center" width="160">Action</td>
 							</tr>
 							<?php
 							$tot = 0;
+							$no = 1;
 							if ($produk->num_rows() > 0) {
 								foreach ($produk->result() as $dat) {
 							?>
-									<tr>
-										<td><B><?php echo $dat->NAMA_PRODUK; ?> (<?php echo $dat->UKURAN; ?>)</B><br><span style="font-size:9pt"><?php echo $dat->KETERANGAN; ?></span></td>
-										<td align="center"><?php echo $dat->QTY; ?></td>
-										<td align="right"><?php echo formatRupiah($dat->HARGA_JUAL); ?></td>
-										<td align="right"><?php echo formatRupiah($dat->QTY * $dat->HARGA_JUAL);
-															$tot += $dat->QTY * $dat->HARGA_JUAL; ?></td>
-									</tr>
+								<tr>
+									<td><?php echo $no++; ?></td>
+									<td>
+										<B><?php echo $dat->NAMA_PRODUK; ?> (<?php echo $dat->UKURAN; ?>)</B><br><span style="font-size:9pt"><?php echo $dat->KETERANGAN; ?></span>
+										<?php 
+										$edit=$this->db->get_where("t_detail_penjualan_edit",["ID_DETAIL_TRANSAKSI_PENJUALAN"=>$dat->ID,"STATUS"=>0]); 
+										?>
+									</td>
+									<td align="center"><?php echo $dat->QTY; ?></td>
+									<td align="right"><?php echo formatRupiah($dat->HARGA_JUAL); ?></td>
+									<td align="right"><?php echo formatRupiah($dat->QTY * $dat->HARGA_JUAL); $tot += $dat->QTY * $dat->HARGA_JUAL; ?></td>
+									<td align="center">
+										<?php if($edit->num_rows()==0){ ?>
+										<a href="javascript:void(0)" onclick="modalEdit(<?php echo $dat->ID; ?>)" class="btn btn-primary mr-1"><i class="mdi mdi-pencil"></i></a>
+										<a href="<?php echo site_url('kasir/hapusRequest/'.base64_encode_fix($dat->ID)); ?>" onclick="return confirm('Yakin menghapus data?')" class="btn btn-danger mr-1"><i class="mdi mdi-trash-can"></i></a>
+										<?php } else { echo "<i><a href='javascript:void(0)' onclick='modalRequest(".$dat->ID.")'>Request Perubahan Data Terkirim</a></i>"; } ?>
+									</td>
+								</tr>
 							<?php
 								}
 							}
 							?>
 							<tfoot>
 								<tr>
-									<td colspan="3" align="right" style="font-weight:bold;">Grand Total</td>
+									<td colspan="4" align="right" style="font-weight:bold;">Grand Total</td>
 									<td align="right"><?php echo formatRupiah($tot); ?></td>
 								</tr>
 								<tr>
-									<td colspan="3" align="right" style="font-weight:bold;">Diskon</td>
+									<td colspan="4" align="right" style="font-weight:bold;">Diskon</td>
 									<td align="right"><?php echo formatRupiah($data->DISKON); ?></td>
 								</tr>
 								<tr>
-									<td colspan="3" align="right" style="font-weight:bold;">Tagihan</td>
+									<td colspan="4" align="right" style="font-weight:bold;">Tagihan</td>
 									<td align="right"><?php echo formatRupiah($tot - $data->DISKON);
 														$hd = $tot - $data->DISKON; ?></td>
 								</tr>
 								<tr>
-									<td colspan="3" align="right" style="font-weight:bold;">Dibayar</td>
+									<td colspan="4" align="right" style="font-weight:bold;">Dibayar</td>
 									<td align="right"><?php echo formatRupiah($data->BAYAR); ?></td>
 								</tr>
 								<tr>
-									<td colspan="3" align="right" style="font-weight:bold;"><?php $tsemua = $data->BAYAR - $hd;
+									<td colspan="4" align="right" style="font-weight:bold;"><?php $tsemua = $data->BAYAR - $hd;
 																							$notif = "";
 																							if ($data->ID_METODE_BAYAR == 1) {
 																								echo "Kembalian";
@@ -203,17 +182,6 @@
 								</tr>
 							</tfoot>
 						</table>
-						<?php
-						if($data->NOTE){
-							if ($data->STATUS_PENGERJAAN != 5){
-							?>
-							<div class="alert alert-warning" role="alert">
-								<?php echo $data->NOTE; ?>
-							</div>
-							<?php
-							}
-						}
-						?>
 						<?php if ($data->STATUS_PENGERJAAN == 4) { ?>
 							<a style="width:100%" class="btn btn-primary" href="https://wa.me/<?php echo $data->NO_TELP; ?>?text=Halo kak, orderan nomor *<?php echo sprintf("%06d", $data->ID); ?>* Sudah bisa diambil ya<?php echo $notif; ?>, terima kasih" target="_blank"><i class="mdi mdi-whatsapp mr-1"></i>Kirim WhatsApp Ke Customer</a>
 						<?php } ?>
@@ -261,6 +229,105 @@
 					<button type="submit" class="btn btn-primary">Simpan</button>
 				</div>
 			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form action="<?= base_url('kasir/simpanEdit/' . base64_encode_fix($data->ID)) ?>" enctype="multipart/form-data" method="post">
+				<div class="modal-header">
+					<h5 class="modal-title">Edit Data</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="form-row mb-2">
+							<div class="col-md-3">
+								<label for="">Produk</label>
+							</div>
+							<div class="col-md-9">
+								<select name="produk" id="produk" class="selectize">
+									<?php
+									$produk=$this->db->get("view_produk_detail");
+									if($produk->num_rows()>0){
+										foreach ($produk->result() as $key) {
+											?>
+											<option value='<?php echo $key->ID; ?>'><?php echo $key->NAMA." (".$key->UKURAN.")"; ?></option>
+											<?php
+										}
+									}
+									?>
+								</select>
+							</div>
+						</div>
+						<div class="form-row mb-2">
+							<div class="col-md-3">
+								<label for="">Qty</label>
+							</div>
+							<div class="col-md-9">
+								<input type="text" name="qty" id="qty" class="form-control">
+								<input type="hidden" name="id" id="id" class="form-control">
+								<input type="hidden" name="id_transaksi" id="id_transaksi" class="form-control">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+					<button type="submit" class="btn btn-primary">Simpan</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalReq" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Request Edit Produk</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="form-row mb-2">
+							<div class="col-md-3">
+								<label for="">Request</label>
+							</div>
+							<div class="col-md-9">
+								<div id="req_request"></div>
+							</div>
+						</div>
+						<div class="form-row mb-2">
+							<div class="col-md-3">
+								<label for="">Produk</label>
+							</div>
+							<div class="col-md-9">
+								<div id="req_produk"></div>
+							</div>
+						</div>
+						<div class="form-row mb-2">
+							<div class="col-md-3">
+								<label for="">Qty</label>
+							</div>
+							<div class="col-md-9">
+								<div id="req_qty"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<span id="batalkan"></span>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+				</div>
 		</div>
 	</div>
 </div>
@@ -349,4 +416,54 @@
 			}
 		})
 	});
+	function modalEdit(id){
+		$.ajax({
+			type: "post",
+			url: "<?= base_url('kasir/modalEditProduk') ?>",
+			data: "id="+id,
+			cache: false,
+			dataType : "json",
+			success: function(msg) {
+				//$("#produk").val(msg["ID_PRODUK_DETAIL"]);
+				$('.selectize')[0].selectize.setValue(msg["ID_PRODUK_DETAIL"]);
+				$("#qty").val(msg["QTY"]);
+				$("#id").val(msg["ID"]);
+				$("#id_transaksi").val(msg["ID_TRANSAKSI_PENJUALAN"]);
+				$("#modalEdit").modal("show");
+			}
+		})
+	}
+	function modalRequest(id){
+		$.ajax({
+			type: "post",
+			url: "<?= base_url('kasir/modalEditReq') ?>",
+			data: "id="+id,
+			cache: false,
+			dataType : "json",
+			success: function(msg) {
+				$("#req_produk").html(msg["NAMA"]+" ("+msg["UKURAN"]+")");
+				$("#req_qty").html(msg["QTY"]);
+				$("#req_request").html(msg["ACTION"]);
+				$("#batalkan").html('<a class="btn btn-danger" href="javascript:void(0)" onclick="batalkanRequest('+msg["ID"]+')">Batalkan</a>');
+				$("#modalReq").modal("show");
+			}
+		})
+	}
+	function batalkanRequest(id){
+		$.ajax({
+			type: "post",
+			url: "<?= base_url('kasir/batalkanRequest') ?>",
+			data: "id="+id,
+			cache: false,
+			success: function(msg) {
+				Swal.fire({
+					title: 'Berhasil',
+					text: "Request Telah Dibatalkan",
+					type: 'success'
+				}).then((result) => {
+					location.reload();
+				});
+			}
+		})
+	}
 </script>

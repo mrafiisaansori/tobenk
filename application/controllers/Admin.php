@@ -1340,6 +1340,166 @@ class Admin extends CI_Controller
 		$data['page'] = 'admin/lihat_laporan_penjualan';
 		$this->load->view($data['page'], $data);
 	}
+	function edit($id)
+	{
+		$id = base64_decode_fix($id);
+		$data["id"] = $id;
+		$data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
+		$data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
+		$data['revisi'] = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->row();
+		$hal = array('menu' => 'laporan');
+		$this->session->set_userdata($hal);
+		$data['page'] = 'admin/detail_edit';
+		$this->load->view($this->_template, $data);
+	}
+	function doPerubahan($id,$lunas,$notes,$bayar){
+		$id = base64_decode_fix($id);
+		$cek = $this->db->get_where("view_detail_penjualan_edit",["ID_TRANSAKSI_PENJUALAN"=>$id]);
+		if($cek->num_rows()>0){
+			foreach ($cek->result() as $data) {
+				$id_detail_transaksi=$data->ID_DETAIL_TRANSAKSI_PENJUALAN;
+				$detail_lama = $this->db->get_where("t_detail_penjualan",["ID"=>$id_detail_transaksi]);
+				if($detail_lama->num_rows()>0){
+					$dl=$detail_lama->row();
+					if($dl->ID_PRODUK_DETAIL==$data->ID_PRODUK_DETAIL)
+					{
+						if($data->ACTION=="EDIT"){
+							$qty_lama=$dl->QTY;
+							
+							$cek_stok=$this->db->get_where('view_produk_detail',["ID"=>$dl->ID_PRODUK_DETAIL]);
+							if($cek_stok->row()->TANPA_STOK==0){
+								$this->db->query("UPDATE m_produk_detail SET STOK=STOK+$qty_lama WHERE ID='$dl->ID_PRODUK_DETAIL'");
+								$jenis = 1;
+								$tanggal = date("Y-m-d H:i:s");
+								$keterangan = "Pengembalian Penjualan Nomor " . sprintf("%06d", $id);
+								$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$dl->ID_PRODUK','$jenis','$qty_lama','$tanggal','$keterangan','$dl->ID_PRODUK_DETAIL')");
+							}
+							
+							$data_edit = array(
+								'STATUS' => 1
+							);
+							$this->db->where('ID', $data->ID);
+							$this->db->update('t_detail_penjualan_edit', $data_edit);
+
+							$data_penjualan = array(
+								'QTY' => $data->QTY
+							);
+							$this->db->where('ID', $id_detail_transaksi);
+							$this->db->update('t_detail_penjualan', $data_penjualan);
+							$qty=$data->QTY;
+							if($cek_stok->row()->TANPA_STOK==0){
+								$this->db->query("UPDATE m_produk_detail SET STOK=STOK-$qty WHERE ID='$data->ID_PRODUK_DETAIL'");
+								$jenis = 2;
+								$tanggal = date("Y-m-d H:i:s");
+								$keterangan = "Update Penjualan Nomor " . sprintf("%06d", $id);
+								$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$data->ID_PRODUK','$jenis','$qty','$tanggal','$keterangan','$data->ID_PRODUK_DETAIL')");
+							}
+						}
+						else
+						{
+							
+							$qty_lama=$dl->QTY;
+							$cek_stok=$this->db->get_where('view_produk_detail',["ID"=>$dl->ID_PRODUK_DETAIL]);
+							if($cek_stok->row()->TANPA_STOK==0){
+								$this->db->query("UPDATE m_produk_detail SET STOK=STOK+$qty_lama WHERE ID='$dl->ID_PRODUK_DETAIL'");
+								$jenis = 1;
+								$tanggal = date("Y-m-d H:i:s");
+								$keterangan = "Pengembalian Penjualan Nomor " . sprintf("%06d", $id);
+								$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$dl->ID_PRODUK','$jenis','$qty_lama','$tanggal','$keterangan','$dl->ID_PRODUK_DETAIL')");
+							}
+							$data_edit = array(
+								'STATUS' => 1
+							);
+							$this->db->where('ID', $data->ID);
+							$this->db->update('t_detail_penjualan_edit', $data_edit);
+
+							$this->db->delete('t_detail_penjualan', ['ID'=>$id_detail_transaksi]);
+						}
+					}
+					else
+					{
+						$qty_lama=$dl->QTY;
+						$cek_stok=$this->db->get_where('view_produk_detail',["ID"=>$dl->ID_PRODUK_DETAIL]);
+						if($cek_stok->row()->TANPA_STOK==0){
+							$this->db->query("UPDATE m_produk_detail SET STOK=STOK+$qty_lama WHERE ID='$dl->ID_PRODUK_DETAIL'");
+							$jenis = 1;
+							$tanggal = date("Y-m-d H:i:s");
+							$keterangan = "Pengembalian Penjualan Nomor " . sprintf("%06d", $id);
+							$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$dl->ID_PRODUK','$jenis','$qty_lama','$tanggal','$keterangan','$dl->ID_PRODUK_DETAIL')");
+						}
+						$this->db->delete('t_detail_penjualan', ['ID'=>$id_detail_transaksi]);
+						$data2 = array(
+							'ID_TRANSAKSI_PENJUALAN' => $id,
+							'ID_PRODUK' => $data->ID_PRODUK,
+							'HARGA_BELI' => $data->HARGA_BELI,
+							'HARGA_JUAL' => $data->HARGA_JUAL,
+							'QTY' => $data->QTY,
+							'ID_PRODUK_DETAIL' => $data->ID_PRODUK_DETAIL
+						);
+						$this->db->insert('t_detail_penjualan', $data2);
+						if($cek_stok->row()->TANPA_STOK==0){
+							$this->db->query("UPDATE m_produk_detail SET STOK=STOK-$data->QTY WHERE ID='$data->ID_PRODUK_DETAIL'");
+							$jenis = 2;
+							$tanggal = date("Y-m-d H:i:s");
+							$keterangan = "Update Penjualan Nomor " . sprintf("%06d", $id);
+							$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$data->ID_PRODUK','$jenis','$qty','$tanggal','$keterangan','$data->ID_PRODUK_DETAIL')");
+						}
+					}
+				}
+			}
+			
+			$baru = $this->db->get_where("t_detail_penjualan",["ID_TRANSAKSI_PENJUALAN"=>$id]);
+			$total = 0;
+			if($baru->num_rows()>0){
+				foreach ($baru->result() as $key) {
+					$total+=($key->HARGA_JUAL*$key->QTY);
+				}
+			}
+			
+			$trans = $this->db->get_where("t_penjualan",["ID"=>$id])->row();
+			//$total = $total-$trans->DISKON;
+			$bayar_lama = $trans->BAYAR;
+			if($trans->DISKON){
+				$bayar = $total-$trans->DISKON;
+			}
+			else{
+				$bayar = $total;
+			}
+			
+
+			if($lunas==1){
+				$datas = array(
+					'TOTAL' => $total,
+					'BAYAR' => $bayar,
+					'NOTE' => base64_decode_fix($notes)
+				);
+				$this->db->where('ID', $id);
+				$this->db->update('t_penjualan', $datas);
+			} else {
+				$datas = array(
+					'TOTAL' => $total,
+					'NOTE' => base64_decode_fix($notes)
+				);
+				if($bayar_lama>=$total){
+					$datas['BAYAR']=$bayar;
+					$datas['LUNAS']=1;
+				}
+				$this->db->where('ID', $id);
+				$this->db->update('t_penjualan', $datas);
+			}
+			$this->session->set_flashdata('judul', 'Berhasil');
+			$this->session->set_flashdata('status', 'Berhasil Validasi Request');
+			$this->session->set_flashdata('type', 'success');
+			redirect('admin/perubahan.html');
+		}
+		else
+		{
+			$this->session->set_flashdata('judul', 'Gagal');
+			$this->session->set_flashdata('status', 'Data Request Tidak Ditemukan');
+			$this->session->set_flashdata('type', 'error');
+			redirect('admin/edit/'.base64_encode_fix($id));
+		}
+	}
 	function cetakLaporanPenjualan($kasir, $tgl_awal, $tgl_akhir, $status)
 	{
 		$data['kasir'] = $kasir;
@@ -1649,6 +1809,14 @@ class Admin extends CI_Controller
 		$data['customer'] = $this->db->get_where("m_customer", ["ID" => $id])->row();
 		$data['penjualan'] = $this->db->get_where("view_penjualan", ["ID_CUSTOMER" => $id]);
 		$data['page'] = 'admin/detail_customer';
+		$this->load->view($this->_template, $data);
+	}
+	function lihatPerubahan()
+	{
+		$hal = array('menu' => 'perubahan');
+		$this->session->set_userdata($hal);
+
+		$data['page'] = 'admin/perubahan';
 		$this->load->view($this->_template, $data);
 	}
 }

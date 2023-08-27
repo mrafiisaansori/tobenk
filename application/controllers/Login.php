@@ -46,6 +46,10 @@ class Login extends CI_Controller
 					$sesi = array('nama_desainer' => $cek->NAMA, 'id_desainer' => $cek->ID, 'level' => $cek->LEVEL);
 					$this->session->set_userdata($sesi);
 					redirect("desainer");
+				} elseif ($cek->LEVEL == 5) {
+					$sesi = array('nama_admin' => $cek->NAMA, 'id_admin' => $cek->ID, 'level' => 1, 'manager' => 1);
+					$this->session->set_userdata($sesi);
+					redirect("admin");
 				}
 			} else {
 				$sesi  = array(

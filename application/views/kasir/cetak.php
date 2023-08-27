@@ -176,7 +176,7 @@ $identitas = $this->db->query("SELECT * FROM m_identitas LIMIT 1")->row();
           </tr>
           <tr>
             <td colspan="3" align="left">Total Tagihan</td>
-            <td align="right"><?php $hd=$data->TOTAL-$data->DISKON; echo formatRupiah($hd); ?></td>
+            <td align="right"><?php $hd=$total-$data->DISKON; echo formatRupiah($hd); ?></td>
           </tr>
           <tr>
             <td colspan="3" align="left">Total Bayar</td>

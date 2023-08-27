@@ -55,8 +55,8 @@
                                     <td>
                                         <?php echo formatRupiah($key->DISKON); ?>
                                     </td>
-                                    <td ><?php  $pnd=$key->TOTAL-$key->DISKON;  echo "<b>".formatRupiah($pnd)."</b>"; if($key->DISKON){ echo "<br><s>".formatRupiah($key->TOTAL)."</s>"; } $pendapatan+=$pnd;  ?></td>
-                                    <td ><?php if($key->ID_METODE_BAYAR==1) { echo formatRupiah($pnd); $terbayar+=$pnd; $fa=0; }  else  { echo formatRupiah($key->BAYAR); $terbayar+=$key->BAYAR; $fa=$pnd-$key->BAYAR; }   $belum_bayar+=$fa;  ?></td>
+                                    <td ><?php  $pnd=$key->TOTAL;  echo "<b>".formatRupiah($pnd)."</b>";$pendapatan+=$pnd;  ?></td>
+                                    <td ><?php if($key->ID_METODE_BAYAR==1) { echo formatRupiah($key->BAYAR); $terbayar+=$key->BAYAR; $fa=0; }  else  { echo formatRupiah($key->BAYAR); $terbayar+=$key->BAYAR; $fa=$pnd-$key->BAYAR-$key->DISKON; }   $belum_bayar+=$fa;  ?></td>
                                     <td ><?php  if($key->LUNAS==1) echo "<span class='badge badge-primary' style='font-size:10pt'>Lunas</span>"; else echo "<span class='badge badge-danger' style='font-size:10pt'>Belum Lunas</span><br><span style='font-size:9pt'>Kurang ".formatRupiah($fa)."</span>"; ?></td>
                                     
                                     <td >
@@ -69,8 +69,8 @@
                                                 $laba += ($keys->HARGA_JUAL-$keys->HARGA_BELI)*$keys->QTY;
                                             }
                                         }
-                                        echo formatRupiah($laba);
-                                        $laba_total+=$laba;
+                                        echo formatRupiah($laba-$key->DISKON);
+                                        $laba_total+=$laba-$key->DISKON;
                                         ?>
                                     </td>
                                     
@@ -108,19 +108,19 @@
             </div>
         </div>
     </div> <!-- end col -->
-    <div class="col-xl-12">
+    <!-- <div class="col-xl-12">
         <div class="card text-white bg-primary">
             <h6 class="card-header bg-transparent border-bottom mt-0" style="color: white"><b>Laba Bersih</b></h6>
             <div class="card-body">
                 <blockquote class="card-bodyquote mb-0">
-                    <p><?php echo formatRupiah($laba_total-$diskon);?></p>
+                    <p><?php // $la=$laba_total-$diskon; if($la>0) echo formatRupiah($la); else echo formatRupiah(0); ?></p>
                 </blockquote>
                 <footer class="blockquote-footer text-white">
                     Perhitungan dari Total Laba - Diskon
                 </footer>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- <div class="col-xl-2">
         <div class="card text-black" style="background-color:#d5ff94!important">
             <h6 class="card-header bg-transparent border-bottom mt-0" style="color: black"><b>Total Tagihan</b></h6>

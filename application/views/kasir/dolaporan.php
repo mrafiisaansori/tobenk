@@ -38,21 +38,22 @@
                                     <td>
                                         <?php echo formatRupiah($key->DISKON); ?>
                                     </td>
-                                    <td ><?php  $pnd=$key->TOTAL-$key->DISKON;  echo formatRupiah($pnd); if($key->DISKON){ echo "<br><s>".formatRupiah($key->TOTAL)."</s>"; } $pendapatan+=$pnd;  ?></td>
-                                    <td ><?php if($key->ID_METODE_BAYAR==1) { echo formatRupiah($pnd); $terbayar+=$pnd; $fa=0; }  else  { echo formatRupiah($key->BAYAR); $terbayar+=$key->BAYAR; $fa=$pnd-$key->BAYAR; }   $belum_bayar+=$fa;  ?></td>
+                                    <td ><?php  $pnd=$key->TOTAL;  echo formatRupiah($pnd); $pendapatan+=$pnd;  ?></td>
+                                    <td ><?php if($key->ID_METODE_BAYAR==1) { echo formatRupiah($key->BAYAR); $terbayar+=$key->BAYAR; $fa=0; }  else  { echo formatRupiah($key->BAYAR); $terbayar+=$key->BAYAR; $fa=$pnd-$key->BAYAR-$key->DISKON; }  if($fa>0){ $belum_bayar+=$fa; } ?></td>
                                     <td>
                                         <?php
-                                        if ($key->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
-                                        else if ($key->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span>";
-                                        else if ($key->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span>";
-                                        else if ($key->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span>";
-                                        else if ($key->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span>";
-                                        else if ($key->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span>";
+                                       if ($key->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
+                                       else if ($key->STATUS_PENGERJAAN == 1) echo "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($key->SP_1) . "</span>";
+                                       else if ($key->STATUS_PENGERJAAN == 2) echo "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($key->SP_2) . "</span>";
+                                       else if ($key->STATUS_PENGERJAAN == 3) echo "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($key->SP_3) . "</span>";
+                                       else if ($key->STATUS_PENGERJAAN == 4) echo "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($key->SP_4) . "</span>";
+                                       else if ($key->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($key->SP_5) . "</span>";
                                         ?>
                                     </td>
-                                    <td ><?php  if($key->LUNAS==1) echo "<span class='badge badge-primary' style='font-size:10pt'>Lunas</span>"; else echo "<span class='badge badge-danger' style='font-size:10pt'>Belum Lunas</span><br><span style='font-size:9pt'>Kurang ".formatRupiah($fa)."</span>"; ?></td>
+                                    <td ><?php if($key->LUNAS==1) echo "<span class='badge badge-primary' style='font-size:10pt'>Lunas</span>"; else echo "<span class='badge badge-danger' style='font-size:10pt'>Belum Lunas</span><br><span style='font-size:9pt'>Kurang ".formatRupiah($fa)."</span>"; ?></td>
                                     <td>
                                     <a target="_blank" href="<?php echo site_url('kasir/detail/'.base64_encode_fix($key->ID)); ?>" class="btn btn-primary mr-1"><i class="mdi mdi-eye"></i></a>
+                                    <?php if ($key->STATUS_PENGERJAAN == 0){ ?><a target="_blank" href="<?php echo site_url('kasir/edit/'.base64_encode_fix($key->ID)); ?>" class="btn btn-success mt-1"><i class="mdi mdi-pencil"></i></a><?php } else { ?><a href="javascript:void(0)" onclick="gabisa()" class="btn btn-secondary mt-1"><i class="mdi mdi-pencil"></i></a><?php } ?>
                                     </td>
                                     
                                 </tr>
@@ -143,5 +144,12 @@
 			 	}
 			});
 		}
+    }
+    function gabisa(){
+        Swal.fire(
+            'Tidak Dapat Merubah Data',
+            'Pesanan sudah masuk di tahapan pengerjaan',
+            'error'
+        );
     }
 </script>

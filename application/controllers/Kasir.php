@@ -247,10 +247,11 @@ class Kasir extends CI_Controller
 		if ($metode == 2) {
 			$lunas = 0;
 			$bayar = $bayar;
-		} else {
+		} else if ($metode == 1){
 			$lunas = 1;
 			$bayar = $nominal_belanja - $diskon;
 		}
+		//echo $bayar;exit();
 
 		if ($this->cart->contents()) {
 			$lebih = 0;
@@ -300,7 +301,7 @@ class Kasir extends CI_Controller
 					$file_name = $upload_data['file_name'];
 				}
 			}
-
+			
 			$data = array(
 				'TANGGAL' => $tanggal,
 				'JAM' => $jam,
@@ -413,13 +414,13 @@ class Kasir extends CI_Controller
 	}
 	function getTabelJsonProduk()
 	{
-		$aColumns = array('ID_PRODUK', 'NAMA_PRODUK', 'UKURAN', 'DESKRIPSI_KATEGORI', 'STOK', 'HARGA_JUAL', 'TANPA_STOK');
+		$aColumns = array('ID_PRODUK', 'NAMA', 'UKURAN', 'DESKRIPSI_KATEGORI', 'STOK', 'HARGA_JUAL', 'TANPA_STOK');
 
 		//primary key
 		$sIndexColumn = "ID_PRODUK";
 
 		//nama table database
-		$sTable = "view_produk";
+		$sTable = "view_produk_detail";
 
 
 		$sLimit = "";
@@ -505,7 +506,7 @@ class Kasir extends CI_Controller
 			}
 			$row = array();
 			$row[] = $seq_number;
-			$row[] = $data->NAMA_PRODUK;
+			$row[] = $data->NAMA;
 			$row[] = $data->UKURAN;
 			$row[] = $data->DESKRIPSI_KATEGORI;
 			$row[] = $data->STOK;
@@ -695,25 +696,27 @@ class Kasir extends CI_Controller
 					';
 				} else {
 					if ($key->TANPA_STOK == 0) {
-						if ($key->FOTO) {
-							$image = site_url($key->FOTO);
-						} else {
-							$image = site_url('upload/product/product.jpg');
+						if($key->STOK>0){
+							if ($key->FOTO) {
+								$image = site_url($key->FOTO);
+							} else {
+								$image = site_url('upload/product/product.jpg');
+							}
+							echo '
+								<div class="col-md-3" style="cursor: pointer" onclick="beli(' . $key->ID . ')">
+										<div class="card">
+												<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
+												<div class="card-body">
+														<h4 class="card-title font-size-16 text-center">' . $key->NAMA . '</h4>
+														<p class="card-text text-center" style="font-size:10pt"><span class="badge badge-primary" style="font-size:10pt">' . $key->UKURAN . '</span></p>
+														<center><p class="card-text">
+																<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>
+														</p></center>
+												</div>
+										</div>
+								</div>
+							';
 						}
-						echo '
-							<div class="col-md-3" style="cursor: pointer" onclick="beli(' . $key->ID . ')">
-									<div class="card">
-											<img class="card-img-top img-fluid" src="' . $image . '" alt="' . $key->NAMA . '">
-											<div class="card-body">
-													<h4 class="card-title font-size-16 text-center">' . $key->NAMA . '</h4>
-													<p class="card-text text-center" style="font-size:10pt"><span class="badge badge-primary" style="font-size:10pt">' . $key->UKURAN . '</span></p>
-													<center><p class="card-text">
-															<small class="text-muted text-center" style="font-size:13pt;color:#2fa97c!important">' . formatRupiah($key->HARGA_JUAL) . '</small>
-													</p></center>
-											</div>
-									</div>
-							</div>
-						';
 					}
 				}
 			}
@@ -838,6 +841,18 @@ class Kasir extends CI_Controller
 		$data['page'] = 'kasir/detail';
 		$this->load->view($this->_template, $data);
 	}
+	function edit($id)
+	{
+		$id = base64_decode_fix($id);
+		$data["id"] = $id;
+		$data['data'] = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
+		$data['produk'] = $this->db->get_where("view_detail_penjualan", ["ID_TRANSAKSI_PENJUALAN" => $id]);
+		$data['revisi'] = $this->db->order_by("ID", "DESC")->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->row();
+		$hal = array('menu' => 'laporan');
+		$this->session->set_userdata($hal);
+		$data['page'] = 'kasir/detail_edit';
+		$this->load->view($this->_template, $data);
+	}
 	function simpanRevisiDesain($id)
 	{
 		$id = base64_decode_fix($id);
@@ -889,8 +904,100 @@ class Kasir extends CI_Controller
 		$data['data'] = $this->db->get_where("t_revisi_desain", ["ID_PENJUALAN" => $id])->result();
 		$this->load->view("desainer/modal_histori_revisi", $data);
 	}
-
-
+	function modalEditProduk()
+	{
+		$id = $this->input->post('id');
+		echo json_encode($this->db->get_where("view_detail_penjualan", ["ID" => $id])->row());
+	}
+	function modalEditReq()
+	{
+		$id = $this->input->post('id');
+		echo json_encode($this->db->get_where("view_detail_penjualan_edit", ["ID_DETAIL_TRANSAKSI_PENJUALAN" => $id])->row());
+	}
+	function batalkanRequest(){
+		$id = $this->input->post('id');
+		$this->db->delete("t_detail_penjualan_edit",["ID"=>$id]);
+	}
+	function simpanEdit(){
+		$produk = $this->input->post("produk");
+		$qty = $this->input->post("qty");
+		$id = $this->input->post("id");
+		$id_transaksi = $this->input->post("id_transaksi");
+		$cek = $this->db->get_where("view_detail_penjualan",["ID"=>$id]);
+		if($cek->num_rows()>0){
+			$data=$cek->row();
+			$detail = $this->db->get_where("view_produk_detail",["ID"=>$data->ID_PRODUK_DETAIL]);
+			$harga_beli = $detail->row()->HARGA_BELI;
+			$harga_jual = $detail->row()->HARGA_JUAL;
+			$cekulang = $this->db->get_where("t_detail_penjualan_edit",["ID_DETAIL_TRANSAKSI_PENJUALAN"=>$id]);
+			if($cekulang->num_rows()>0){
+				$data2 = array(
+					'ID_PRODUK' => $data->ID_PRODUK,
+					'HARGA_BELI' => $harga_beli,
+					'HARGA_JUAL' => $harga_jual,
+					'QTY' => $qty,
+					'ID_PRODUK_DETAIL' => $data->ID_PRODUK_DETAIL,
+					'ACTION' => "EDIT",
+					'STATUS' => 0
+				);
+				$this->db->where('ID_DETAIL_TRANSAKSI_PENJUALAN', $id);
+				$this->db->update('t_detail_penjualan_edit', $data2);
+			}else{
+				$data2 = array(
+					'ID_TRANSAKSI_PENJUALAN' => $data->ID_TRANSAKSI_PENJUALAN,
+					'ID_PRODUK' => $data->ID_PRODUK,
+					'HARGA_BELI' => $harga_beli,
+					'HARGA_JUAL' => $harga_jual,
+					'QTY' => $qty,
+					'ID_PRODUK_DETAIL' => $data->ID_PRODUK_DETAIL,
+					'ID_DETAIL_TRANSAKSI_PENJUALAN' => $id,
+					'ACTION' => "EDIT",
+					'STATUS' => 0
+				);
+				$this->db->insert('t_detail_penjualan_edit', $data2);
+			}
+		}
+		$return = array(
+			'status' => true,
+			'judul' => 'Success',
+			'pesan' => "Berhasil Update Data",
+			'type' => 'success'
+		);
+		$this->session->set_flashdata($return);
+		redirect("kasir/edit/" . base64_encode_fix($id_transaksi));
+	}
+	function hapusRequest($id)
+	{
+		$id = base64_decode_fix($id);
+		$detail = $this->db->get_where("view_detail_penjualan", ["ID" => $id]);
+		if($detail->num_rows()>0){
+			$data=$detail->row();
+			$id_transaksi=$data->ID_TRANSAKSI_PENJUALAN;
+			$detail = $this->db->get_where("view_produk_detail",["ID"=>$data->ID_PRODUK_DETAIL]);
+			$harga_beli = $detail->row()->HARGA_BELI;
+			$harga_jual = $detail->row()->HARGA_JUAL;
+			$data2 = array(
+				'ID_TRANSAKSI_PENJUALAN' => $data->ID_TRANSAKSI_PENJUALAN,
+				'ID_PRODUK' => $data->ID_PRODUK,
+				'HARGA_BELI' => $harga_beli,
+				'HARGA_JUAL' => $harga_jual,
+				'QTY' => $data->QTY,
+				'ID_PRODUK_DETAIL' => $data->ID_PRODUK_DETAIL,
+				'ID_DETAIL_TRANSAKSI_PENJUALAN' => $id,
+				'ACTION' => "HAPUS",
+				'STATUS' => 0
+			);
+			$this->db->insert('t_detail_penjualan_edit', $data2);
+			$return = array(
+				'status' => true,
+				'judul' => 'Success',
+				'pesan' => "Berhasil Hapus Data",
+				'type' => 'success'
+			);
+			$this->session->set_flashdata($return);
+			redirect("kasir/edit/" . base64_encode_fix($id_transaksi));
+		}
+	}
 	function status($id, $status)
 	{
 		$id = base64_decode_fix($id);

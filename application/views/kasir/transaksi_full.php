@@ -67,26 +67,27 @@
 			            <div class="card-body"> 
 			                <form action="<?php echo site_url('kasir/bayar') ?>" method="post" enctype="multipart/form-data">
 			                <div>
-															<div class="form-row form-group-custom mb-4">
-																<div class="col-10">
-	                            	<h5 class="font-size-14">Customer</h5>
-	                                <select name="customer" id="customer"  class="selectize" onchange="lama()">
-																		<option value="">Pilih Nama - Alamat (No Telp)</option>
-																		<?php
-																		$cust = $this->db->query("SELECT * FROM m_customer WHERE `STATUS`=1 ORDER BY NAMA ASC");
-																		if($cust->num_rows()>0){
-																			foreach($cust->result() as $cs){
-																				echo "<option value='".$cs->ID."'>".$cs->NAMA." - ".$cs->ALAMAT." (".$cs->NO_TELP.")</option>";
-																			}
-																		}
-																		?>
-																	</select>
-																	</div>
-																	<div class="col">
-																		<h5 class="font-size-14"></h5>
-																		<a data-toggle="modal" data-target="#myModal" class="btn btn-primary mt-3" style="height:37px;width:100%" href="javascript:void(0)"><i class="mdi mdi-plus-thick"></i></a>
-																	</div>
-	                            </div>
+							<div class="form-row form-group-custom mb-4">
+								<div class="col-12 mb-4">
+									<h5 class="font-size-14"></h5>
+									<a data-toggle="modal" data-target="#myModal" class="btn btn-primary mt-3" style="height:37px;width:100%" href="javascript:void(0)"><i class="mdi mdi-plus-thick"></i> Customer</a>
+								</div>
+								<div class="col-12">
+									<h5 class="font-size-14">Customer</h5>
+									<select name="customer" id="customer"  class="selectize" onchange="lama()">
+										<option value="">Pilih Nama - Alamat (No Telp)</option>
+										<?php
+										$cust = $this->db->query("SELECT * FROM m_customer WHERE `STATUS`=1 ORDER BY NAMA ASC");
+										if($cust->num_rows()>0){
+											foreach($cust->result() as $cs){
+												echo "<option value='".$cs->ID."'>".$cs->NAMA." - ".$cs->ALAMAT." (".$cs->NO_TELP.")</option>";
+											}
+										}
+										?>
+									</select>
+								</div>
+								
+	                        </div>
 															<div class="form-group form-group-custom mb-4 contain">
 																		<!--<a data-toggle="modal" data-target="#PowerLensa"  href="javascript:void(0)" class="btn btn-primary" style="width:100%"><i class="mdi mdi-pencil-outline mr-1"></i>Ubah</a>
 																		 <table class="table table-striped table-bordered">

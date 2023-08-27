@@ -429,19 +429,19 @@
                             </a>
 
                         </li>
-                        <!--<li>
+                        <li>
 
-                                <a href="<?php //echo site_url('admin/transaksi-keuangan.html'); 
-                                            ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'transaksi-keuangan'){ echo "active";}
+                                <a href="<?php echo site_url('admin/perubahan.html'); 
+                                            ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'perubahan'){ echo "active";}
                                                                                                                             ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                    <span>Transaksi Keuangan</span>
+                                    <span>Perubahan Transaksi</span>
 
                                 </a>
 
-                            </li>-->
+                            </li>
 
                         <li class="menu-title">Laporan</li>
 

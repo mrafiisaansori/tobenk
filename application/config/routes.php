@@ -82,4 +82,5 @@ $route['admin/detail-transaksi-keuangan.html'] = 'admin/detailTransaksiKeuangan'
 $route['admin/laporan-keuangan.html'] = 'admin/laporan_keuangan';
 $route['admin/laporan-penjualan-hapus.html'] = 'admin/filterLaporanPenjualanHapus';
 $route['admin/customer.html'] = 'admin/lihatCustomer';
+$route['admin/perubahan.html'] = 'admin/lihatPerubahan';
 

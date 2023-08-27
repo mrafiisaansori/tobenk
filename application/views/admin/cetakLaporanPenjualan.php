@@ -65,7 +65,7 @@
                     <td style="vertical-align: top">
                         <?php echo formatRupiah($key->DISKON); ?>
                     </td>
-                    <td style="vertical-align: top" ><?php $tp=$key->TOTAL-$key->DISKON;  echo formatRupiah($tp)."<br><s>".formatRupiah($key->TOTAL)."</s>"; $pendapatan+=$tp; ?></td>
+                    <td style="vertical-align: top" ><?php $tp=$key->TOTAL;  echo formatRupiah($tp); $pendapatan+=$tp; ?></td>
                     <td style="vertical-align: top" ><?php if($key->ID_METODE_BAYAR==1) { echo formatRupiah($tp); $terbayar+=$tp; $fa=0; }  else  { echo formatRupiah($key->BAYAR); $terbayar+=$key->BAYAR; $fa=$tp-$key->BAYAR; }   $belum_bayar+=$fa;  ?></td>
                     <td style="vertical-align: top" ><?php  if($key->LUNAS==1) echo "<b>Lunas</b>"; else echo "<b>Belum Lunas</b><br><span style='font-size:9pt'>Kurang ".formatRupiah($fa)."</span>"; ?></td>
                     <td style="vertical-align: top" >
@@ -78,8 +78,8 @@
                                 $laba += ($keys->HARGA_JUAL-$keys->HARGA_BELI)*$keys->QTY;
                             }
                         }
-                        echo formatRupiah($laba);
-                        $laba_total+=$laba;
+                        echo formatRupiah($laba-$key->DISKON);
+                        $laba_total+=$laba-$key->DISKON;
                         ?>
                     </td>
                    
@@ -132,7 +132,6 @@
         </tfoot>
     </table>
     <br>
-    <h4>Laba Bersih : <?php echo formatRupiah($laba_total-$diskon);?></h4>
                     </section>
 
 </body>
