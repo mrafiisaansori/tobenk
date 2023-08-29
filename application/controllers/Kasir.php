@@ -247,7 +247,7 @@ class Kasir extends CI_Controller
 		if ($metode == 2) {
 			$lunas = 0;
 			$bayar = $bayar;
-		} else if ($metode == 1){
+		} else if ($metode == 1) {
 			$lunas = 1;
 			$bayar = $nominal_belanja - $diskon;
 		}
@@ -301,7 +301,39 @@ class Kasir extends CI_Controller
 					$file_name = $upload_data['file_name'];
 				}
 			}
-			
+			$file_name2 = "";
+			if ($_FILES['file_customer2']['name']) {
+				$config2['upload_path'] = './upload/file_customer/';
+				$config2['allowed_types'] = 'jpg|png|jpeg|pdf|cdr';
+				$config2['max_size'] = 2046;
+				$this->upload->initialize($config2);
+				if (!$this->upload->do_upload('file_customer2')) {
+					$this->session->set_flashdata('judul', 'Produk');
+					$this->session->set_flashdata('status', $this->upload->display_errors());
+					$this->session->set_flashdata('type', 'error');
+					redirect('transaksi-full.html');
+				} else {
+					$upload_data = $this->upload->data();
+					$file_name2 = $upload_data['file_name'];
+				}
+			}
+			$file_name3 = "";
+			if ($_FILES['file_customer3']['name']) {
+				$config3['upload_path'] = './upload/file_customer/';
+				$config3['allowed_types'] = 'jpg|png|jpeg|pdf|cdr';
+				$config3['max_size'] = 2046;
+				$this->upload->initialize($config3);
+				if (!$this->upload->do_upload('file_customer3')) {
+					$this->session->set_flashdata('judul', 'Produk');
+					$this->session->set_flashdata('status', $this->upload->display_errors());
+					$this->session->set_flashdata('type', 'error');
+					redirect('transaksi-full.html');
+				} else {
+					$upload_data = $this->upload->data();
+					$file_name3 = $upload_data['file_name'];
+				}
+			}
+
 			$data = array(
 				'TANGGAL' => $tanggal,
 				'JAM' => $jam,
@@ -328,7 +360,9 @@ class Kasir extends CI_Controller
 				'STATUS_PENGERJAAN' => 0,
 				'LUNAS' => $lunas,
 				'FILE_MENTAH' => $file_mentah,
-				'FILE_CUSTOMER' => $file_name
+				'FILE_CUSTOMER' => $file_name,
+				'FILE_CUSTOMER2' => $file_name2,
+				'FILE_CUSTOMER3' => $file_name3
 			);
 			$this->db->insert('t_penjualan', $data);
 			$id_last = $this->db->insert_id();
@@ -696,7 +730,7 @@ class Kasir extends CI_Controller
 					';
 				} else {
 					if ($key->TANPA_STOK == 0) {
-						if($key->STOK>0){
+						if ($key->STOK > 0) {
 							if ($key->FOTO) {
 								$image = site_url($key->FOTO);
 							} else {
@@ -914,23 +948,25 @@ class Kasir extends CI_Controller
 		$id = $this->input->post('id');
 		echo json_encode($this->db->get_where("view_detail_penjualan_edit", ["ID_DETAIL_TRANSAKSI_PENJUALAN" => $id])->row());
 	}
-	function batalkanRequest(){
+	function batalkanRequest()
+	{
 		$id = $this->input->post('id');
-		$this->db->delete("t_detail_penjualan_edit",["ID"=>$id]);
+		$this->db->delete("t_detail_penjualan_edit", ["ID" => $id]);
 	}
-	function simpanEdit(){
+	function simpanEdit()
+	{
 		$produk = $this->input->post("produk");
 		$qty = $this->input->post("qty");
 		$id = $this->input->post("id");
 		$id_transaksi = $this->input->post("id_transaksi");
-		$cek = $this->db->get_where("view_detail_penjualan",["ID"=>$id]);
-		if($cek->num_rows()>0){
-			$data=$cek->row();
-			$detail = $this->db->get_where("view_produk_detail",["ID"=>$data->ID_PRODUK_DETAIL]);
+		$cek = $this->db->get_where("view_detail_penjualan", ["ID" => $id]);
+		if ($cek->num_rows() > 0) {
+			$data = $cek->row();
+			$detail = $this->db->get_where("view_produk_detail", ["ID" => $data->ID_PRODUK_DETAIL]);
 			$harga_beli = $detail->row()->HARGA_BELI;
 			$harga_jual = $detail->row()->HARGA_JUAL;
-			$cekulang = $this->db->get_where("t_detail_penjualan_edit",["ID_DETAIL_TRANSAKSI_PENJUALAN"=>$id]);
-			if($cekulang->num_rows()>0){
+			$cekulang = $this->db->get_where("t_detail_penjualan_edit", ["ID_DETAIL_TRANSAKSI_PENJUALAN" => $id]);
+			if ($cekulang->num_rows() > 0) {
 				$data2 = array(
 					'ID_PRODUK' => $data->ID_PRODUK,
 					'HARGA_BELI' => $harga_beli,
@@ -942,7 +978,7 @@ class Kasir extends CI_Controller
 				);
 				$this->db->where('ID_DETAIL_TRANSAKSI_PENJUALAN', $id);
 				$this->db->update('t_detail_penjualan_edit', $data2);
-			}else{
+			} else {
 				$data2 = array(
 					'ID_TRANSAKSI_PENJUALAN' => $data->ID_TRANSAKSI_PENJUALAN,
 					'ID_PRODUK' => $data->ID_PRODUK,
@@ -970,10 +1006,10 @@ class Kasir extends CI_Controller
 	{
 		$id = base64_decode_fix($id);
 		$detail = $this->db->get_where("view_detail_penjualan", ["ID" => $id]);
-		if($detail->num_rows()>0){
-			$data=$detail->row();
-			$id_transaksi=$data->ID_TRANSAKSI_PENJUALAN;
-			$detail = $this->db->get_where("view_produk_detail",["ID"=>$data->ID_PRODUK_DETAIL]);
+		if ($detail->num_rows() > 0) {
+			$data = $detail->row();
+			$id_transaksi = $data->ID_TRANSAKSI_PENJUALAN;
+			$detail = $this->db->get_where("view_produk_detail", ["ID" => $data->ID_PRODUK_DETAIL]);
 			$harga_beli = $detail->row()->HARGA_BELI;
 			$harga_jual = $detail->row()->HARGA_JUAL;
 			$data2 = array(

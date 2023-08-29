@@ -136,72 +136,79 @@
 
                     <div class="col-md-12">
                         <?php
-                        $edit=$this->db->get_where("t_detail_penjualan_edit",["ID_DETAIL_TRANSAKSI_PENJUALAN"=>$dat->ID,"STATUS"=>0]); 
-                        if($edit->num_rows()==0){ ?>
-                        <div class="card">
-                            <h6 class="card-header bg-transparent border-bottom mt-0">
-                                <b>Desain</b>
-                                <button class="btn btn-info btn-sm" id="btnHistoriRevisi" style="float:right;">Histori Revisi</button>
-                            </h6>
-                            <div class="card-body">
-                                <form action="<?= base_url('desainer/uploadDesain/' . base64_encode_fix($data->ID)) ?>" method="post" enctype="multipart/form-data">
-                                    <table class="table table-bordered" style="font-size:10pt">
-                                        <tbody>
-                                            <tr>
-                                                <th width="30%" style="background-color:#f8f9fa"><b>File Dari Customer</b></th>
-                                                <th>
-                                                    <?php if ($data->FILE_CUSTOMER) {
-                                                        echo "<a target='_blank' href=" . site_url('upload/file_customer/' . $data->FILE_CUSTOMER) . ">" . $data->FILE_CUSTOMER . "</a>";
-                                                    } else echo "-"; ?>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th width="30%" style="background-color:#f8f9fa"><b>File Mentah</b></th>
-                                                <th>
-                                                    <?php if ($data->STATUS_PENGERJAAN < 3) { ?>
-                                                        <input type="text" class="form-control" name="file_mentah" value="<?= $data->FILE_MENTAH ?>">
-                                                    <?php } else {
-                                                        echo $data->FILE_MENTAH;
-                                                    } ?>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th style="background-color:#f8f9fa"><b>Mockup</b></th>
-                                                <th style="">
-                                                    <?php if ($data->STATUS_PENGERJAAN < 3) { ?>
-                                                        <input type="file" name="mockup" accept="image/*">
-                                                    <?php } else {
-                                                        // echo $data->MOCKUP;
-                                                        echo $revisi ? $revisi->MOCKUP : '';
-                                                    } ?>
-                                                    <?php
-                                                    if ($revisi) {
-                                                        if (file_exists('./upload/mockup/' . $revisi->MOCKUP) && $revisi->MOCKUP != null) {
-                                                            echo "<a style='float:right;' href='" . base_url() . "upload/mockup/" . $revisi->MOCKUP . "' target='_blank' class='btn btn-sm btn-primary'>Lihat</a>";
+                        $edit = $this->db->get_where("t_detail_penjualan_edit", ["ID_DETAIL_TRANSAKSI_PENJUALAN" => $dat->ID, "STATUS" => 0]);
+                        if ($edit->num_rows() == 0) { ?>
+                            <div class="card">
+                                <h6 class="card-header bg-transparent border-bottom mt-0">
+                                    <b>Desain</b>
+                                    <button class="btn btn-info btn-sm" id="btnHistoriRevisi" style="float:right;">Histori Revisi</button>
+                                </h6>
+                                <div class="card-body">
+                                    <form action="<?= base_url('desainer/uploadDesain/' . base64_encode_fix($data->ID)) ?>" method="post" enctype="multipart/form-data">
+                                        <table class="table table-bordered" style="font-size:10pt">
+                                            <tbody>
+                                                <tr>
+                                                    <th width="30%" style="background-color:#f8f9fa"><b>File Dari Customer</b></th>
+                                                    <th>
+                                                        <?php if ($data->FILE_CUSTOMER) {
+                                                            echo "<a target='_blank' href=" . site_url('upload/file_customer/' . $data->FILE_CUSTOMER) . ">" . $data->FILE_CUSTOMER . "</a><br>";
+                                                        } else echo "-"; ?>
+
+                                                        <?php if ($data->FILE_CUSTOMER2) echo "<a target='_blank' href='" . site_url('upload/file_customer/' . $data->FILE_CUSTOMER2) . "'>" . $data->FILE_CUSTOMER2 . "</a><br>"; ?>
+                                                        <?php if ($data->FILE_CUSTOMER3) echo "<a target='_blank' href='" . site_url('upload/file_customer/' . $data->FILE_CUSTOMER3) . "'>" . $data->FILE_CUSTOMER3 . "</a><br>"; ?>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th width="30%" style="background-color:#f8f9fa"><b>File Mentah</b></th>
+                                                    <th>
+                                                        <?php if ($data->STATUS_PENGERJAAN < 3) { ?>
+                                                            <input type="text" class="form-control" name="file_mentah" value="<?= $data->FILE_MENTAH ?>">
+                                                        <?php } else {
+                                                            echo $data->FILE_MENTAH;
+                                                        } ?>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="background-color:#f8f9fa"><b>Mockup</b></th>
+                                                    <th style="">
+                                                        <?php if ($data->STATUS_PENGERJAAN < 3) { ?>
+                                                            <input type="file" name="mockup" accept="image/*">
+                                                        <?php } else {
+                                                            // echo $data->MOCKUP;
+                                                            echo $revisi ? $revisi->MOCKUP : '';
+                                                        } ?>
+                                                        <?php
+                                                        if ($revisi) {
+                                                            if (file_exists('./upload/mockup/' . $revisi->MOCKUP) && $revisi->MOCKUP != null) {
+                                                                echo "<a style='float:right;' href='" . base_url() . "upload/mockup/" . $revisi->MOCKUP . "' target='_blank' class='btn btn-sm btn-primary'>Lihat</a>";
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <?php if ($data->STATUS_PENGERJAAN < 3) { ?>
-                                        <button type="submit" class="btn btn-primary">Simpan</button>
-                                    <?php } ?>
-                                </form>
+                                                        ?>
+                                                    </th>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <?php if ($data->STATUS_PENGERJAAN < 3) { ?>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                        <?php } ?>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
                         <?php } else { ?>
                             <div class="card noti border mt-4 mt-lg-0 mb-0">
                                 <div class="card-body">
 
                                     <div class="text-center">
                                         <div class="icons-xl uim-icon-warning my-4">
-                                            <span class="uim-svg" style=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em"><path class="uim-tertiary" d="M20.05713,22H3.94287A3.02288,3.02288,0,0,1,1.3252,17.46631L9.38232,3.51123a3.02272,3.02272,0,0,1,5.23536,0L22.6748,17.46631A3.02288,3.02288,0,0,1,20.05713,22Z"></path><circle cx="12" cy="17" r="1" class="uim-primary"></circle><path class="uim-primary" d="M12,14a1,1,0,0,1-1-1V9a1,1,0,0,1,2,0v4A1,1,0,0,1,12,14Z"></path></svg></span>
+                                            <span class="uim-svg" style=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em">
+                                                    <path class="uim-tertiary" d="M20.05713,22H3.94287A3.02288,3.02288,0,0,1,1.3252,17.46631L9.38232,3.51123a3.02272,3.02272,0,0,1,5.23536,0L22.6748,17.46631A3.02288,3.02288,0,0,1,20.05713,22Z"></path>
+                                                    <circle cx="12" cy="17" r="1" class="uim-primary"></circle>
+                                                    <path class="uim-primary" d="M12,14a1,1,0,0,1-1-1V9a1,1,0,0,1,2,0v4A1,1,0,0,1,12,14Z"></path>
+                                                </svg></span>
                                         </div>
                                         <h4 class="alert-heading font-size-20">Pesanan Tidak Dapat Diproses</h4>
                                         <p class="text-muted">Terdapat perubahan pada pesanan dan belum di ACC oleh manager toko silahkan hubungi Kasir</p>
-                                        
+
                                     </div>
                                 </div>
                             </div>

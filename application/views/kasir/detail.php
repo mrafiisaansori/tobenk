@@ -21,7 +21,7 @@
 					<a href="<?php echo site_url('kasir/ambil/' . base64_encode_fix($id)); ?>" class="btn btn-success mr-1" onclick="return confirm('Dengan menekan tombol ini maka transaksi dinyatakan selesai dan pesanan sudah di ambil oleh customer, apakah anda yakin?')" style="float:right;"><i class="mdi mdi-check-bold mr-1"></i> Diambil Customer</a>
 				<?php } ?>
 				<?php if ($data->STATUS == 1) { ?>
-				<a target="_blank" href="<?php echo site_url('kasir/cetak/' . base64_encode_fix($data->ID) . '/' . base64_encode_fix($data->BAYAR)); ?>" class="btn btn-info mr-1" style="float:right;"><i class="mdi mdi-printer mr-1"></i> Cetak</a>
+					<a target="_blank" href="<?php echo site_url('kasir/cetak/' . base64_encode_fix($data->ID) . '/' . base64_encode_fix($data->BAYAR)); ?>" class="btn btn-info mr-1" style="float:right;"><i class="mdi mdi-printer mr-1"></i> Cetak</a>
 				<?php } ?>
 			</div>
 		</div>
@@ -112,8 +112,13 @@
 										</tr>
 										<tr>
 											<th style="background-color:#f8f9fa"><b>File Customer</b></th>
-											<th><?php if ($data->FILE_CUSTOMER) echo "<a target='_blank' href='" . site_url('upload/file_customer/' . $data->FILE_CUSTOMER) . "'>" . $data->FILE_CUSTOMER . "</a>";
-												else echo "-"; ?></th>
+											<th>
+												<?php if ($data->FILE_CUSTOMER) echo "<a target='_blank' href='" . site_url('upload/file_customer/' . $data->FILE_CUSTOMER) . "'>" . $data->FILE_CUSTOMER . "</a><br>";
+												else echo "-"; ?>
+												<?php if ($data->FILE_CUSTOMER2) echo "<a target='_blank' href='" . site_url('upload/file_customer/' . $data->FILE_CUSTOMER2) . "'>" . $data->FILE_CUSTOMER2 . "</a><br>"; ?>
+												<?php if ($data->FILE_CUSTOMER3) echo "<a target='_blank' href='" . site_url('upload/file_customer/' . $data->FILE_CUSTOMER3) . "'>" . $data->FILE_CUSTOMER3 . "</a><br>"; ?>
+
+											</th>
 										</tr>
 									</tbody>
 								</table>
@@ -204,13 +209,13 @@
 							</tfoot>
 						</table>
 						<?php
-						if($data->NOTE){
-							if ($data->STATUS_PENGERJAAN != 5){
-							?>
-							<div class="alert alert-warning" role="alert">
-								<?php echo $data->NOTE; ?>
-							</div>
-							<?php
+						if ($data->NOTE) {
+							if ($data->STATUS_PENGERJAAN != 5) {
+						?>
+								<div class="alert alert-warning" role="alert">
+									<?php echo $data->NOTE; ?>
+								</div>
+						<?php
 							}
 						}
 						?>
