@@ -319,7 +319,7 @@
 
                                 <a href="<?php //echo site_url('admin/identitas.html'); 
                                             ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'identitas'){ echo "active";}
-                                                                                                                ?>">
+                                                                    ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -390,7 +390,7 @@
 
                                 <a href="<?php //echo site_url('admin/jenis-bayar.html'); 
                                             ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'jenis-bayar'){ echo "active";}
-                                                                                                                    ?>">
+                                                                    ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -431,17 +431,19 @@
                         </li>
                         <li>
 
-                                <a href="<?php echo site_url('admin/perubahan.html'); 
-                                            ?>" class="waves-effect <?php if($this->session->userdata('menu') == 'perubahan'){ echo "active";}
-                                                                                                                            ?>">
+                            <a href="<?php echo site_url('admin/perubahan.html');
+                                        ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'perubahan') {
+                                                                        echo "active";
+                                                                    }
+                                                                    ?>">
 
-                                    <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
+                                <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
-                                    <span>Perubahan Transaksi</span>
+                                <span>Perubahan Transaksi</span>
 
-                                </a>
+                            </a>
 
-                            </li>
+                        </li>
 
                         <li class="menu-title">Laporan</li>
 
@@ -489,7 +491,7 @@
 
                                 <a href="<?php //echo site_url('admin/laporan-penyusutan.html'); 
                                             ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'laporan-penyusutan'){ echo "active";}
-                                                                                                                            ?>">
+                                                                    ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -503,7 +505,7 @@
 
                                 <a href="<?php //echo site_url('admin/laporan-pendapatan.html'); 
                                             ?>" class="waves-effect <? php // if($this->session->userdata('menu') == 'laporan-pendapatan'){ echo "active";}
-                                                                                                                            ?>">
+                                                                    ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -516,7 +518,7 @@
 
                                 <a href="<?php //echo site_url('admin/laporan-stok.html'); 
                                             ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'laporan-stok'){ echo "active";}
-                                                                                                                    ?>">
+                                                                    ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 
@@ -529,7 +531,7 @@
 
                                 <a href="<?php //echo site_url('admin/laporan-keuangan.html'); 
                                             ?>" class="waves-effect <?php //if($this->session->userdata('menu') == 'laporans'){ echo "active";}
-                                                                                                                        ?>">
+                                                                    ?>">
 
                                     <div class="d-inline-block icons-sm mr-1"><i class="uim uim-airplay"></i></div>
 

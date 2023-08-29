@@ -22,6 +22,168 @@ class Kasir extends CI_Controller
 		$data['page'] = 'kasir/dashboard';
 		$this->load->view($this->_template, $data);
 	}
+
+	function getTableTransaksiJson()
+	{
+		$aColumns = array('ID', 'NAMA_CUSTOMER', 'TANGGAL', 'ID_METODE_BAYAR', 'DISKON', 'TOTAL', 'BAYAR', 'STATUS_PENGERJAAN', 'LUNAS', 'STATUS_PESANAN');
+
+		//primary key
+		$sIndexColumn = "ID";
+
+		//nama table database
+		$sTable = "view_penjualan";
+
+
+		$sLimit = "";
+		if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1') {
+			$sLimit = "LIMIT " . $this->db->escape($_GET['iDisplayStart']) . ", " .
+				$this->db->escape($_GET['iDisplayLength']);
+		}
+
+		if (isset($_GET['iSortCol_0'])) {
+			$sOrder = "ORDER BY  ";
+			for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
+				if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
+					$sOrder .= $aColumns[intval($_GET['iSortCol_' . $i])] . "
+                         " . $this->db->escape($_GET['sSortDir_' . $i]) . ", ";
+				}
+			}
+
+			$sOrder = substr_replace($sOrder, "", -2);
+			if ($sOrder == "ORDER BY") {
+				$sOrder = "";
+			}
+		}
+
+		$sWhere = "";
+
+		if ($_GET['sSearch'] != "") {
+			$sWhere = "WHERE (";
+			for ($i = 0; $i < count($aColumns); $i++) {
+				if ($aColumns[$i] == 'ID') {
+					$id = (int) $_GET['sSearch'];
+					if ($id > 0)
+						$sWhere .= $aColumns[$i] . " LIKE '%" .  $id . "%' OR ";
+				} else {
+					$sWhere .= $aColumns[$i] . " LIKE '%" . $_GET['sSearch'] . "%' OR ";
+				}
+			}
+			$sWhere = substr_replace($sWhere, "", -3);
+			$sWhere .= ") ";
+		}
+
+		for ($i = 0; $i < count($aColumns); $i++) {
+			if ($_GET['bSearchable_' . $i] == "true" && $_GET['sSearch_' . $i] != '') {
+				if ($sWhere == "") {
+					$sWhere = "WHERE ";
+				} else {
+					$sWhere .= " AND ";
+				}
+				$sWhere .= $aColumns[$i] . " LIKE '%" . $this->db->escape($_GET['sSearch_' . $i]) . "%' ";
+			}
+		}
+		$hOrder = str_replace("'", "", $sOrder);
+		$hLimit = str_replace("'", "", $sLimit);
+		$sQuery = "
+            SELECT *
+            FROM   $sTable
+            $sWhere
+            $hOrder
+            $hLimit
+		";
+		$rResult = $this->db->query($sQuery)->result();
+
+		$sQuery = "
+            SELECT FOUND_ROWS() AS JUMLAH
+        ";
+		$rResultFilterTotal = $this->db->query($sQuery);
+		$aResultFilterTotal = $rResultFilterTotal->row();
+		$iFilteredTotal = $aResultFilterTotal->JUMLAH;
+
+		$sQuery = "
+            SELECT COUNT(" . $sIndexColumn . ") AS JUMLAH
+            FROM   $sTable
+		";
+		$rResultTotal = $this->db->query($sQuery);
+		$aResultTotal = $rResultTotal->row();
+		$iTotal = $aResultTotal->JUMLAH;
+
+		$output = array(
+			"sEcho" => intval($_GET['sEcho']),
+			"iTotalRecords" => $iTotal,
+			"iTotalDisplayRecords" => $iFilteredTotal,
+			"aaData" => array()
+		);
+		$seq_number = $_GET['iDisplayStart'] + 1;
+
+		foreach ($rResult as $data) {
+			$row = array();
+			$row[] = sprintf("%06d", $data->ID);
+
+			$row[] =  $data->ID_CUSTOMER ?  "<b>" . ($data->NAMA_CUSTOMER) . "</b><br><span>" . $data->ALAMAT . "<br>" . $data->NO_TELP . "</span>" :  "<b>Tidak Terdaftar</b>";
+
+			$row[] = "<b>" . tgl_indo_lengkap($data->TANGGAL) . "</b><br><span>" . $data->JAM . "</span>";
+
+			$row[] = $data->ID_METODE_BAYAR == 1 ? "<br><span class='badge badge-soft-success' style='font-size:10pt'>Full</span>" : "<br><span class='badge badge-soft-danger' style='font-size:10pt'>DP</span>";
+
+
+			$row[] = formatRupiah($data->DISKON);
+
+			$pnd = $data->TOTAL;
+			$row[] = formatRupiah($pnd);
+
+			if ($data->ID_METODE_BAYAR == 1) {
+				$bayar = formatRupiah($data->BAYAR);
+				$fa = 0;
+			} else {
+				$bayar = formatRupiah($data->BAYAR);
+				$fa = $pnd - $data->BAYAR - $data->DISKON;
+			}
+
+			$row[] = $bayar;
+
+
+			$status_pengerjaan = array(
+				'0' => "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>",
+				'1' => "<span class='badge badge-warning' style='font-size:10pt;'>Desain Diupload</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap2($data->SP_1) . "</span>",
+				'2' => "<span class='badge badge-danger' style='font-size:10pt;'>Revisi Desain</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap2($data->SP_2) . "</span>",
+				'3' => "<span class='badge badge-success' style='font-size:10pt;'>Selesai Desain</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap2($data->SP_3) . "</span>",
+				'4' => "<span class='badge badge-info' style='font-size:10pt;'>Selesai Produksi</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap2($data->SP_4) . "</span>",
+				'5' => "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap2($data->SP_5) . "</span>",
+			);
+			$row[] = isset($status_pengerjaan[$data->STATUS_PENGERJAAN]) ? $status_pengerjaan[$data->STATUS_PENGERJAAN] : '';
+
+			$row[] = $data->LUNAS == 1 ?  "<span class='badge badge-primary' style='font-size:10pt'>Lunas</span>" : "<span class='badge badge-danger' style='font-size:10pt'>Belum Lunas</span><br><span style='font-size:9pt'>Kurang " . formatRupiah($fa) . "</span>";
+
+			$options = array(
+				'1' => $data->STATUS_PESANAN == 1 ? 'selected' : '',
+				'2' =>  $data->STATUS_PESANAN == 2 ? 'selected' : '',
+				'3' =>  $data->STATUS_PESANAN == 3 ? 'selected' : '',
+				'4' =>  $data->STATUS_PESANAN == 4 ? 'selected' : '',
+				'5' =>  $data->STATUS_PESANAN == 5 ? 'selected' : '',
+			);
+
+			$row[] = "
+				<select class='form-control' onchange='ubahStatusPesanan(this)' data-id='" . $data->ID . "'>
+					<option value='1' " . $options['1'] . ">Baju Belum Diorder</option>
+					<option value='2' " . $options['2'] . ">Baju Sudah Diorder</option>
+					<option value='3' " . $options['3'] . ">Baju Ready</option>
+					<option value='4' " . $options['4'] . ">DTF Sudah Diorder</option>
+					<option value='5' " . $options['5'] . ">DTF Sudah Ready</option>
+				</select>
+			";
+			$output['aaData'][] = $row;
+			$seq_number++;
+		}
+
+		echo json_encode($output);
+	}
+	function ubahStatusPesanan()
+	{
+		$id = $this->input->post('id');
+		$status = $this->input->post('status');
+		$this->db->update('t_penjualan', array('STATUS_PESANAN' => $status), array('ID' => $id));
+	}
 	public function transaksi()
 	{
 		$hal = array('menu' => 'transaksi');
@@ -1289,5 +1451,40 @@ class Kasir extends CI_Controller
 		$data['data'] = $this->db->get_where('view_penjualan', array('STATUS_PENGERJAAN' => 4))->result();
 		$data['page'] = 'kasir/produksi_selesai';
 		$this->load->view($this->_template, $data);
+	}
+	function uang_keluar()
+	{
+		$data['data'] = $this->db->order_by('ID', 'DESC')->get('t_uang_keluar')->result();
+		$data['page'] = 'kasir/uang_keluar';
+		$this->load->view($this->_template, $data);
+	}
+	function insertUangKeluar()
+	{
+		$insert = array(
+			'KETERANGAN' => $this->input->post('keterangan'),
+			'NOMINAL' => $this->input->post('nominal'),
+			'TANGGAL' => $this->input->post('tanggal')
+		);
+		$this->db->insert('t_uang_keluar', $insert);
+		$return = array(
+			'status' => true,
+			'judul' => 'Success',
+			'pesan' => "Berhasil Menambahkan Uang Keluar",
+			'type' => 'success'
+		);
+		$this->session->set_flashdata($return);
+		redirect("kasir/uang_keluar");
+	}
+	function deleteUangKeluar($id)
+	{
+		$this->db->delete('t_uang_keluar', array('ID' => $id));
+		$return = array(
+			'status' => true,
+			'judul' => 'Success',
+			'pesan' => "Berhasil Menghapus Uang Keluar",
+			'type' => 'success'
+		);
+		$this->session->set_flashdata($return);
+		redirect("kasir/uang_keluar");
 	}
 }
