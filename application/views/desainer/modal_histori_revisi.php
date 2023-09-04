@@ -20,9 +20,9 @@
                     <tbody>
                         <?php $no = 1; ?>
                         <?php
-                        if (count($data) == 1) {
-                            $data = null;
-                        }
+                        // if (count($data) == 1) {
+                        //     $data = null;
+                        // }
                         ?>
                         <?php if ($data) {
                             $num_histori = 1; ?>
