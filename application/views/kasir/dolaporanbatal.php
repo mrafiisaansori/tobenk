@@ -24,7 +24,7 @@
                 $jumlah++;
                 ?>
                 <tr>
-                    <td><?php echo sprintf("%06d",$key->ID); ?></td>
+                    <td>TO-<?php echo sprintf("%06d",$key->ID); ?></td>
                     <td><?php echo "<b>".($key->NAMA_CUSTOMER)."</b><br><span style='font-size:9pt'>".$key->ALAMAT."<br>".$key->NO_TELP."</span>"; ?></td>
                     <td><?php echo "<b>".tgl_indo_lengkap($key->TANGGAL)."</b><br><span style='font-size:9pt'>".$key->JAM."</span>"; ?></td>
                     <td><?php echo $key->JENIS_BAYAR; if($key->ID_METODE_BAYAR==1) echo "<br><span class='badge badge-soft-success'>Full Payment</span>"; else  echo "<br><span class='badge badge-soft-danger'>Down Payment</span>"; ?></td>

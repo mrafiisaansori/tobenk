@@ -48,7 +48,7 @@
                                         $jumlah++;
                                 ?>
                                         <tr>
-                                            <td><?php echo sprintf("%06d", $key->ID); ?></td>
+                                            <td>TO-<?php echo sprintf("%06d", $key->ID); ?></td>
                                             <td><?php if ($key->ID_CUSTOMER) echo "<b>" . ($key->NAMA_CUSTOMER) . "</b><br><span>" . $key->ALAMAT . "<br>" . $key->NO_TELP . "</span>";
                                                 else echo "<b>Tidak Terdaftar</b>"; ?></td>
                                             <td><?php echo "<b>" . tgl_indo_lengkap($key->TANGGAL) . "</b><br><span>" . $key->JAM . "</span>"; ?></td>

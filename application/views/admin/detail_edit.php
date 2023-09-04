@@ -102,7 +102,7 @@
 						<table class="table table-bordered table-striped" style="font-size:10pt">
                             <tr>
 								<td bgcolor="#ff8370" style="font-weight:bold;font-size:12pt" align="center" colspan=5><b>Transaksi Lama</b></td>
-								<td bgcolor="#70ff7e" style="font-weight:bold;font-size:12pt" align="center" colspan=6><b>Perubahan Transaksi</b></td>
+								<td bgcolor="#70ff7e" style="font-weight:bold;font-size:12pt" align="center" colspan=7><b>Perubahan Transaksi</b></td>
 							</tr>
 							<tr>
 								<td bgcolor="#ff8370" style="font-weight:bold;" align="center">No</td>
@@ -114,6 +114,7 @@
 								<td bgcolor="#70ff7e" style="font-weight:bold;" align="center">Qty</td>
 								<td bgcolor="#70ff7e" style="font-weight:bold;" align="center">Harga</td>
 								<td bgcolor="#70ff7e" style="font-weight:bold;" align="center">Total</td>
+								<td bgcolor="#70ff7e" style="font-weight:bold;" align="center">Stok Saat Ini</td>
 							</tr>
 							<?php
 							$tot = 0;
@@ -142,6 +143,8 @@
                                         <td align="right"><?php echo formatRupiah($edit->HARGA_JUAL); ?></td>
 									    <td align="right"><?php if($edit->ACTION=="HAPUS"){ echo " - "; } echo formatRupiah($edit->QTY * $edit->HARGA_JUAL); 
                                         if($edit->ACTION=="EDIT") $tot_edit += $edit->QTY * $edit->HARGA_JUAL; ?></td>
+                                        <td align="center"><?php $stok=$this->db->get_where("view_produk_detail",["ID"=>$edit->ID_PRODUK_DETAIL]); if($stok->num_rows()>0) if($stok->row()->TANPA_STOK==1) echo "Tanpa Stok"; else echo $stok->row()->STOK; ?></td>
+
                                         <?php
                                     }
                                     else
@@ -153,6 +156,7 @@
                                         <td align="center"><?php echo $dat->QTY; ?></td>
                                         <td align="right"><?php echo formatRupiah($dat->HARGA_JUAL); ?></td>
                                         <td align="right"><?php echo formatRupiah($dat->QTY * $dat->HARGA_JUAL); $tot_edit += $dat->QTY * $dat->HARGA_JUAL; ?></td>
+                                        <td align="center"><?php $stok=$this->db->get_where("view_produk_detail",["ID"=>$dat->ID_PRODUK_DETAIL]); if($stok->num_rows()>0) if($stok->row()->TANPA_STOK==1) echo "Tanpa Stok"; else echo $stok->row()->STOK; ?></td>
                                         <?php
                                     } 
                                     
@@ -161,7 +165,27 @@
 							<?php
 								}
 							}
+							$tambahan = $this->db->get_where("view_detail_penjualan_edit",["ACTION"=>"TAMBAH","ID_TRANSAKSI_PENJUALAN"=>$data->ID,"STATUS"=>0]);
+							if ($tambahan->num_rows() > 0) {
+								foreach ($tambahan->result() as $tambah) {
 							?>
+								<tr>
+									<td colspan=5></td>
+									<td>
+									<B><?php echo $tambah->NAMA; ?> (<?php echo $tambah->UKURAN; ?>)</B><br><span style="font-size:9pt"><?php echo $tambah->KETERANGAN; ?></span><br><?php echo "<span style='font-size:9pt' class='badge badge-primary'>Tambah Data</span>"; ?>
+									</td>
+									<td align="center"><?php echo $tambah->QTY; ?></td>
+									<td align="right"><?php echo formatRupiah($tambah->HARGA_JUAL); ?></td>
+									<td align="right"><?php 
+									echo formatRupiah($tambah->QTY * $tambah->HARGA_JUAL); 
+									if($tambah->ACTION=="TAMBAH") $tot_edit += $tambah->QTY * $tambah->HARGA_JUAL; ?></td>
+								</tr>
+							<?php
+								}
+							}
+							?>
+
+
 								<tr>
 									<td colspan="4" align="right" style="font-weight:bold;">Grand Total</td>
 									<td align="right"><?php echo formatRupiah($tot); ?></td>

@@ -133,16 +133,17 @@
                 <div class="card">
                     <div class="card-body">
                         <h5>Transaksi</h5>
+                        <hr>
                         <table class="table" id="tableAjax">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Customer</th>
                                     <th>Tanggal</th>
-                                    <th>Pembayaran</th>
+                                    <!-- <th>Pembayaran</th>
                                     <th>Diskon</th>
                                     <th width="300">Tagihan</th>
-                                    <th width="300">Terbayar</th>
+                                    <th width="300">Terbayar</th> -->
                                     <th>Status Pengerjaan</th>
                                     <th>Status Pembayaran</th>
                                     <th>Status Pesanan</th>
@@ -167,9 +168,7 @@
 <script>
     $(document).ready(function() {
         $("#tableAjax").dataTable({
-            responsive: true,
             "iDisplayLength": 10,
-            "responsive": true,
             "aLengthMenu": [10, 25, 50, 100],
             "bProcessing": true,
             "bServerSide": true,

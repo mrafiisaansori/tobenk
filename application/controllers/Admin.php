@@ -1360,6 +1360,7 @@ class Admin extends CI_Controller
 				$id_detail_transaksi=$data->ID_DETAIL_TRANSAKSI_PENJUALAN;
 				$detail_lama = $this->db->get_where("t_detail_penjualan",["ID"=>$id_detail_transaksi]);
 				if($detail_lama->num_rows()>0){
+					//EDIT DAN HAPUS
 					$dl=$detail_lama->row();
 					if($dl->ID_PRODUK_DETAIL==$data->ID_PRODUK_DETAIL)
 					{
@@ -1428,6 +1429,13 @@ class Admin extends CI_Controller
 							$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$dl->ID_PRODUK','$jenis','$qty_lama','$tanggal','$keterangan','$dl->ID_PRODUK_DETAIL')");
 						}
 						$this->db->delete('t_detail_penjualan', ['ID'=>$id_detail_transaksi]);
+
+						$data_edit = array(
+							'STATUS' => 1
+						);
+						$this->db->where('ID', $data->ID);
+						$this->db->update('t_detail_penjualan_edit', $data_edit);
+
 						$data2 = array(
 							'ID_TRANSAKSI_PENJUALAN' => $id,
 							'ID_PRODUK' => $data->ID_PRODUK,
@@ -1442,6 +1450,34 @@ class Admin extends CI_Controller
 							$jenis = 2;
 							$tanggal = date("Y-m-d H:i:s");
 							$keterangan = "Update Penjualan Nomor " . sprintf("%06d", $id);
+							$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$data->ID_PRODUK','$jenis','$qty','$tanggal','$keterangan','$data->ID_PRODUK_DETAIL')");
+						}
+					}
+				}
+				else{
+					//TAMBAH
+					if($data->ACTION=="TAMBAH"){
+						$data_edit = array(
+							'STATUS' => 1
+						);
+						$this->db->where('ID', $data->ID);
+						$this->db->update('t_detail_penjualan_edit', $data_edit);
+
+						$data2 = array(
+							'ID_TRANSAKSI_PENJUALAN' => $id,
+							'ID_PRODUK' => $data->ID_PRODUK,
+							'HARGA_BELI' => $data->HARGA_BELI,
+							'HARGA_JUAL' => $data->HARGA_JUAL,
+							'QTY' => $data->QTY,
+							'ID_PRODUK_DETAIL' => $data->ID_PRODUK_DETAIL
+						);
+						$this->db->insert('t_detail_penjualan', $data2);
+
+						if($data->TANPA_STOK==0){
+							$this->db->query("UPDATE m_produk_detail SET STOK=STOK-$data->QTY WHERE ID='$data->ID_PRODUK_DETAIL'");
+							$jenis = 2;
+							$tanggal = date("Y-m-d H:i:s");
+							$keterangan = "Tambah Penjualan Nomor " . sprintf("%06d", $id);
 							$query = $this->db->query("INSERT INTO t_rekam_stok (ID_PRODUK,JENIS,QTY,TANGGAL,KETERANGAN,ID_PRODUK_DETAIL) VALUES ('$data->ID_PRODUK','$jenis','$qty','$tanggal','$keterangan','$data->ID_PRODUK_DETAIL')");
 						}
 					}
@@ -1470,19 +1506,35 @@ class Admin extends CI_Controller
 			if($lunas==1){
 				$datas = array(
 					'TOTAL' => $total,
-					'BAYAR' => $bayar,
-					'NOTE' => base64_decode_fix($notes)
 				);
+				if($bayar_lama<$total){
+					$datas['NOTE']=base64_decode_fix($notes);
+					$datas['LUNAS']=0;
+				}
+				elseif($bayar_lama==$total)
+				{
+					$datas['LUNAS']=1;
+				}
+				else
+				{
+					$datas['NOTE']=base64_decode_fix($notes);
+				}
 				$this->db->where('ID', $id);
 				$this->db->update('t_penjualan', $datas);
 			} else {
 				$datas = array(
 					'TOTAL' => $total,
-					'NOTE' => base64_decode_fix($notes)
 				);
-				if($bayar_lama>=$total){
+				if($bayar_lama==$total){
 					$datas['BAYAR']=$bayar;
 					$datas['LUNAS']=1;
+				}
+				elseif($bayar_lama>$total){
+					$datas['NOTE']=base64_decode_fix($notes);
+					$datas['LUNAS']=1;
+				}
+				else{
+					$datas['NOTE']=base64_decode_fix($notes);
 				}
 				$this->db->where('ID', $id);
 				$this->db->update('t_penjualan', $datas);

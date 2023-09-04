@@ -58,9 +58,28 @@
 							<div class="col-xl-12">
 								<table class="table table-bordered" style="font-size:10pt">
 									<tbody>
+										<?php
+										$options = array(
+											'1' => 'Baju Belum Diorder',
+											'2' =>  'Baju Sudah Diorder',
+											'3' =>  'Baju Ready',
+											'4' =>  'DTF Sudah Diorder',
+											'5' =>  'DTF Sudah Ready'
+										);
+										?>
+										<tr>
+											<th style="background-color:#f8f9fa"><b>Status Pesanan</b></th>
+											<th style="">
+											<h5>
+											<span class="badge badge-soft-info">
+											<?php $sp=$data->STATUS_PESANAN; echo $options[$sp]; ?>
+											</span>
+											</h5>
+											</th>
+										</tr>
 										<tr>
 											<th style="background-color:#f8f9fa"><b>No Nota</b></th>
-											<th style=""><?php echo sprintf("%06d", $data->ID); ?></th>
+											<th style=""><?php echo "TO-".sprintf("%06d", $data->ID); ?></th>
 										</tr>
 										<tr>
 											<th style="background-color:#f8f9fa"><b>Nama</b></th>
@@ -198,7 +217,7 @@
 								<tr>
 									<td colspan="3" align="right" style="font-weight:bold;"><?php $tsemua = $data->BAYAR - $hd;
 																							$notif = "";
-																							if ($data->ID_METODE_BAYAR == 1) {
+																							if ($hd<$data->BAYAR) {
 																								echo "Kembalian";
 																							} else {
 																								echo "Kurang Bayar";

@@ -85,7 +85,7 @@ $identitas = $this->db->query("SELECT * FROM m_identitas LIMIT 1")->row();
         <tr>
           <td width="150">No. Order</td>
           <td>:</td>
-          <td><?php echo sprintf("%06d",$data->ID); ?></td>
+          <td>TO-<?php echo sprintf("%06d",$data->ID); ?></td>
           <td></td>
         </tr>
         <tr>

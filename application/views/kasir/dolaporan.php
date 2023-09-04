@@ -27,7 +27,7 @@
                 $jumlah++;
         ?>
                 <tr>
-                    <td><?php echo sprintf("%06d", $key->ID); ?></td>
+                    <td>TO-<?php echo sprintf("%06d", $key->ID); ?></td>
                     <td><?php if ($key->ID_CUSTOMER) echo "<b>" . ($key->NAMA_CUSTOMER) . "</b><br><span>" . $key->ALAMAT . "<br>" . $key->NO_TELP . "</span>";
                         else echo "<b>Tidak Terdaftar</b>"; ?></td>
                     <td><?php echo "<b>" . tgl_indo_lengkap($key->TANGGAL) . "</b><br><span>" . $key->JAM . "</span>"; ?></td>
@@ -42,18 +42,20 @@
                     <td><?php $pnd = $key->TOTAL;
                         echo formatRupiah($pnd);
                         $pendapatan += $pnd;  ?></td>
-                    <td><?php if ($key->ID_METODE_BAYAR == 1) {
+                    <td><?php 
+                        
                             echo formatRupiah($key->BAYAR);
                             $terbayar += $key->BAYAR;
-                            $fa = 0;
-                        } else {
-                            echo formatRupiah($key->BAYAR);
-                            $terbayar += $key->BAYAR;
-                            $fa = $pnd - $key->BAYAR - $key->DISKON;
-                        }
-                        if ($fa > 0) {
-                            $belum_bayar += $fa;
-                        } ?></td>
+                            if($key->BAYAR<($pnd - $key->DISKON)){
+                                $fa = ($pnd - $key->DISKON) - $key->BAYAR;
+                                $belum_bayar += $fa;
+                            }
+                            else{
+                                $fa = $key->BAYAR - ($pnd - $key->DISKON);
+                            }
+                           
+                        
+                         ?></td>
                     <td>
                         <?php
                         if ($key->STATUS_PENGERJAAN == 0) echo "<span class='badge badge-secondary' style='font-size:10pt;'>Diproses</span>";
@@ -64,8 +66,8 @@
                         else if ($key->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($key->SP_5) . "</span>";
                         ?>
                     </td>
-                    <td><?php if ($key->LUNAS == 1) echo "<span class='badge badge-primary' style='font-size:10pt'>Lunas</span>";
-                        else echo "<span class='badge badge-danger' style='font-size:10pt'>Belum Lunas</span><br><span style='font-size:9pt'>Kurang " . formatRupiah($fa) . "</span>"; ?></td>
+                    <td><?php if ($key->LUNAS == 1) { echo "<span class='badge badge-primary' style='font-size:10pt'>Lunas</span>"; if($fa>0){ echo "<br><span style='font-size:9pt'>Lebih " . formatRupiah($fa) . "</span>"; } }
+                        else { echo "<span class='badge badge-danger' style='font-size:10pt'>Belum Lunas</span>"; if($fa>0){ echo "<br><span style='font-size:9pt'>Kurang " . formatRupiah($fa) . "</span>";} } ?></td>
                     <td>
                         <a target="_blank" href="<?php echo site_url('kasir/detail/' . base64_encode_fix($key->ID)); ?>" class="btn btn-primary mr-1"><i class="mdi mdi-eye"></i></a>
                         <?php if ($key->STATUS_PENGERJAAN == 0) { ?><a target="_blank" href="<?php echo site_url('kasir/edit/' . base64_encode_fix($key->ID)); ?>" class="btn btn-success mt-1"><i class="mdi mdi-pencil"></i></a><?php } else { ?><a href="javascript:void(0)" onclick="gabisa()" class="btn btn-secondary mt-1"><i class="mdi mdi-pencil"></i></a><?php } ?>
@@ -116,7 +118,7 @@
         </div>
     </div>
     <div class="col-xl-3 mt-4">
-        <div class="card text-white bg-primary">
+        <div class="card text-white bg-danger">
             <div class="card-body">
                 <blockquote class="card-bodyquote mb-0">
                     <p><?php echo formatRupiah($belum_bayar); ?></p>

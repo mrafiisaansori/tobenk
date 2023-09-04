@@ -47,7 +47,7 @@
 									<tbody>
 										<tr>
 											<th style="background-color:#f8f9fa"><b>No Nota</b></th>
-											<th style=""><?php echo sprintf("%06d", $data->ID); ?></th>
+											<th style="">TO-<?php echo sprintf("%06d", $data->ID); ?></th>
 										</tr>
 										<tr>
 											<th style="background-color:#f8f9fa"><b>Nama</b></th>
@@ -114,6 +114,7 @@
 				<div class="card">
 					<h6 class="card-header bg-transparent border-bottom mt-0"><b>Produk</b></h6>
 					<div class="card-body">
+						<a href="javascript:void(0)" onclick="modalTambah()" class="btn btn-block btn-primary mb-3">Tambah</a>
 						<table class="table table-bordered" style="font-size:10pt">
 							<tr style="background-color:#f8f9fa">
 								<td style="font-weight:bold;" align="center">No</td>
@@ -129,13 +130,14 @@
 							if ($produk->num_rows() > 0) {
 								foreach ($produk->result() as $dat) {
 							?>
-								<tr>
+								<?php 
+									$edit=$this->db->get_where("t_detail_penjualan_edit",["ID_DETAIL_TRANSAKSI_PENJUALAN"=>$dat->ID,"STATUS"=>0]); 
+								?>
+								<tr <?php if($edit->num_rows()>0) { if($edit->row()->ACTION=="HAPUS") echo "bgcolor='#ffb7b7'"; else echo "bgcolor='#aed6fe'"; } ?>>
 									<td><?php echo $no++; ?></td>
 									<td>
 										<B><?php echo $dat->NAMA_PRODUK; ?> (<?php echo $dat->UKURAN; ?>)</B><br><span style="font-size:9pt"><?php echo $dat->KETERANGAN; ?></span>
-										<?php 
-										$edit=$this->db->get_where("t_detail_penjualan_edit",["ID_DETAIL_TRANSAKSI_PENJUALAN"=>$dat->ID,"STATUS"=>0]); 
-										?>
+										
 									</td>
 									<td align="center"><?php echo $dat->QTY; ?></td>
 									<td align="right"><?php echo formatRupiah($dat->HARGA_JUAL); ?></td>
@@ -144,7 +146,26 @@
 										<?php if($edit->num_rows()==0){ ?>
 										<a href="javascript:void(0)" onclick="modalEdit(<?php echo $dat->ID; ?>)" class="btn btn-primary mr-1"><i class="mdi mdi-pencil"></i></a>
 										<a href="<?php echo site_url('kasir/hapusRequest/'.base64_encode_fix($dat->ID)); ?>" onclick="return confirm('Yakin menghapus data?')" class="btn btn-danger mr-1"><i class="mdi mdi-trash-can"></i></a>
-										<?php } else { echo "<i><a href='javascript:void(0)' onclick='modalRequest(".$dat->ID.")'>Request Perubahan Data Terkirim</a></i>"; } ?>
+										<?php } else { echo "<a href='javascript:void(0)' onclick='modalRequest(".$edit->row()->ID.")'>Request Perubahan Data Terkirim</a>"; } ?>
+									</td>
+								</tr>
+							<?php
+								}
+							}
+							$tambahan = $this->db->get_where("view_detail_penjualan_edit",["ACTION"=>"TAMBAH","ID_TRANSAKSI_PENJUALAN"=>$data->ID,"STATUS"=>0]);
+							if ($tambahan->num_rows() > 0) {
+								foreach ($tambahan->result() as $tambah) {
+							?>
+								<tr bgcolor="#d4fff0">
+									<td><?php echo $no++; ?></td>
+									<td>
+										<B><?php echo $tambah->NAMA; ?> (<?php echo $tambah->UKURAN; ?>)</B><br><span style="font-size:9pt"><?php echo $tambah->KETERANGAN; ?></span>
+									</td>
+									<td align="center"><?php echo $tambah->QTY; ?></td>
+									<td align="right"><?php echo formatRupiah($tambah->HARGA_JUAL); ?></td>
+									<td align="right"><?php echo formatRupiah($tambah->QTY * $tambah->HARGA_JUAL); $tot += $tambah->QTY * $tambah->HARGA_JUAL; ?></td>
+									<td align="center">
+										<?php echo "<a href='javascript:void(0)' onclick='modalRequest(".$tambah->ID.")'>Request Penambahan Data Terkirim</a>"; ?>
 									</td>
 								</tr>
 							<?php
@@ -155,6 +176,7 @@
 								<tr>
 									<td colspan="4" align="right" style="font-weight:bold;">Grand Total</td>
 									<td align="right"><?php echo formatRupiah($tot); ?></td>
+									<td rowspan=5 style="background-color:lightgrey"></td>
 								</tr>
 								<tr>
 									<td colspan="4" align="right" style="font-weight:bold;">Diskon</td>
@@ -172,7 +194,7 @@
 								<tr>
 									<td colspan="4" align="right" style="font-weight:bold;"><?php $tsemua = $data->BAYAR - $hd;
 																							$notif = "";
-																							if ($data->ID_METODE_BAYAR == 1) {
+																							if ($hd<$data->BAYAR) {
 																								echo "Kembalian";
 																							} else {
 																								echo "Kurang Bayar";
@@ -255,9 +277,22 @@
 									$produk=$this->db->get("view_produk_detail");
 									if($produk->num_rows()>0){
 										foreach ($produk->result() as $key) {
+											if($key->TANPA_STOK==1){
+												$tampil=true;
+											}
+											else{
+												if($key->STOK>0){
+													$tampil=true;
+												}
+												else{
+													$tampil=false;
+												}
+											}
+											if($tampil){
 											?>
 											<option value='<?php echo $key->ID; ?>'><?php echo $key->NAMA." (".$key->UKURAN.")"; ?></option>
 											<?php
+											}
 										}
 									}
 									?>
@@ -286,6 +321,68 @@
 	</div>
 </div>
 
+<div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form action="<?= base_url('kasir/simpanTambah/' . base64_encode_fix($data->ID)) ?>" enctype="multipart/form-data" method="post">
+				<div class="modal-header">
+					<h5 class="modal-title">Tambah Data</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="form-row mb-2">
+							<div class="col-md-3">
+								<label for="">Produk</label>
+							</div>
+							<div class="col-md-9">
+								<select name="produk" id="produk" class="selectize">
+									<?php
+									$produk=$this->db->get("view_produk_detail");
+									if($produk->num_rows()>0){
+										foreach ($produk->result() as $key) {
+											if($key->TANPA_STOK==1){
+												$tampil=true;
+											}
+											else{
+												if($key->STOK>0){
+													$tampil=true;
+												}
+												else{
+													$tampil=false;
+												}
+											}
+											if($tampil){
+											?>
+											<option value='<?php echo $key->ID; ?>'><?php echo $key->NAMA." (".$key->UKURAN.")"; ?></option>
+											<?php
+											}
+										}
+									}
+									?>
+								</select>
+							</div>
+						</div>
+						<div class="form-row mb-2">
+							<div class="col-md-3">
+								<label for="">Qty</label>
+							</div>
+							<div class="col-md-9">
+								<input type="text" name="qty" id="qty" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+					<button type="submit" class="btn btn-primary">Simpan</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 
 <div class="modal fade" id="modalReq" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -432,6 +529,9 @@
 				$("#modalEdit").modal("show");
 			}
 		})
+	}
+	function modalTambah(){
+		$("#modalTambah").modal("show");
 	}
 	function modalRequest(id){
 		$.ajax({
