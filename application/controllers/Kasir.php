@@ -165,6 +165,7 @@ class Kasir extends CI_Controller
 				'3' =>  $data->STATUS_PESANAN == 3 ? 'selected' : '',
 				'4' =>  $data->STATUS_PESANAN == 4 ? 'selected' : '',
 				'5' =>  $data->STATUS_PESANAN == 5 ? 'selected' : '',
+				'6' =>  $data->STATUS_PESANAN == 6 ? 'selected' : '',
 			);
 
 			$row[] = "
@@ -174,6 +175,7 @@ class Kasir extends CI_Controller
 					<option value='3' " . $options['3'] . ">Baju Ready</option>
 					<option value='4' " . $options['4'] . ">DTF Sudah Diorder</option>
 					<option value='5' " . $options['5'] . ">DTF Sudah Ready</option>
+					<option value='6' " . $options['6'] . ">Proses Bordir</option>
 				</select>
 			";
 			$output['aaData'][] = $row;
