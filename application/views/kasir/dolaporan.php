@@ -49,9 +49,11 @@
                             if($key->BAYAR<($pnd - $key->DISKON)){
                                 $fa = ($pnd - $key->DISKON) - $key->BAYAR;
                                 $belum_bayar += $fa;
+                                $kata="Kurang";
                             }
                             else{
                                 $fa = $key->BAYAR - ($pnd - $key->DISKON);
+                                $kata="Lebih";
                             }
                            
                         
@@ -66,11 +68,11 @@
                         else if ($key->STATUS_PENGERJAAN == 5) echo "<span class='badge badge-dark' style='font-size:10pt;'>Diambil</span><br><span style='font-size:9pt'>" . tgl_jam_indo_lengkap($key->SP_5) . "</span>";
                         ?>
                     </td>
-                    <td><?php if ($key->LUNAS == 1) { echo "<span class='badge badge-primary' style='font-size:10pt'>Lunas</span>"; if($fa>0){ echo "<br><span style='font-size:9pt'>Lebih " . formatRupiah($fa) . "</span>"; } }
-                        else { echo "<span class='badge badge-danger' style='font-size:10pt'>Belum Lunas</span>"; if($fa>0){ echo "<br><span style='font-size:9pt'>Kurang " . formatRupiah($fa) . "</span>";} } ?></td>
+                    <td><?php if ($key->LUNAS == 1) { echo "<span class='badge badge-primary' style='font-size:10pt'>Lunas</span>"; if($fa>0){ echo "<br><span style='font-size:9pt'>".$kata." " . formatRupiah($fa) . "</span>"; } }
+                        else { echo "<span class='badge badge-danger' style='font-size:10pt'>Belum Lunas</span>"; if($fa>0){ echo "<br><span style='font-size:9pt'>".$kata." " . formatRupiah($fa) . "</span>";} } ?></td>
                     <td>
                         <a target="_blank" href="<?php echo site_url('kasir/detail/' . base64_encode_fix($key->ID)); ?>" class="btn btn-primary mr-1"><i class="mdi mdi-eye"></i></a>
-                        <?php if ($key->STATUS_PENGERJAAN == 0) { ?><a target="_blank" href="<?php echo site_url('kasir/edit/' . base64_encode_fix($key->ID)); ?>" class="btn btn-success mt-1"><i class="mdi mdi-pencil"></i></a><?php } else { ?><a href="javascript:void(0)" onclick="gabisa()" class="btn btn-secondary mt-1"><i class="mdi mdi-pencil"></i></a><?php } ?>
+                        <?php if ($key->STATUS_PENGERJAAN < 3) { ?><a target="_blank" href="<?php echo site_url('kasir/edit/' . base64_encode_fix($key->ID)); ?>" class="btn btn-success mt-1"><i class="mdi mdi-pencil"></i></a><?php } else { ?><a href="javascript:void(0)" onclick="gabisa()" class="btn btn-secondary mt-1"><i class="mdi mdi-pencil"></i></a><?php } ?>
                     </td>
 
                 </tr>

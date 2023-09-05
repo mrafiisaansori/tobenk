@@ -26,7 +26,8 @@
                         ?>
                         <?php if ($data) {
                             $num_histori = 1; ?>
-                            <?php foreach ($data as $dataVal) { ?>
+                            <?php foreach ($data as $dataVal) { 
+                                ?>
                                 <tr>
                                     <td>
                                         <?= $no++; ?>

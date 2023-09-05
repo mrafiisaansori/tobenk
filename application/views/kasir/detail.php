@@ -227,19 +227,43 @@
 								</tr>
 							</tfoot>
 						</table>
+						<?php // if ($data->ID_METODE_BAYAR == 2) { ?>
+						<table  class="table table-bordered" style="font-size:10pt">
+							<tr>
+								<td align="center" width="50%">
+									<b>Pembayaran DP</b>
+									<br>
+									<?php echo $data->JENIS_BAYAR ?>
+									<br>
+									<?php echo formatRupiah($data->NOMINAL_DP) ?>
+								</td>
+								<td align="center" width="50%">
+									<b>Pelunasan</b>
+									<br>
+									<?php if($data->JENIS_BAYAR_PELUNASAN){ $jenis=$this->db->get_where("m_jenis_bayar",["ID"=>$data->JENIS_BAYAR_PELUNASAN]); echo $jenis->row()->NAMA; } ?>
+									<br>
+									<?php echo formatRupiah($data->NOMINAL_PELUNASAN) ?>
+								</td>
+							</tr>
+						</table>
+						<?php //} ?>
 						<?php
-						if ($data->NOTE) {
-							if ($data->STATUS_PENGERJAAN != 5) {
-						?>
-								<div class="alert alert-warning" role="alert">
-									<?php echo $data->NOTE; ?>
-								</div>
-						<?php
-							}
-						}
+						// if ($data->NOTE) {
+						// 	if ($data->STATUS_PENGERJAAN != 5) {
+						// ?>
+						 		<!-- <div class="alert alert-warning" role="alert">
+						// 			<?php ///echo $data->NOTE; ?>
+						// 		</div> -->
+						 <?php
+						// 	}
+						// }
 						?>
 						<?php if ($data->STATUS_PENGERJAAN == 4) { ?>
-							<a style="width:100%" class="btn btn-primary" href="https://wa.me/<?php echo $data->NO_TELP; ?>?text=Halo kak, orderan nomor *<?php echo sprintf("%06d", $data->ID); ?>* Sudah bisa diambil ya<?php echo $notif; ?>, terima kasih" target="_blank"><i class="mdi mdi-whatsapp mr-1"></i>Kirim WhatsApp Ke Customer</a>
+							<a style="width:100%" class="btn btn-primary mb-2" href="https://wa.me/<?php echo $data->NO_TELP; ?>?text=Halo kak, orderan nomor *<?php echo sprintf("%06d", $data->ID); ?>* Sudah bisa diambil ya<?php echo $notif; ?>, terima kasih" target="_blank"><i class="mdi mdi-whatsapp mr-1"></i>Kirim WhatsApp Ke Customer</a>
+							<?php 
+								if ($data->LUNAS == 0) {  ?>
+							<a style="width:100%" class="btn btn-info" href="javascript:void(0)"  data-target="#modalPelunasan" data-toggle="modal"><i class="mdi mdi-paypal mr-1"></i>Bayar Pelunasan</a>
+							<?php } ?>
 						<?php } ?>
 					</div>
 				</div>
@@ -276,6 +300,56 @@
 							</div>
 							<div class="col-md-9">
 								<input type="file" name="file_customer" id="file_customer" class="form-control" accept="image/*">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+					<button type="submit" class="btn btn-primary">Simpan</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modalPelunasan" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<form action="<?= base_url('kasir/simpanPelunasan/' . base64_encode_fix($data->ID)) ?>" enctype="multipart/form-data" method="post">
+				<div class="modal-header">
+					<h5 class="modal-title">Pelunasan</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="form-row mb-2">
+							<div class="col-md-3">
+								<label for="">Jenis Pembayaran</label>
+							</div>
+							<div class="col-md-9">
+								<select class="form-control" name="jenis">
+									<?php
+									$jenis = $this->db->query("SELECT * FROM m_jenis_bayar");
+									if ($jenis->num_rows() > 0) {
+										foreach ($jenis->result() as $key) {
+									?>
+											<option value="<?php echo $key->ID; ?>"><?php echo $key->NAMA; ?></option>
+									<?php
+										}
+									}
+									?>
+								</select>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-md-3">
+								<label for="">Nominal</label>
+							</div>
+							<div class="col-md-9">
+								<input type="text" class="form-control" id="bayar" name="bayar" required="">
 							</div>
 						</div>
 					</div>
