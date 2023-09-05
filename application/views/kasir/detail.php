@@ -259,7 +259,7 @@
 						// }
 						?>
 						<?php if ($data->STATUS_PENGERJAAN == 4) { ?>
-							<a style="width:100%" class="btn btn-primary mb-2" href="https://wa.me/<?php echo $data->NO_TELP; ?>?text=Halo kak, orderan nomor *<?php echo sprintf("%06d", $data->ID); ?>* Sudah bisa diambil ya<?php echo $notif; ?>, terima kasih" target="_blank"><i class="mdi mdi-whatsapp mr-1"></i>Kirim WhatsApp Ke Customer</a>
+							<a style="width:100%" class="btn btn-primary mb-2" href="https://wa.me/<?php echo $data->NO_TELP; ?>?text=Halo kak, orderan nomor *<?php echo sprintf("%06d", $data->ID); ?>* Sudah bisa diambil ya, terima kasih" target="_blank"><i class="mdi mdi-whatsapp mr-1"></i>Kirim WhatsApp Ke Customer</a>
 							<?php 
 								if ($data->LUNAS == 0) {  ?>
 							<a style="width:100%" class="btn btn-info" href="javascript:void(0)"  data-target="#modalPelunasan" data-toggle="modal"><i class="mdi mdi-paypal mr-1"></i>Bayar Pelunasan</a>

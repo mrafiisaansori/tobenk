@@ -530,7 +530,8 @@ class Kasir extends CI_Controller
 				'FILE_MENTAH' => $file_mentah,
 				'FILE_CUSTOMER' => $file_name,
 				'FILE_CUSTOMER2' => $file_name2,
-				'FILE_CUSTOMER3' => $file_name3
+				'FILE_CUSTOMER3' => $file_name3,
+				'NOMINAL_DP' => $bayar
 			);
 			$this->db->insert('t_penjualan', $data);
 			$id_last = $this->db->insert_id();
@@ -1133,7 +1134,7 @@ class Kasir extends CI_Controller
 			$detail = $this->db->get_where("view_produk_detail", ["ID" => $produk]);
 			//echo $this->db->last_query();exit();
 			if($detail->num_rows()>0){
-				if($key->TANPA_STOK==1){
+				if($detail->row()->TANPA_STOK==1){
 					//TIDAK USAH BACA STOK
 					$harga_beli = $detail->row()->HARGA_BELI;
 					$harga_jual = $detail->row()->HARGA_JUAL;
@@ -1232,7 +1233,7 @@ class Kasir extends CI_Controller
 
 		$detail = $this->db->get_where("view_produk_detail", ["ID" => $produk]);
 		if($detail->num_rows()>0){
-			if($key->TANPA_STOK==1){
+			if($detail->row()->TANPA_STOK==1){
 				$harga_beli = $detail->row()->HARGA_BELI;
 				$harga_jual = $detail->row()->HARGA_JUAL;
 				$id_produk = $detail->row()->ID_PRODUK;
@@ -1368,23 +1369,34 @@ class Kasir extends CI_Controller
 	function ambil($id)
 	{
 		$id = base64_decode_fix($id);
+		$data = array(
+			'STATUS_PENGERJAAN' => 5,
+			'AMBIL' => date("Y-m-d H:i:s"),
+			'SP_5' => date("Y-m-d H:i:s")
+		);
+
+		$this->db->where('ID', $id);
+		$this->db->update('t_penjualan', $data);
+		$return = array(
+			'status' => true,
+			'judul' => 'Success',
+			'pesan' => "Transaksi Selesai",
+			'type' => 'success'
+		);
+		$this->session->set_flashdata($return);
+		redirect("kasir/detail/" . base64_encode_fix($id));
+	}
+	function simpanPelunasan($id){
+		$bayar = str_replace(".", "", $this->input->post("bayar"));
+
+		$id = base64_decode_fix($id);
 		$penjualan = $this->db->get_where("view_penjualan", ["ID" => $id])->row();
-		if ($penjualan->ID_METODE_BAYAR == 1) {
-			$data = array(
-				'STATUS_PENGERJAAN' => 5,
-				'LUNAS' => 1,
-				'AMBIL' => date("Y-m-d H:i:s"),
-				'SP_5' => date("Y-m-d H:i:s")
-			);
-		} else {
-			$data = array(
-				'STATUS_PENGERJAAN' => 5,
-				'LUNAS' => 1,
-				'BAYAR' => $penjualan->TOTAL - $penjualan->DISKON,
-				'AMBIL' => date("Y-m-d H:i:s"),
-				'SP_5' => date("Y-m-d H:i:s")
-			);
-		}
+		$data = array(
+			'LUNAS' => 1,
+			'BAYAR' => $penjualan->BAYAR+$bayar,
+			'NOMINAL_PELUNASAN' => $bayar,
+			'JENIS_BAYAR_PELUNASAN' => $this->input->post('jenis'),
+		);
 
 		$this->db->where('ID', $id);
 		$this->db->update('t_penjualan', $data);
