@@ -329,6 +329,8 @@
 
                             </li> -->
 
+                        
+                        <?php if(!$this->session->userdata('manager')){ ?>
                         <li>
 
                             <a href="<?php echo site_url('admin/pengguna.html'); ?>" class="waves-effect <?php if ($this->session->userdata('menu') == 'pengguna') {
@@ -342,7 +344,7 @@
                             </a>
 
                         </li>
-
+                        <?php } ?>
 
                         <li>
 
