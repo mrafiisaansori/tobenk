@@ -55,10 +55,10 @@ class Kasir extends CI_Controller
 			}
 		}
 
-		$sWhere = "";
+		$sWhere = "WHERE LUNAS=0";
 
 		if ($_GET['sSearch'] != "") {
-			$sWhere = "WHERE (";
+			$sWhere = " AND (";
 			for ($i = 0; $i < count($aColumns); $i++) {
 				if ($aColumns[$i] == 'ID') {
 					$id = (int) $_GET['sSearch'];
